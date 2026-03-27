@@ -2,53 +2,55 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Digital Justice & AI</title>
+<title>Digital Justice AI Experience</title>
 
 <style>
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
-  background: radial-gradient(circle at top, #0f172a, #020617);
+  background: linear-gradient(135deg, #020617, #0f172a);
   color: white;
   overflow: hidden;
 }
 
+/* SLIDES /
 .slide {
   display: none;
   height: 100vh;
   padding: 80px;
   box-sizing: border-box;
-  animation: fade 0.6s ease;
+  position: relative;
 }
 
 .active { display: block; }
 
-@keyframes fade {
-  from {opacity: 0; transform: translateY(20px);}
-  to {opacity: 1; transform: translateY(0);}
-}
-
+/ TEXT /
 h1 {
-  font-size: 56px;
+  font-size: 60px;
   color: #38bdf8;
 }
 
 h2 {
   font-size: 36px;
-  margin-bottom: 20px;
   color: #22d3ee;
 }
 
-p {
+p, li {
   font-size: 22px;
   opacity: 0.9;
 }
 
-ul {
-  font-size: 22px;
-  line-height: 1.8;
+/ ANIMATION /
+.fade {
+  animation: fadeUp 0.8s ease;
 }
 
+@keyframes fadeUp {
+  from {opacity: 0; transform: translateY(30px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+/ NAV /
 .nav {
   position: fixed;
   bottom: 30px;
@@ -59,14 +61,12 @@ ul {
 }
 
 button {
-  background: rgba(56,189,248,0.15);
-  color: #38bdf8;
+  background: rgba(56,189,248,0.1);
   border: 1px solid #38bdf8;
+  color: #38bdf8;
   padding: 12px 22px;
-  font-size: 16px;
   border-radius: 10px;
   cursor: pointer;
-  backdrop-filter: blur(10px);
 }
 
 button:hover {
@@ -74,21 +74,41 @@ button:hover {
   color: black;
 }
 
+/ PROGRESS /
 .progress {
   position: fixed;
   top: 0;
-  left: 0;
   height: 4px;
   background: #38bdf8;
   width: 0%;
-  transition: 0.3s;
 }
 
-.slide-number {
+/ AI BOX /
+.ai-box {
+  position: absolute;
+  bottom: 100px;
+  right: 40px;
+  width: 300px;
+  background: rgba(255,255,255,0.05);
+  padding: 15px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.ai-box input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  margin-top: 10px;
+}
+
+/ AUTO PLAY */
+.auto-btn {
   position: fixed;
   top: 15px;
-  right: 20px;
-  opacity: 0.6;
+  left: 20px;
+  font-size: 14px;
 }
 </style>
 </head>
@@ -96,103 +116,94 @@ button:hover {
 <body>
 
 <div class="progress" id="progress"></div>
-<div class="slide-number" id="slideNum"></div>
+
+<button class="auto-btn" onclick="toggleAuto()">▶ Auto Play</button>
 
 <!-- SLIDES -->
 
-<div class="slide active">
-  <h1>Digital Justice ⚖️</h1>
-  <p>AI × Judiciary × Access to Justice</p>
+<div class="slide active fade">
+  <h1>⚖ Digital Justice</h1>
+  <p>AI × Judiciary × Access</p>
 </div>
 
-<div class="slide">
-  <h2>The Core Idea</h2>
-  <p>Courts are going digital.</p>
-  <p>But people are not keeping up.</p>
+<div class="slide fade">
+  <h2>The Shift</h2>
+  <p>Courts → Digital</p>
+  <p>People → Not Ready</p>
 </div>
 
-<div class="slide">
-  <h2>What Exists Today</h2>
+<div class="slide fade">
+  <h2>Reality Check</h2>
+  <button onclick="reveal()">Click to Reveal</button>
+  <div id="hidden" style="display:none;">
+    <p>High Awareness</p>
+    <p>Low Usage</p>
+  </div>
+</div>
+
+<div class="slide fade">
+  <h2>The Divide</h2>
   <ul>
-    <li>Case Status ✔</li>
-    <li>e-Cause Lists ✔</li>
-    <li>e-Filing ⚠</li>
-    <li>Virtual Hearings ⚠</li>
+    <li>Youth → Active</li>
+    <li>Elderly → Excluded</li>
+    <li>Women → Underrepresented</li>
   </ul>
 </div>
 
-<div class="slide">
-  <h2>The Real Problem</h2>
+<div class="slide fade">
+  <h2>Core Problem</h2>
   <ul>
-    <li>Low Awareness</li>
     <li>Digital Illiteracy</li>
     <li>Language Barriers</li>
-    <li>Fear of Tech</li>
+    <li>Fear of Errors</li>
   </ul>
 </div>
 
-<div class="slide">
-  <h2>Ground Reality</h2>
-  <p>Younger → Use it</p>
-  <p>Older → Avoid it</p>
-  <p>Women → Use less</p>
+<div class="slide fade">
+  <h2>Impact</h2>
+  <p>⚡ Faster Justice</p>
+  <p>💰 Lower Cost</p>
+  <p>📉 Fewer Court Visits</p>
 </div>
 
-<div class="slide">
-  <h2>Key Insight</h2>
-  <p>Awareness ≠ Usage</p>
-  <p>Access ≠ Inclusion</p>
-</div>
-
-<div class="slide">
-  <h2>Why It Matters</h2>
+<div class="slide fade">
+  <h2>AI Potential</h2>
   <ul>
-    <li>Faster Justice</li>
-    <li>Lower Costs</li>
-    <li>Less Court Visits</li>
+    <li>Smart Legal Help</li>
+    <li>Case Analysis</li>
+    <li>Translation</li>
   </ul>
 </div>
 
-<div class="slide">
-  <h2>Where AI Comes In</h2>
-  <ul>
-    <li>Legal Research</li>
-    <li>Case Prediction</li>
-    <li>Language Translation</li>
-    <li>Smart Assistance</li>
-  </ul>
+<div class="slide fade">
+  <h2>Interactive Insight</h2>
+  <button onclick="showInsight()">See Key Insight</button>
+  <p id="insight"></p>
 </div>
 
-<div class="slide">
-  <h2>Global Reality</h2>
-  <p>US / UK → High Usage</p>
-  <p>India → High Potential</p>
-</div>
-
-<div class="slide">
-  <h2>Big Gap</h2>
-  <p>Technology exists.</p>
-  <p>People don’t use it.</p>
-</div>
-
-<div class="slide">
+<div class="slide fade">
   <h2>Solutions</h2>
   <ul>
     <li>Help Desks</li>
     <li>Training</li>
-    <li>Regional Languages</li>
     <li>AI Assistants</li>
   </ul>
 </div>
 
-<div class="slide">
-  <h2>Final Thought</h2>
-  <p>Digital Justice is powerful.</p>
-  <p>But only if people can use it.</p>
+<div class="slide fade">
+  <h2>Final Line</h2>
+  <p>Technology is ready.</p>
+  <p>Society is not.</p>
+</div>
+
+<!-- AI CHAT DEMO -->
+<div class="ai-box">
+  🤖 Ask AI (Demo)
+  <input type="text" placeholder="Ask about judiciary..." onkeydown="ai(event)">
+  <p id="aiResponse"></p>
 </div>
 
 <!-- NAV -->
-
 <div class="nav">
   <button onclick="prev()">⬅ Back</button>
   <button onclick="next()">Next ➡</button>
@@ -202,34 +213,59 @@ button:hover {
 let current = 0;
 const slides = document.querySelectorAll(".slide");
 const progress = document.getElementById("progress");
-const slideNum = document.getElementById("slideNum");
 
 function show(i){
   slides.forEach(s => s.classList.remove("active"));
   slides[i].classList.add("active");
 
-  progress.style.width = ((i+1)/slides.length)*100 + "%";
-  slideNum.innerText = (i+1) + " / " + slides.length;
+  progress.style.width = ((i+1)/slides.length)100 + "%";
 }
 
-function next(){
-  if(current < slides.length-1){
-    current++;
-    show(current);
-  }
-}
+function next(){ if(current < slides.length-1){ current++; show(current);} }
+function prev(){ if(current > 0){ current--; show(current);} }
 
-function prev(){
-  if(current > 0){
-    current--;
-    show(current);
-  }
-}
-
+/ KEYBOARD /
 document.addEventListener("keydown", e => {
   if(e.key === "ArrowRight") next();
   if(e.key === "ArrowLeft") prev();
 });
+
+/ REVEAL /
+function reveal(){
+  document.getElementById("hidden").style.display = "block";
+}
+
+/ INSIGHT /
+function showInsight(){
+  document.getElementById("insight").innerText =
+  "Digital Justice fails without Digital Literacy.";
+}
+
+/ AI DEMO /
+function ai(e){
+  if(e.key === "Enter"){
+    let q = e.target.value.toLowerCase();
+    let res = "AI: ";
+
+    if(q.includes("problem")) res += "Low awareness & digital literacy.";
+    else if(q.includes("ai")) res += "AI helps automate legal processes.";
+    else res += "Improves access to justice.";
+
+    document.getElementById("aiResponse").innerText = res;
+    e.target.value = "";
+  }
+}
+
+/ AUTO PLAY */
+let auto = false;
+function toggleAuto(){
+  auto = !auto;
+  if(auto){
+    interval = setInterval(()=>{ next(); }, 3000);
+  } else {
+    clearInterval(interval);
+  }
+}
 </script>
 
 </body>
