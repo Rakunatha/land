@@ -2,221 +2,202 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Land Registry</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>e-Judiciary & AI Study</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'IBM Plex Sans', sans-serif; background: #fff; color: #0a0a0a; min-height: 100vh; }
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #0f172a;
+  color: #e2e8f0;
+  overflow: hidden;
+}
 
-  header {
-    border-bottom: 1px solid #e0e0e0;
-    padding: 20px 40px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .wordmark { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
-  .chain-indicator { display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #888; }
-  .chain-indicator::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: #0a0a0a; animation: pulse 2.5s ease-in-out infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
+.slide {
+  display: none;
+  height: 100vh;
+  padding: 60px;
+  box-sizing: border-box;
+}
 
-  main { max-width: 600px; margin: 0 auto; padding: 60px 24px 80px; }
+.active {
+  display: block;
+}
 
-  .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: #888; margin-bottom: 8px; }
-  h1 { font-size: 30px; font-weight: 300; letter-spacing: -0.3px; line-height: 1.2; margin-bottom: 48px; }
+h1, h2 {
+  color: #38bdf8;
+}
 
-  .tabs { display: flex; border-bottom: 1px solid #e0e0e0; margin-bottom: 36px; }
-  .tab { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; padding: 10px 20px 10px 0; border: none; background: none; color: #888; cursor: pointer; border-bottom: 1.5px solid transparent; margin-bottom: -1px; transition: color 0.15s, border-color 0.15s; }
-  .tab.active { color: #0a0a0a; border-bottom-color: #0a0a0a; }
-  .tab:hover:not(.active) { color: #0a0a0a; }
+p {
+  font-size: 18px;
+  line-height: 1.6;
+}
 
-  .panel { display: none; }
-  .panel.active { display: block; animation: appear 0.18s ease; }
-  @keyframes appear { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+.nav {
+  position: fixed;
+  bottom: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 40px;
+}
 
-  .field { margin-bottom: 22px; }
-  .field label { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #888; margin-bottom: 7px; }
-  .field input, .field select { width: 100%; border: 1px solid #e0e0e0; border-radius: 0; padding: 10px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #0a0a0a; background: #fff; outline: none; transition: border-color 0.15s; -webkit-appearance: none; }
-  .field input:focus, .field select:focus { border-color: #0a0a0a; }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+button {
+  background: #38bdf8;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-  .btn { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; padding: 12px 24px; border: 1px solid #0a0a0a; background: #0a0a0a; color: #fff; cursor: pointer; transition: background 0.15s, color 0.15s; }
-  .btn:hover { background: #fff; color: #0a0a0a; }
+button:hover {
+  background: #0ea5e9;
+}
 
-  .list-section { margin-top: 48px; }
-  .list-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #888; margin-bottom: 12px; }
-
-  .record { border-top: 1px solid #e0e0e0; padding: 14px 0; display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; }
-  .r-id { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; }
-  .r-owner { font-size: 13px; color: #888; grid-column: 1; }
-  .r-hash { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #bbb; grid-column: 1; margin-top: 3px; }
-  .r-block { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #888; grid-row: 1/3; grid-column: 2; text-align: right; padding-top: 2px; }
-
-  .empty { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #bbb; padding: 20px 0; border-top: 1px solid #e0e0e0; }
-
-  .result { border: 1px solid #e0e0e0; padding: 24px; margin-top: 24px; display: none; animation: appear 0.18s ease; }
-  .result.show { display: block; }
-  .result.valid { border-color: #0a0a0a; }
-  .r-status { font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; }
-  .r-status.ok { color: #0a0a0a; }
-  .r-status.fail { color: #888; }
-  .r-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px solid #f0f0f0; gap: 16px; }
-  .r-row:last-child { border: none; }
-  .r-k { font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #888; flex-shrink: 0; }
-  .r-v { font-family: 'IBM Plex Mono', monospace; font-size: 12px; text-align: right; }
-
-  .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(8px); background: #0a0a0a; color: #fff; font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 10px 20px; opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; white-space: nowrap; z-index: 999; }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-  @media (max-width: 520px) {
-    header { padding: 16px 20px; }
-    main { padding: 36px 20px 60px; }
-    .row { grid-template-columns: 1fr; }
-    h1 { font-size: 24px; }
-  }
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 5px;
+  background: #38bdf8;
+  width: 0%;
+}
 </style>
 </head>
+
 <body>
 
-<header>
-  <div class="wordmark">Land Registry</div>
-  <div class="chain-indicator">Block <span id="bnum">4</span></div>
-</header>
+<div class="progress" id="progress"></div>
 
-<main>
-  <div class="eyebrow">Blockchain-secured</div>
-  <h1>Immutable property<br>ownership records</h1>
+<!-- SLIDES -->
 
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('register',this)">Register</button>
-    <button class="tab" onclick="switchTab('verify',this)">Verify</button>
-  </div>
+<div class="slide active">
+  <h1>Digital Justice & AI in Judiciary</h1>
+  <p><b>Empirical Study on Public Awareness & Accessibility</b></p>
+  <p>By RAKUNATHA KHRISHANTH MANATHRA</p>
+</div>
 
-  <div id="panel-register" class="panel active">
-    <div class="row">
-      <div class="field">
-        <label>Parcel / Survey No.</label>
-        <input id="r-id" type="text" placeholder="e.g. TN/CHE/0042">
-      </div>
-      <div class="field">
-        <label>Land type</label>
-        <select id="r-type">
-          <option value="">Select</option>
-          <option>Residential</option>
-          <option>Commercial</option>
-          <option>Agricultural</option>
-          <option>Industrial</option>
-        </select>
-      </div>
-    </div>
-    <div class="field">
-      <label>Location</label>
-      <input id="r-loc" type="text" placeholder="Full legal address">
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Area (m²)</label>
-        <input id="r-area" type="number" placeholder="450">
-      </div>
-      <div class="field">
-        <label>Owner name</label>
-        <input id="r-owner" type="text" placeholder="Full legal name">
-      </div>
-    </div>
-    <button class="btn" onclick="register()">Register on chain</button>
+<div class="slide">
+  <h2>Abstract</h2>
+  <p>This study evaluates awareness and usage of e-Judiciary services at the Madras High Court and explores AI integration in judicial processes.</p>
+  <p>Findings show high awareness of basic tools but low adoption of advanced systems like e-filing and AI.</p>
+</div>
 
-    <div class="list-section">
-      <div class="list-label">Registered parcels</div>
-      <div id="record-list"></div>
-    </div>
-  </div>
+<div class="slide">
+  <h2>Key Objectives</h2>
+  <p>• Assess awareness of digital court services</p>
+  <p>• Evaluate usage & perception</p>
+  <p>• Identify barriers & suggest improvements</p>
+</div>
 
-  <div id="panel-verify" class="panel">
-    <div class="field">
-      <label>Parcel ID or transaction hash</label>
-      <input id="v-input" type="text" placeholder="TN/CHE/0042 or 0x…">
-    </div>
-    <button class="btn" onclick="verify()">Verify record</button>
-    <div id="result" class="result"></div>
-  </div>
-</main>
+<div class="slide">
+  <h2>Introduction</h2>
+  <p>Indian judiciary is transitioning from paper-based systems to digital platforms including:</p>
+  <p>• e-Filing</p>
+  <p>• Virtual Hearings</p>
+  <p>• Case Tracking</p>
+</div>
 
-<div id="toast" class="toast"></div>
+<div class="slide">
+  <h2>Problem Statement</h2>
+  <p>Availability ≠ Accessibility</p>
+  <p>Major gap exists due to:</p>
+  <p>• Digital illiteracy</p>
+  <p>• Language barriers</p>
+  <p>• Lack of awareness</p>
+</div>
+
+<div class="slide">
+  <h2>Methodology</h2>
+  <p>• Sample: 200 respondents (Chennai)</p>
+  <p>• Method: Questionnaire</p>
+  <p>• Analysis: SPSS, graphs, comparative charts</p>
+</div>
+
+<div class="slide">
+  <h2>Key Findings</h2>
+  <p>• High awareness: Case status & cause lists</p>
+  <p>• Low usage: e-Filing & AI tools</p>
+  <p>• Major barrier: Digital literacy</p>
+</div>
+
+<div class="slide">
+  <h2>Demographic Insights</h2>
+  <p>• Youth → High usage</p>
+  <p>• Elderly → Low awareness</p>
+  <p>• Women → Lower participation</p>
+</div>
+
+<div class="slide">
+  <h2>Challenges</h2>
+  <p>• Technical difficulty</p>
+  <p>• Fear of mistakes</p>
+  <p>• Internet access issues</p>
+  <p>• Lack of guidance</p>
+</div>
+
+<div class="slide">
+  <h2>Role of AI</h2>
+  <p>AI can improve:</p>
+  <p>• Case management</p>
+  <p>• Legal research</p>
+  <p>• Language translation</p>
+</div>
+
+<div class="slide">
+  <h2>Global Comparison</h2>
+  <p>India vs US/UK/Canada:</p>
+  <p>• India → Free access but low awareness</p>
+  <p>• Developed countries → High usage, better literacy</p>
+</div>
+
+<div class="slide">
+  <h2>Recommendations</h2>
+  <p>• Help desks in courts</p>
+  <p>• Training programs</p>
+  <p>• Regional language support</p>
+  <p>• AI integration</p>
+</div>
+
+<div class="slide">
+  <h2>Conclusion</h2>
+  <p>Digital justice is powerful but incomplete.</p>
+  <p>Success depends on awareness, inclusivity & accessibility.</p>
+</div>
+
+<!-- NAVIGATION -->
+
+<div class="nav">
+  <button onclick="prevSlide()">⬅ Previous</button>
+  <button onclick="nextSlide()">Next ➡</button>
+</div>
 
 <script>
-let blockNum = 4;
-const parcels = [
-  { id:'TN/CHE/0001', type:'Residential', location:'12 Poes Garden, Chennai', area:320, owner:'Kavitha Sundar', hash:'0x9b3d…f721', block:2, ts:'2024-01-15' },
-  { id:'TN/CBE/0002', type:'Commercial', location:'45 Avinashi Rd, Coimbatore', area:850, owner:'Rajesh Natarajan', hash:'0x2c7f…4b32', block:3, ts:'2024-02-03' },
-  { id:'TN/MDU/0003', type:'Agricultural', location:'Srivilliputhur, Madurai', area:4200, owner:'Murugesan Pillai', hash:'0xa1e4…8d71', block:4, ts:'2024-02-20' },
-];
+let current = 0;
+const slides = document.querySelectorAll(".slide");
+const progress = document.getElementById("progress");
 
-function genHash() {
-  const c='0123456789abcdef'; let s='0x';
-  for(let i=0;i<4;i++) s+=c[Math.floor(Math.random()*16)];
-  s+='…';
-  for(let i=0;i<4;i++) s+=c[Math.floor(Math.random()*16)];
-  return s;
+function showSlide(index) {
+  slides.forEach(s => s.classList.remove("active"));
+  slides[index].classList.add("active");
+
+  progress.style.width = ((index + 1) / slides.length) * 100 + "%";
 }
 
-function toast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2600);
-}
-
-function renderList() {
-  const el=document.getElementById('record-list');
-  if(!parcels.length){ el.innerHTML='<div class="empty">No parcels registered yet.</div>'; return; }
-  el.innerHTML=parcels.map(p=>`
-    <div class="record">
-      <div class="r-id">${p.id}</div>
-      <div class="r-block">Block #${p.block}</div>
-      <div class="r-owner">${p.owner} · ${p.type}</div>
-      <div class="r-hash">${p.hash} · ${p.ts}</div>
-    </div>`).join('');
-}
-
-function register() {
-  const id=document.getElementById('r-id').value.trim();
-  const type=document.getElementById('r-type').value;
-  const loc=document.getElementById('r-loc').value.trim();
-  const area=document.getElementById('r-area').value;
-  const owner=document.getElementById('r-owner').value.trim();
-  if(!id||!type||!loc||!area||!owner){ toast('Fill all fields'); return; }
-  blockNum++;
-  parcels.push({ id, type, location:loc, area:Number(area), owner, hash:genHash(), block:blockNum, ts:new Date().toISOString().slice(0,10) });
-  document.getElementById('bnum').textContent=blockNum;
-  renderList();
-  toast('Registered · Block #'+blockNum);
-  ['r-id','r-loc','r-area','r-owner'].forEach(i=>document.getElementById(i).value='');
-  document.getElementById('r-type').value='';
-}
-
-function verify() {
-  const q=document.getElementById('v-input').value.trim();
-  const box=document.getElementById('result');
-  if(!q) return;
-  const p=parcels.find(x=>x.id===q||x.hash===q);
-  box.className='result show '+(p?'valid':'');
-  if(p){
-    box.innerHTML=`<div class="r-status ok">Verified — on chain</div>`+
-      [['Parcel',p.id],['Owner',p.owner],['Type',p.type],['Location',p.location],['Area',p.area.toLocaleString()+' m²'],['Tx hash',p.hash],['Block','#'+p.block],['Date',p.ts]]
-      .map(([k,v])=>`<div class="r-row"><span class="r-k">${k}</span><span class="r-v">${v}</span></div>`).join('');
-  } else {
-    box.innerHTML=`<div class="r-status fail">Not found — no on-chain record matched</div>
-      <div class="r-row"><span class="r-k">Query</span><span class="r-v">${q}</span></div>`;
+function nextSlide() {
+  if (current < slides.length - 1) {
+    current++;
+    showSlide(current);
   }
 }
 
-function switchTab(name,el) {
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('panel-'+name).classList.add('active');
+function prevSlide() {
+  if (current > 0) {
+    current--;
+    showSlide(current);
+  }
 }
-
-renderList();
-document.getElementById('v-input').addEventListener('keydown',e=>{if(e.key==='Enter')verify();});
 </script>
+
 </body>
 </html>
