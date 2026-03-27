@@ -2,34 +2,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>e-Judiciary & AI Study</title>
+<title>Digital Justice & AI</title>
+
 <style>
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #0f172a;
-  color: #e2e8f0;
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: white;
   overflow: hidden;
 }
 
 .slide {
   display: none;
   height: 100vh;
-  padding: 60px;
+  padding: 80px;
   box-sizing: border-box;
+  animation: fade 0.6s ease;
 }
 
-.active {
-  display: block;
+.active { display: block; }
+
+@keyframes fade {
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: translateY(0);}
 }
 
-h1, h2 {
+h1 {
+  font-size: 56px;
   color: #38bdf8;
 }
 
+h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #22d3ee;
+}
+
 p {
-  font-size: 18px;
-  line-height: 1.6;
+  font-size: 22px;
+  opacity: 0.9;
+}
+
+ul {
+  font-size: 22px;
+  line-height: 1.8;
 }
 
 .nav {
@@ -42,25 +59,36 @@ p {
 }
 
 button {
-  background: #38bdf8;
-  border: none;
-  padding: 12px 20px;
+  background: rgba(56,189,248,0.15);
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+  padding: 12px 22px;
   font-size: 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
+  backdrop-filter: blur(10px);
 }
 
 button:hover {
-  background: #0ea5e9;
+  background: #38bdf8;
+  color: black;
 }
 
 .progress {
   position: fixed;
   top: 0;
   left: 0;
-  height: 5px;
+  height: 4px;
   background: #38bdf8;
   width: 0%;
+  transition: 0.3s;
+}
+
+.slide-number {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  opacity: 0.6;
 }
 </style>
 </head>
@@ -68,135 +96,140 @@ button:hover {
 <body>
 
 <div class="progress" id="progress"></div>
+<div class="slide-number" id="slideNum"></div>
 
 <!-- SLIDES -->
 
 <div class="slide active">
-  <h1>Digital Justice & AI in Judiciary</h1>
-  <p><b>Empirical Study on Public Awareness & Accessibility</b></p>
-  <p>By RAKUNATHA KHRISHANTH MANATHRA</p>
+  <h1>Digital Justice ⚖️</h1>
+  <p>AI × Judiciary × Access to Justice</p>
 </div>
 
 <div class="slide">
-  <h2>Abstract</h2>
-  <p>This study evaluates awareness and usage of e-Judiciary services at the Madras High Court and explores AI integration in judicial processes.</p>
-  <p>Findings show high awareness of basic tools but low adoption of advanced systems like e-filing and AI.</p>
+  <h2>The Core Idea</h2>
+  <p>Courts are going digital.</p>
+  <p>But people are not keeping up.</p>
 </div>
 
 <div class="slide">
-  <h2>Key Objectives</h2>
-  <p>• Assess awareness of digital court services</p>
-  <p>• Evaluate usage & perception</p>
-  <p>• Identify barriers & suggest improvements</p>
+  <h2>What Exists Today</h2>
+  <ul>
+    <li>Case Status ✔</li>
+    <li>e-Cause Lists ✔</li>
+    <li>e-Filing ⚠</li>
+    <li>Virtual Hearings ⚠</li>
+  </ul>
 </div>
 
 <div class="slide">
-  <h2>Introduction</h2>
-  <p>Indian judiciary is transitioning from paper-based systems to digital platforms including:</p>
-  <p>• e-Filing</p>
-  <p>• Virtual Hearings</p>
-  <p>• Case Tracking</p>
+  <h2>The Real Problem</h2>
+  <ul>
+    <li>Low Awareness</li>
+    <li>Digital Illiteracy</li>
+    <li>Language Barriers</li>
+    <li>Fear of Tech</li>
+  </ul>
 </div>
 
 <div class="slide">
-  <h2>Problem Statement</h2>
-  <p>Availability ≠ Accessibility</p>
-  <p>Major gap exists due to:</p>
-  <p>• Digital illiteracy</p>
-  <p>• Language barriers</p>
-  <p>• Lack of awareness</p>
+  <h2>Ground Reality</h2>
+  <p>Younger → Use it</p>
+  <p>Older → Avoid it</p>
+  <p>Women → Use less</p>
 </div>
 
 <div class="slide">
-  <h2>Methodology</h2>
-  <p>• Sample: 200 respondents (Chennai)</p>
-  <p>• Method: Questionnaire</p>
-  <p>• Analysis: SPSS, graphs, comparative charts</p>
+  <h2>Key Insight</h2>
+  <p>Awareness ≠ Usage</p>
+  <p>Access ≠ Inclusion</p>
 </div>
 
 <div class="slide">
-  <h2>Key Findings</h2>
-  <p>• High awareness: Case status & cause lists</p>
-  <p>• Low usage: e-Filing & AI tools</p>
-  <p>• Major barrier: Digital literacy</p>
+  <h2>Why It Matters</h2>
+  <ul>
+    <li>Faster Justice</li>
+    <li>Lower Costs</li>
+    <li>Less Court Visits</li>
+  </ul>
 </div>
 
 <div class="slide">
-  <h2>Demographic Insights</h2>
-  <p>• Youth → High usage</p>
-  <p>• Elderly → Low awareness</p>
-  <p>• Women → Lower participation</p>
+  <h2>Where AI Comes In</h2>
+  <ul>
+    <li>Legal Research</li>
+    <li>Case Prediction</li>
+    <li>Language Translation</li>
+    <li>Smart Assistance</li>
+  </ul>
 </div>
 
 <div class="slide">
-  <h2>Challenges</h2>
-  <p>• Technical difficulty</p>
-  <p>• Fear of mistakes</p>
-  <p>• Internet access issues</p>
-  <p>• Lack of guidance</p>
+  <h2>Global Reality</h2>
+  <p>US / UK → High Usage</p>
+  <p>India → High Potential</p>
 </div>
 
 <div class="slide">
-  <h2>Role of AI</h2>
-  <p>AI can improve:</p>
-  <p>• Case management</p>
-  <p>• Legal research</p>
-  <p>• Language translation</p>
+  <h2>Big Gap</h2>
+  <p>Technology exists.</p>
+  <p>People don’t use it.</p>
 </div>
 
 <div class="slide">
-  <h2>Global Comparison</h2>
-  <p>India vs US/UK/Canada:</p>
-  <p>• India → Free access but low awareness</p>
-  <p>• Developed countries → High usage, better literacy</p>
+  <h2>Solutions</h2>
+  <ul>
+    <li>Help Desks</li>
+    <li>Training</li>
+    <li>Regional Languages</li>
+    <li>AI Assistants</li>
+  </ul>
 </div>
 
 <div class="slide">
-  <h2>Recommendations</h2>
-  <p>• Help desks in courts</p>
-  <p>• Training programs</p>
-  <p>• Regional language support</p>
-  <p>• AI integration</p>
+  <h2>Final Thought</h2>
+  <p>Digital Justice is powerful.</p>
+  <p>But only if people can use it.</p>
 </div>
 
-<div class="slide">
-  <h2>Conclusion</h2>
-  <p>Digital justice is powerful but incomplete.</p>
-  <p>Success depends on awareness, inclusivity & accessibility.</p>
-</div>
-
-<!-- NAVIGATION -->
+<!-- NAV -->
 
 <div class="nav">
-  <button onclick="prevSlide()">⬅ Previous</button>
-  <button onclick="nextSlide()">Next ➡</button>
+  <button onclick="prev()">⬅ Back</button>
+  <button onclick="next()">Next ➡</button>
 </div>
 
 <script>
 let current = 0;
 const slides = document.querySelectorAll(".slide");
 const progress = document.getElementById("progress");
+const slideNum = document.getElementById("slideNum");
 
-function showSlide(index) {
+function show(i){
   slides.forEach(s => s.classList.remove("active"));
-  slides[index].classList.add("active");
+  slides[i].classList.add("active");
 
-  progress.style.width = ((index + 1) / slides.length) * 100 + "%";
+  progress.style.width = ((i+1)/slides.length)*100 + "%";
+  slideNum.innerText = (i+1) + " / " + slides.length;
 }
 
-function nextSlide() {
-  if (current < slides.length - 1) {
+function next(){
+  if(current < slides.length-1){
     current++;
-    showSlide(current);
+    show(current);
   }
 }
 
-function prevSlide() {
-  if (current > 0) {
+function prev(){
+  if(current > 0){
     current--;
-    showSlide(current);
+    show(current);
   }
 }
+
+document.addEventListener("keydown", e => {
+  if(e.key === "ArrowRight") next();
+  if(e.key === "ArrowLeft") prev();
+});
 </script>
 
 </body>
