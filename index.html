@@ -3,225 +3,360 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Land Registry</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>👁️👄👁️</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'IBM Plex Sans', sans-serif; background: #fff; color: #0a0a0a; min-height: 100vh; }
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
 
-header {
-border-bottom: 1px solid #e0e0e0;
-padding: 20px 40px;
-display: flex; align-items: center; justify-content: space-between;
+body {
+background: #050508;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+font-family: ‘Share Tech Mono’, monospace;
+overflow: hidden;
+cursor: none;
+user-select: none;
 }
-.wordmark { font-family: ‘IBM Plex Mono’, monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
-.chain-indicator { display: flex; align-items: center; gap: 6px; font-family: ‘IBM Plex Mono’, monospace; font-size: 11px; color: #888; }
-.chain-indicator::before { content: ‘’; display: block; width: 6px; height: 6px; border-radius: 50%; background: #0a0a0a; animation: pulse 2.5s ease-in-out infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-main { max-width: 600px; margin: 0 auto; padding: 60px 24px 80px; }
-
-.eyebrow { font-family: ‘IBM Plex Mono’, monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: #888; margin-bottom: 8px; }
-h1 { font-size: 30px; font-weight: 300; letter-spacing: -0.3px; line-height: 1.2; margin-bottom: 48px; }
-
-.tabs { display: flex; border-bottom: 1px solid #e0e0e0; margin-bottom: 36px; }
-.tab { font-family: ‘IBM Plex Mono’, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; padding: 10px 20px 10px 0; border: none; background: none; color: #888; cursor: pointer; border-bottom: 1.5px solid transparent; margin-bottom: -1px; transition: color 0.15s, border-color 0.15s; }
-.tab.active { color: #0a0a0a; border-bottom-color: #0a0a0a; }
-.tab:hover:not(.active) { color: #0a0a0a; }
-
-.panel { display: none; }
-.panel.active { display: block; animation: appear 0.18s ease; }
-@keyframes appear { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
-
-.field { margin-bottom: 22px; }
-.field label { display: block; font-family: ‘IBM Plex Mono’, monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #888; margin-bottom: 7px; }
-.field input, .field select { width: 100%; border: 1px solid #e0e0e0; border-radius: 0; padding: 10px 12px; font-family: ‘IBM Plex Mono’, monospace; font-size: 13px; color: #0a0a0a; background: #fff; outline: none; transition: border-color 0.15s; -webkit-appearance: none; }
-.field input:focus, .field select:focus { border-color: #0a0a0a; }
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-.btn { font-family: ‘IBM Plex Mono’, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; padding: 12px 24px; border: 1px solid #0a0a0a; background: #0a0a0a; color: #fff; cursor: pointer; transition: background 0.15s, color 0.15s; }
-.btn:hover { background: #fff; color: #0a0a0a; }
-
-.list-section { margin-top: 48px; }
-.list-label { font-family: ‘IBM Plex Mono’, monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: #888; margin-bottom: 12px; }
-
-.record { border-top: 1px solid #e0e0e0; padding: 14px 0; display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; }
-.r-id { font-family: ‘IBM Plex Mono’, monospace; font-size: 13px; font-weight: 500; }
-.r-owner { font-size: 13px; color: #888; grid-column: 1; }
-.r-hash { font-family: ‘IBM Plex Mono’, monospace; font-size: 10px; color: #bbb; grid-column: 1; margin-top: 3px; }
-.r-block { font-family: ‘IBM Plex Mono’, monospace; font-size: 11px; color: #888; grid-row: 1/3; grid-column: 2; text-align: right; padding-top: 2px; }
-
-.empty { font-family: ‘IBM Plex Mono’, monospace; font-size: 12px; color: #bbb; padding: 20px 0; border-top: 1px solid #e0e0e0; }
-
-.result { border: 1px solid #e0e0e0; padding: 24px; margin-top: 24px; display: none; animation: appear 0.18s ease; }
-.result.show { display: block; }
-.result.valid { border-color: #0a0a0a; }
-.r-status { font-family: ‘IBM Plex Mono’, monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 16px; }
-.r-status.ok { color: #0a0a0a; }
-.r-status.fail { color: #888; }
-.r-row { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 0; border-bottom: 1px solid #f0f0f0; gap: 16px; }
-.r-row:last-child { border: none; }
-.r-k { font-family: ‘IBM Plex Mono’, monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #888; flex-shrink: 0; }
-.r-v { font-family: ‘IBM Plex Mono’, monospace; font-size: 12px; text-align: right; }
-
-.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(8px); background: #0a0a0a; color: #fff; font-family: ‘IBM Plex Mono’, monospace; font-size: 12px; padding: 10px 20px; opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; white-space: nowrap; z-index: 999; }
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-@media (max-width: 520px) {
-header { padding: 16px 20px; }
-main { padding: 36px 20px 60px; }
-.row { grid-template-columns: 1fr; }
-h1 { font-size: 24px; }
+.scanlines {
+position: fixed; inset: 0;
+background: repeating-linear-gradient(
+to bottom,
+transparent 0px, transparent 2px,
+rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px
+);
+pointer-events: none; z-index: 100;
 }
+.vignette {
+position: fixed; inset: 0;
+background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.9) 100%);
+pointer-events: none; z-index: 99;
+}
+
+#cursor {
+position: fixed;
+width: 18px; height: 18px;
+border: 2px solid #39ff14;
+border-radius: 50%;
+pointer-events: none;
+z-index: 200;
+transform: translate(-50%,-50%);
+transition: width .15s, height .15s, background .15s;
+box-shadow: 0 0 8px #39ff14, 0 0 20px #39ff1466;
+}
+#cursor.pressed {
+width: 36px; height: 36px;
+background: #39ff1422;
+}
+
+#face {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: clamp(8px, 5vw, 60px);
+perspective: 800px;
+}
+
+.ascii-el {
+line-height: 1;
+white-space: pre;
+transition: filter .12s;
+transform-origin: center;
+}
+
+.eye-wrap {
+font-size: clamp(70px, 18vw, 180px);
+filter: drop-shadow(0 0 14px #39ff14) drop-shadow(0 0 36px #39ff1466);
+}
+
+.mouth-wrap {
+font-size: clamp(80px, 20vw, 200px);
+filter: drop-shadow(0 0 14px #ff3c6e) drop-shadow(0 0 36px #ff3c6e66);
+transform-origin: center;
+}
+
+.ripple {
+position: fixed;
+border-radius: 50%;
+pointer-events: none;
+transform: translate(-50%,-50%) scale(0);
+animation: rippleOut .6s ease-out forwards;
+z-index: 50;
+}
+@keyframes rippleOut {
+to { transform: translate(-50%,-50%) scale(1); opacity: 0; }
+}
+
+@keyframes shake {
+0%,100% { transform: translate(0,0) rotate(0deg); }
+15% { transform: translate(-10px, 5px) rotate(-3deg); }
+30% { transform: translate(10px, -5px) rotate(3deg); }
+45% { transform: translate(-7px, 7px) rotate(-2deg); }
+60% { transform: translate(7px, -4px) rotate(2deg); }
+80% { transform: translate(-4px, 3px) rotate(-1deg); }
+}
+@keyframes spinEye {
+0% { transform: rotate(0deg) scale(1); }
+50% { transform: rotate(180deg) scale(1.3); }
+100% { transform: rotate(360deg) scale(1); }
+}
+@keyframes squish {
+0%,100% { transform: scaleY(1) scaleX(1); }
+30% { transform: scaleY(0.55) scaleX(1.4); }
+60% { transform: scaleY(1.25) scaleX(0.85); }
+}
+@keyframes scream {
+0%,100% { transform: scale(1) rotate(0deg); }
+20% { transform: scale(1.5) rotate(-6deg); }
+50% { transform: scale(0.8) rotate(4deg); }
+75% { transform: scale(1.3) rotate(-2deg); }
+}
+@keyframes bounce {
+0%,100% { transform: translateY(0); }
+40% { transform: translateY(-20px); }
+70% { transform: translateY(8px); }
+}
+@keyframes glitch {
+0%,100% { filter: drop-shadow(0 0 14px #39ff14); }
+15% { filter: drop-shadow(-4px 0 #ff003c) drop-shadow(4px 0 #00cfff) hue-rotate(90deg); transform: translate(4px,0); }
+30% { filter: drop-shadow(0 0 14px #39ff14); transform: translate(-4px,0); }
+45% { filter: invert(1) hue-rotate(180deg); transform: translate(2px,0); }
+60% { filter: drop-shadow(0 0 14px #39ff14); transform: translate(0,0); }
+}
+
+.reaction {
+position: fixed;
+font-family: ‘Share Tech Mono’, monospace;
+font-size: clamp(18px, 3.5vw, 32px);
+color: #39ff14;
+text-shadow: 0 0 12px #39ff14;
+pointer-events: none;
+z-index: 80;
+animation: floatUp 1s ease-out forwards;
+white-space: nowrap;
+}
+@keyframes floatUp {
+0%   { opacity:1; transform:translate(-50%,-50%) scale(1); }
+100% { opacity:0; transform:translate(-50%,-160%) scale(1.4); }
+}
+
+#hint {
+position: fixed;
+bottom: 28px;
+left: 50%;
+transform: translateX(-50%);
+color: #39ff1466;
+font-size: clamp(10px, 2vw, 13px);
+letter-spacing: .3em;
+text-transform: uppercase;
+animation: fadeHint 4s 1s ease-in-out forwards;
+z-index: 90;
+text-align: center;
+}
+@keyframes fadeHint { 0%,70%{opacity:1} 100%{opacity:0} }
 </style>
 
 </head>
 <body>
 
-<header>
-  <div class="wordmark">Land Registry</div>
-  <div class="chain-indicator">Block <span id="bnum">4</span></div>
-</header>
+<div class="scanlines"></div>
+<div class="vignette"></div>
+<div id="cursor"></div>
 
-<main>
-  <div class="eyebrow">Blockchain-secured</div>
-  <h1>Immutable property<br>ownership records</h1>
-
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('register',this)">Register</button>
-    <button class="tab" onclick="switchTab('verify',this)">Verify</button>
-  </div>
-
-  <div id="panel-register" class="panel active">
-    <div class="row">
-      <div class="field">
-        <label>Parcel / Survey No.</label>
-        <input id="r-id" type="text" placeholder="e.g. TN/CHE/0042">
-      </div>
-      <div class="field">
-        <label>Land type</label>
-        <select id="r-type">
-          <option value="">Select</option>
-          <option>Residential</option>
-          <option>Commercial</option>
-          <option>Agricultural</option>
-          <option>Industrial</option>
-        </select>
-      </div>
-    </div>
-    <div class="field">
-      <label>Location</label>
-      <input id="r-loc" type="text" placeholder="Full legal address">
-    </div>
-    <div class="row">
-      <div class="field">
-        <label>Area (m²)</label>
-        <input id="r-area" type="number" placeholder="450">
-      </div>
-      <div class="field">
-        <label>Owner name</label>
-        <input id="r-owner" type="text" placeholder="Full legal name">
-      </div>
-    </div>
-    <button class="btn" onclick="register()">Register on chain</button>
-
-```
-<div class="list-section">
-  <div class="list-label">Registered parcels</div>
-  <div id="record-list"></div>
+<div id="face">
+  <div class="eye-wrap  ascii-el" id="eye-left">👁️</div>
+  <div class="mouth-wrap ascii-el" id="mouth">👄</div>
+  <div class="eye-wrap  ascii-el" id="eye-right">👁️</div>
 </div>
-```
 
-  </div>
-
-  <div id="panel-verify" class="panel">
-    <div class="field">
-      <label>Parcel ID or transaction hash</label>
-      <input id="v-input" type="text" placeholder="TN/CHE/0042 or 0x…">
-    </div>
-    <button class="btn" onclick="verify()">Verify record</button>
-    <div id="result" class="result"></div>
-  </div>
-</main>
-
-<div id="toast" class="toast"></div>
+<div id="hint">tap eyes · drag mouth · shake to panic</div>
 
 <script>
-let blockNum = 4;
-const parcels = [
-  { id:'TN/CHE/0001', type:'Residential', location:'12 Poes Garden, Chennai', area:320, owner:'Kavitha Sundar', hash:'0x9b3d…f721', block:2, ts:'2024-01-15' },
-  { id:'TN/CBE/0002', type:'Commercial', location:'45 Avinashi Rd, Coimbatore', area:850, owner:'Rajesh Natarajan', hash:'0x2c7f…4b32', block:3, ts:'2024-02-03' },
-  { id:'TN/MDU/0003', type:'Agricultural', location:'Srivilliputhur, Madurai', area:4200, owner:'Murugesan Pillai', hash:'0xa1e4…8d71', block:4, ts:'2024-02-20' },
-];
+const cursor = document.getElementById('cursor');
+const face   = document.getElementById('face');
+const eyeL   = document.getElementById('eye-left');
+const eyeR   = document.getElementById('eye-right');
+const mouth  = document.getElementById('mouth');
 
-function genHash() {
-  const c='0123456789abcdef'; let s='0x';
-  for(let i=0;i<4;i++) s+=c[Math.floor(Math.random()*16)];
-  s+='…';
-  for(let i=0;i<4;i++) s+=c[Math.floor(Math.random()*16)];
-  return s;
+let mx = innerWidth/2, my = innerHeight/2;
+let prevMx = mx, prevMy = my;
+let velX = 0, velY = 0, fastCount = 0;
+let faceRX = 0, faceRY = 0;
+let eyeLX = 0, eyeLY = 0, eyeRX = 0, eyeRY = 0;
+let isDown = false, holdInterval = null;
+let dragging = false, dragStartY = 0, mouthDragScale = 1;
+let lastPanic = 0;
+let eyeLState = 0, eyeRState = 0; // 0=normal,animating=1
+
+function lerp(a,b,t){ return a+(b-a)*t; }
+
+// ── Cursor ────────────────────────────────────────────────────────
+function setPos(x,y){ mx=x; my=y; cursor.style.left=x+'px'; cursor.style.top=y+'px'; }
+document.addEventListener('mousemove', e => setPos(e.clientX,e.clientY));
+document.addEventListener('touchmove', e => { e.preventDefault(); setPos(e.touches[0].clientX,e.touches[0].clientY); },{passive:false});
+
+// ── Helpers ───────────────────────────────────────────────────────
+function center(el){ const r=el.getBoundingClientRect(); return {x:r.left+r.width/2,y:r.top+r.height/2}; }
+function hit(el,x,y){ const r=el.getBoundingClientRect(); return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom; }
+
+function ripple(x,y,size,col){
+  const d=document.createElement('div');
+  d.className='ripple';
+  d.style.cssText=`left:${x}px;top:${y}px;width:${size}px;height:${size}px;background:${col||'radial-gradient(circle,#39ff1455 0%,transparent 70%)'}`;
+  document.body.appendChild(d);
+  setTimeout(()=>d.remove(),700);
 }
 
-function toast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2600);
+const words=['!!','OwO','uwu','OOF','WHY','HEY','lol','bruh','omg','👀','wut'];
+const mouths=['😮','😲','😬','🫦','💋','😱'];
+
+function reaction(text,x,y){
+  const d=document.createElement('div');
+  d.className='reaction';
+  d.textContent=text;
+  d.style.cssText=`left:${x}px;top:${y}px`;
+  document.body.appendChild(d);
+  setTimeout(()=>d.remove(),1000);
 }
 
-function renderList() {
-  const el=document.getElementById('record-list');
-  if(!parcels.length){ el.innerHTML='<div class="empty">No parcels registered yet.</div>'; return; }
-  el.innerHTML=parcels.map(p=>`
-    <div class="record">
-      <div class="r-id">${p.id}</div>
-      <div class="r-block">Block #${p.block}</div>
-      <div class="r-owner">${p.owner} · ${p.type}</div>
-      <div class="r-hash">${p.hash} · ${p.ts}</div>
-    </div>`).join('');
-}
+// ── Raf loop ──────────────────────────────────────────────────────
+function raf(){
+  velX = mx - prevMx; velY = my - prevMy;
+  prevMx = mx; prevMy = my;
+  const speed = Math.sqrt(velX*velX+velY*velY);
 
-function register() {
-  const id=document.getElementById('r-id').value.trim();
-  const type=document.getElementById('r-type').value;
-  const loc=document.getElementById('r-loc').value.trim();
-  const area=document.getElementById('r-area').value;
-  const owner=document.getElementById('r-owner').value.trim();
-  if(!id||!type||!loc||!area||!owner){ toast('Fill all fields'); return; }
-  blockNum++;
-  parcels.push({ id, type, location:loc, area:Number(area), owner, hash:genHash(), block:blockNum, ts:new Date().toISOString().slice(0,10) });
-  document.getElementById('bnum').textContent=blockNum;
-  renderList();
-  toast('Registered · Block #'+blockNum);
-  ['r-id','r-loc','r-area','r-owner'].forEach(i=>document.getElementById(i).value='');
-  document.getElementById('r-type').value='';
-}
+  // shake / panic
+  if(speed > 28){ fastCount++; } else { fastCount = Math.max(0,fastCount-1); }
+  if(fastCount > 6){ triggerPanic(); fastCount=0; }
 
-function verify() {
-  const q=document.getElementById('v-input').value.trim();
-  const box=document.getElementById('result');
-  if(!q) return;
-  const p=parcels.find(x=>x.id===q||x.hash===q);
-  box.className='result show '+(p?'valid':'');
-  if(p){
-    box.innerHTML=`<div class="r-status ok">Verified — on chain</div>`+
-      [['Parcel',p.id],['Owner',p.owner],['Type',p.type],['Location',p.location],['Area',p.area.toLocaleString()+' m²'],['Tx hash',p.hash],['Block','#'+p.block],['Date',p.ts]]
-      .map(([k,v])=>`<div class="r-row"><span class="r-k">${k}</span><span class="r-v">${v}</span></div>`).join('');
-  } else {
-    box.innerHTML=`<div class="r-status fail">Not found — no on-chain record matched</div>
-      <div class="r-row"><span class="r-k">Query</span><span class="r-v">${q}</span></div>`;
+  // face tilt
+  const cx=innerWidth/2, cy=innerHeight/2;
+  faceRX = lerp(faceRX, (mx-cx)*0.018, 0.06);
+  faceRY = lerp(faceRY, (my-cy)*0.012, 0.06);
+  face.style.transform = `rotateY(${faceRX}deg) rotateX(${-faceRY}deg)`;
+
+  // eye tracking
+  function eyeTrack(el, ox, oy){
+    const c = center(el);
+    const dx=mx-c.x, dy=my-c.y;
+    const d=Math.sqrt(dx*dx+dy*dy)||1;
+    const r = Math.min(d/180,1)*20;
+    return { x: lerp(ox,(dx/d)*r,0.1), y: lerp(oy,(dy/d)*r,0.1) };
   }
+  if(eyeLState===0){ const o=eyeTrack(eyeL,eyeLX,eyeLY); eyeLX=o.x; eyeLY=o.y; eyeL.style.transform=`translate(${eyeLX}px,${eyeLY}px)`; }
+  if(eyeRState===0){ const o=eyeTrack(eyeR,eyeRX,eyeRY); eyeRX=o.x; eyeRY=o.y; eyeR.style.transform=`translate(${eyeRX}px,${eyeRY}px)`; }
+
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+// ── Panic / shake ─────────────────────────────────────────────────
+function triggerPanic(){
+  const now=Date.now(); if(now-lastPanic<800) return; lastPanic=now;
+  face.style.animation='shake .5s ease-out';
+  mouth.style.animation='scream .45s ease-out';
+  ripple(mx,my,220,'radial-gradient(circle,#ff3c6e55 0%,transparent 70%)');
+  reaction(['!!!','AHHHH','STOP','no no','🫨'][Math.floor(Math.random()*5)], mx, my-50);
+  setTimeout(()=>{ face.style.animation=''; mouth.style.animation=''; },500);
 }
 
-function switchTab(name,el) {
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('panel-'+name).classList.add('active');
+// ── Tap eye ───────────────────────────────────────────────────────
+function tapEye(el, stateRef, setRef){
+  if(stateRef[0]!==0) return;
+  stateRef[0]=1;
+  const c=center(el);
+  const animations=['spinEye .7s ease-out','squish .5s ease-out','bounce .5s ease-out','glitch .4s ease-out'];
+  const texts=['👁','OwO','UwU','😵','wut'];
+  const pick=Math.floor(Math.random()*animations.length);
+  el.style.animation=animations[pick];
+  reaction(texts[pick], c.x, c.y-60);
+  ripple(c.x,c.y,140,'radial-gradient(circle,#39ff1466 0%,transparent 70%)');
+  setTimeout(()=>{ el.style.animation=''; stateRef[0]=0; },700);
 }
 
-renderList();
-document.getElementById('v-input').addEventListener('keydown',e=>{if(e.key==='Enter')verify();});
+const eyeLState2=[0], eyeRState2=[0]; // use array so tapEye can mutate
+
+// ── Tap mouth ────────────────────────────────────────────────────
+function tapMouth(){
+  const c=center(mouth);
+  mouth.style.animation='scream .45s ease-out';
+  reaction(mouths[Math.floor(Math.random()*mouths.length)], c.x, c.y-70);
+  ripple(c.x,c.y,200,'radial-gradient(circle,#ff3c6e55 0%,transparent 70%)');
+  setTimeout(()=>mouth.style.animation='',450);
+}
+
+// ── Generic tap ──────────────────────────────────────────────────
+function doTap(x,y){
+  if(hit(eyeL,x,y)){ tapEye(eyeL,eyeLState2,null); return; }
+  if(hit(eyeR,x,y)){ tapEye(eyeR,eyeRState2,null); return; }
+  if(hit(mouth,x,y)){ tapMouth(); return; }
+  // background tap
+  face.style.animation='shake .3s ease-out';
+  reaction(words[Math.floor(Math.random()*words.length)], x, y-40);
+  ripple(x,y,150);
+  setTimeout(()=>face.style.animation='',300);
+}
+
+// ── Hold ─────────────────────────────────────────────────────────
+function startHold(){
+  ripple(mx,my,120);
+  holdInterval=setInterval(()=>{
+    face.style.animation='shake .2s ease-out';
+    reaction('!!',mx+Math.random()*40-20,my-40);
+    ripple(mx,my,80);
+    setTimeout(()=>face.style.animation='',200);
+  },280);
+}
+function stopHold(){ clearInterval(holdInterval); holdInterval=null; }
+
+// ── Drag (mouth stretch) ─────────────────────────────────────────
+function onDragMove(y){
+  const dy = y - dragStartY;
+  const s = 1 + Math.abs(dy)/250;
+  mouthDragScale = dy > 0 ? s : 1/s;
+  mouth.style.transform = `scaleY(${mouthDragScale}) scaleX(${1/Math.sqrt(Math.abs(mouthDragScale))})`;
+}
+function onDragEnd(){
+  dragging=false;
+  mouth.style.transform='';
+  mouthDragScale=1;
+}
+
+// ── Mouse ─────────────────────────────────────────────────────────
+document.addEventListener('mousedown', e=>{
+  isDown=true; dragging=true; dragStartY=e.clientY;
+  cursor.classList.add('pressed');
+  holdInterval===null && setTimeout(()=>{ if(isDown) startHold(); },320);
+});
+document.addEventListener('mousemove', e=>{ if(dragging) onDragMove(e.clientY); });
+document.addEventListener('mouseup', e=>{
+  isDown=false; stopHold(); cursor.classList.remove('pressed');
+  const dist=Math.abs(e.clientY-dragStartY);
+  onDragEnd();
+  if(dist<8) doTap(e.clientX,e.clientY);
+});
+
+// ── Touch ──────────────────────────────────────────────────────────
+document.addEventListener('touchstart', e=>{
+  const t=e.touches[0]; setPos(t.clientX,t.clientY);
+  isDown=true; dragging=true; dragStartY=t.clientY;
+  cursor.classList.add('pressed');
+  setTimeout(()=>{ if(isDown) startHold(); },320);
+},{passive:true});
+document.addEventListener('touchmove', e=>{
+  if(dragging) onDragMove(e.touches[0].clientY);
+},{passive:false});
+document.addEventListener('touchend', e=>{
+  const t=e.changedTouches[0];
+  isDown=false; stopHold(); cursor.classList.remove('pressed');
+  const dist=Math.abs(t.clientY-dragStartY);
+  onDragEnd();
+  if(dist<8) doTap(t.clientX,t.clientY);
+});
 </script>
 
 </body>
