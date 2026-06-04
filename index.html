@@ -14,204 +14,323 @@
   --text:#f0ede8;
   --muted:#6b6b6b;
   --accent:#c8a96e;
-  --w:920px;
-  --h:520px;
-}
-body{
-  background:var(--bg);
-  font-family:'Inter',sans-serif;
-  color:var(--text);
-  overflow:hidden;
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:20px;
-}
-#stage{
-  width:var(--w);
-  height:var(--h);
-  position:relative;
-  background:var(--bg);
-  border:1px solid var(--line);
-}
-.slide{
-  position:absolute;
-  inset:0;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .4s ease;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-.slide.active{opacity:1;pointer-events:all}
-
-.rule{
-  position:absolute;
-  top:0;left:80px;right:80px;
-  height:1px;
-  background:var(--line);
-}
-.rule-b{top:auto;bottom:0}
-
-.eyebrow{
-  font-size:10px;
-  letter-spacing:3px;
-  text-transform:uppercase;
-  color:var(--muted);
-  font-family:'Inter',sans-serif;
-  font-weight:400;
-  margin-bottom:20px;
-}
-.big{
-  font-family:'EB Garamond',serif;
-  font-size:52px;
-  font-weight:400;
-  line-height:1.1;
-  color:var(--text);
-}
-.big em{color:var(--accent);font-style:italic}
-.sub{
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.7;
-  font-weight:300;
-  max-width:520px;
-  margin-top:18px;
-}
-.authors{
-  display:flex;
-  gap:40px;
-  margin-top:36px;
-  padding-top:28px;
-  border-top:1px solid var(--line);
-}
-.aname{font-size:12px;font-weight:500;color:var(--text)}
-.arole{font-size:11px;color:var(--muted);margin-top:2px}
-
-.pad{padding:0 80px}
-
-.statement{
-  font-family:'EB Garamond',serif;
-  font-size:28px;
-  font-weight:400;
-  line-height:1.55;
-  color:var(--text);
-  max-width:700px;
-}
-.statement em{color:var(--accent);font-style:italic}
-
-.col2{display:grid;grid-template-columns:1fr 1fr;height:100%}
-.col-l{
-  padding:60px 52px;
-  border-right:1px solid var(--line);
-  display:flex;flex-direction:column;justify-content:center;
-}
-.col-r{
-  padding:60px 52px;
-  display:flex;flex-direction:column;justify-content:center;gap:20px;
 }
 
-.point{
-  display:flex;gap:20px;align-items:flex-start;
-  padding-bottom:20px;
-  border-bottom:1px solid var(--line);
-}
-.point:last-child{border-bottom:none;padding-bottom:0}
-.point-num{
-  font-family:'EB Garamond',serif;
-  font-size:28px;color:var(--accent);
-  line-height:1;flex-shrink:0;
-  font-weight:400;
-}
-.point-text{font-size:12px;color:var(--muted);line-height:1.7;padding-top:4px}
-.point-text strong{color:var(--text);font-weight:500;display:block;font-size:13px;margin-bottom:2px}
-
-.jgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);margin-top:28px}
-.jcell{background:var(--bg);padding:24px 20px}
-.jflag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
-.jname{font-size:14px;font-weight:500;margin-bottom:10px;font-family:'EB Garamond',serif}
-.jpts{font-size:11px;color:var(--muted);line-height:1.8}
-
-.sstats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:28px}
-.sstat{background:var(--bg);padding:22px 24px}
-.snum{font-family:'EB Garamond',serif;font-size:40px;color:var(--accent);font-weight:400;line-height:1}
-.slabel{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
-
-.layers{display:flex;flex-direction:column;gap:0}
-.layer{
-  display:flex;align-items:center;gap:20px;
-  padding:16px 0;
-  border-bottom:1px solid var(--line);
-}
-.layer:first-child{padding-top:0}
-.layer:last-child{border-bottom:none;padding-bottom:0}
-.ltag{
-  font-size:9px;letter-spacing:2px;text-transform:uppercase;
-  color:var(--accent);width:80px;flex-shrink:0;
-  font-weight:500;
-}
-.ltext{font-size:12px;color:var(--muted);line-height:1.6}
-.ltext strong{color:var(--text);font-weight:500}
-
-.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:28px}
-.fcell{background:var(--bg);padding:22px 20px}
-.ftitle{font-size:13px;font-weight:500;margin-bottom:8px}
-.fbody{font-size:11px;color:var(--muted);line-height:1.7}
-
-.quote-slide{padding:80px}
-blockquote{
-  font-family:'EB Garamond',serif;
-  font-size:22px;
-  font-style:italic;
-  line-height:1.7;
-  color:var(--text);
-  border-left:1px solid var(--accent);
-  padding-left:32px;
-  max-width:680px;
-  margin-bottom:40px;
-}
-.tags{display:flex;flex-wrap:wrap;gap:8px}
-.tag{
-  font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--muted);
-  border:1px solid var(--line);
-  padding:5px 12px;
-  font-weight:400;
+html, body {
+  height: 100%;
+  background: var(--bg);
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  overflow: hidden;
 }
 
-#nav{
-  width:var(--w);
-  display:flex;align-items:center;gap:14px;
+/* ── Layout shell ── */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px;
 }
-.nbtn{
-  background:none;
-  border:1px solid var(--line);
-  color:var(--muted);
-  padding:8px 18px;
-  font-size:11px;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  font-family:'Inter',sans-serif;
-  cursor:pointer;
-  transition:all .15s;
+
+/* ── Stage: fills viewport minus nav ── */
+#stage {
+  width: 100%;
+  max-width: 960px;
+  /* maintain 16:9 up to max size, then fill remaining height */
+  aspect-ratio: 16 / 9;
+  max-height: calc(100vh - 80px);
+  position: relative;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  overflow: hidden;
 }
-.nbtn:hover{border-color:var(--muted);color:var(--text)}
-.nbtn:disabled{opacity:.2;cursor:default}
-#bar-wrap{flex:1;height:1px;background:var(--line)}
-#pbar{height:100%;background:var(--accent);transition:width .3s}
-#ctr{font-size:11px;color:var(--muted);letter-spacing:1px}
+
+/* On very small / tall screens, drop aspect-ratio and let it fill */
+@media (max-height: 560px), (max-width: 480px) {
+  #stage {
+    aspect-ratio: unset;
+    flex: 1;
+    width: 100%;
+    max-height: none;
+  }
+  body {
+    gap: 10px;
+    padding: 10px;
+    overflow: hidden;
+  }
+}
+
+/* ── Slide base ── */
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .4s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.slide::-webkit-scrollbar { display: none; }
+.slide.active { opacity: 1; pointer-events: all; }
+
+/* ── Decorative rules ── */
+.rule {
+  position: absolute;
+  top: 0; left: 5%; right: 5%;
+  height: 1px;
+  background: var(--line);
+  flex-shrink: 0;
+}
+.rule-b { top: auto; bottom: 0; }
+
+/* ── Fluid padding ── */
+.pad {
+  padding: 0 clamp(24px, 7%, 80px);
+}
+
+/* ── Typography scale ── */
+.eyebrow {
+  font-size: clamp(8px, 1.1vw, 10px);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 400;
+  margin-bottom: clamp(10px, 2vw, 20px);
+}
+
+.big {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(28px, 5.5vw, 52px);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--text);
+}
+.big em { color: var(--accent); font-style: italic; }
+
+.sub {
+  font-size: clamp(10px, 1.3vw, 13px);
+  color: var(--muted);
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 520px;
+  margin-top: clamp(10px, 1.8vw, 18px);
+}
+
+.statement {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(16px, 2.9vw, 28px);
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--text);
+  max-width: 700px;
+}
+.statement em { color: var(--accent); font-style: italic; }
+
+/* ── Authors ── */
+.authors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(16px, 3vw, 40px);
+  margin-top: clamp(20px, 3.5vw, 36px);
+  padding-top: clamp(16px, 2.5vw, 28px);
+  border-top: 1px solid var(--line);
+}
+.aname { font-size: clamp(10px, 1.2vw, 12px); font-weight: 500; color: var(--text); }
+.arole { font-size: clamp(9px, 1.1vw, 11px); color: var(--muted); margin-top: 2px; }
+
+/* ── Two-column layout ── */
+.col2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+}
+.col-l {
+  padding: clamp(28px, 6%, 60px) clamp(20px, 5%, 52px);
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.col-r {
+  padding: clamp(28px, 6%, 60px) clamp(20px, 5%, 52px);
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(10px, 2vw, 20px);
+}
+
+/* Stack columns on narrow screens */
+@media (max-width: 600px) {
+  .col2 {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100%;
+  }
+  .col-l {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: clamp(16px, 4%, 28px);
+  }
+}
+
+/* ── Points (slide 3) ── */
+.point {
+  display: flex;
+  gap: clamp(12px, 2vw, 20px);
+  align-items: flex-start;
+  padding-bottom: clamp(12px, 2vw, 20px);
+  border-bottom: 1px solid var(--line);
+}
+.point:last-child { border-bottom: none; padding-bottom: 0; }
+.point-num {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(20px, 2.8vw, 28px);
+  color: var(--accent);
+  line-height: 1; flex-shrink: 0;
+  font-weight: 400;
+}
+.point-text { font-size: clamp(9px, 1.2vw, 12px); color: var(--muted); line-height: 1.7; padding-top: 4px; }
+.point-text strong { color: var(--text); font-weight: 500; display: block; font-size: clamp(10px, 1.3vw, 13px); margin-bottom: 2px; }
+
+/* ── Jurisdiction grid (slide 4) ── */
+.jgrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  margin-top: clamp(16px, 2.5vw, 28px);
+}
+@media (max-width: 700px) {
+  .jgrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 420px) {
+  .jgrid { grid-template-columns: 1fr; }
+}
+.jcell { background: var(--bg); padding: clamp(14px, 2.3vw, 24px) clamp(12px, 2vw, 20px); }
+.jflag { font-size: clamp(8px, 1vw, 10px); letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.jname { font-size: clamp(11px, 1.4vw, 14px); font-weight: 500; margin-bottom: 8px; font-family: 'EB Garamond', serif; }
+.jpts { font-size: clamp(9px, 1.1vw, 11px); color: var(--muted); line-height: 1.8; }
+
+/* ── Stats (slide 5) ── */
+.sstats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  margin-top: clamp(16px, 2.5vw, 28px);
+}
+@media (max-width: 500px) {
+  .sstats { grid-template-columns: 1fr; }
+}
+.sstat { background: var(--bg); padding: clamp(14px, 2.2vw, 22px) clamp(14px, 2.5vw, 24px); }
+.snum { font-family: 'EB Garamond', serif; font-size: clamp(28px, 4vw, 40px); color: var(--accent); font-weight: 400; line-height: 1; }
+.slabel { font-size: clamp(9px, 1.1vw, 11px); color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+/* ── Layers (slide 7) ── */
+.layers { display: flex; flex-direction: column; gap: 0; }
+.layer {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(12px, 2vw, 20px);
+  padding: clamp(10px, 1.8vw, 16px) 0;
+  border-bottom: 1px solid var(--line);
+}
+.layer:first-child { padding-top: 0; }
+.layer:last-child { border-bottom: none; padding-bottom: 0; }
+.ltag {
+  font-size: clamp(7px, 0.9vw, 9px); letter-spacing: 2px; text-transform: uppercase;
+  color: var(--accent);
+  width: clamp(52px, 7%, 80px);
+  flex-shrink: 0;
+  font-weight: 500;
+  padding-top: 2px;
+}
+.ltext { font-size: clamp(9px, 1.2vw, 12px); color: var(--muted); line-height: 1.6; }
+.ltext strong { color: var(--text); font-weight: 500; }
+
+/* ── Findings grid (slide 6) ── */
+.fgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+}
+@media (max-width: 600px) {
+  .fgrid { grid-template-columns: 1fr; }
+}
+.fcell { background: var(--bg); padding: clamp(14px, 2.2vw, 22px) clamp(12px, 2vw, 20px); }
+.ftitle { font-size: clamp(10px, 1.3vw, 13px); font-weight: 500; margin-bottom: 6px; }
+.fbody { font-size: clamp(9px, 1.1vw, 11px); color: var(--muted); line-height: 1.7; }
+
+/* ── Quote slide (slide 8) ── */
+.quote-slide {
+  padding: clamp(32px, 8%, 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+blockquote {
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(14px, 2.2vw, 22px);
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--text);
+  border-left: 1px solid var(--accent);
+  padding-left: clamp(16px, 3vw, 32px);
+  max-width: 680px;
+  margin-bottom: clamp(20px, 4vw, 40px);
+}
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag {
+  font-size: clamp(8px, 1vw, 10px); letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+}
+
+/* ── Navigation ── */
+#nav {
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nbtn {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 7px 14px;
+  font-size: clamp(9px, 1.1vw, 11px);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.nbtn:hover { border-color: var(--muted); color: var(--text); }
+.nbtn:disabled { opacity: .2; cursor: default; }
+#bar-wrap { flex: 1; height: 1px; background: var(--line); }
+#pbar { height: 100%; background: var(--accent); transition: width .3s; }
+#ctr { font-size: clamp(9px, 1.1vw, 11px); color: var(--muted); letter-spacing: 1px; white-space: nowrap; }
+
+/* ── Slide 1: hero vertical centering padding ── */
+#s1.slide { padding-top: clamp(24px, 4%, 40px); }
 </style>
 </head>
 <body>
 
 <div id="stage">
 
+  <!-- Slide 1: Title -->
   <div class="slide active" id="s1">
     <div class="rule"></div>
-    <div class="pad" style="padding-top:0">
+    <div class="pad">
       <div class="eyebrow">Public International Law</div>
       <div class="big">IP Rights &amp; <em>AI</em><br>Across Borders</div>
       <div class="sub">A study on jurisdiction and enforcement of intellectual property rights in cross-border AI-related cases. 250 respondents. SPSS analysis.</div>
@@ -223,6 +342,7 @@ blockquote{
     <div class="rule rule-b"></div>
   </div>
 
+  <!-- Slide 2: The Problem -->
   <div class="slide" id="s2">
     <div class="rule"></div>
     <div class="pad">
@@ -236,11 +356,12 @@ blockquote{
     <div class="rule rule-b"></div>
   </div>
 
+  <!-- Slide 3: Three Failures -->
   <div class="slide" id="s3">
     <div class="col2">
       <div class="col-l">
         <div class="eyebrow">Three Failures</div>
-        <div class="statement" style="font-size:24px">Where the system breaks down</div>
+        <div class="statement" style="font-size:clamp(15px,2.5vw,24px)">Where the system breaks down</div>
       </div>
       <div class="col-r">
         <div class="point">
@@ -259,6 +380,7 @@ blockquote{
     </div>
   </div>
 
+  <!-- Slide 4: Jurisdictions -->
   <div class="slide" id="s4">
     <div class="rule"></div>
     <div class="pad">
@@ -289,6 +411,7 @@ blockquote{
     <div class="rule rule-b"></div>
   </div>
 
+  <!-- Slide 5: Methodology -->
   <div class="slide" id="s5">
     <div class="rule"></div>
     <div class="pad">
@@ -311,15 +434,16 @@ blockquote{
     <div class="rule rule-b"></div>
   </div>
 
+  <!-- Slide 6: Key Findings -->
   <div class="slide" id="s6">
     <div class="col2">
       <div class="col-l">
         <div class="eyebrow">Key Findings</div>
-        <div class="statement" style="font-size:22px">What the data says</div>
+        <div class="statement" style="font-size:clamp(14px,2.2vw,22px)">What the data says</div>
         <div class="sub" style="max-width:360px">Chi-Square tests showed no statistically significant age-based variation in opinions — but a clear consensus emerged regardless of demographic.</div>
       </div>
       <div class="col-r">
-        <div class="fgrid" style="margin-top:0;gap:1px">
+        <div class="fgrid">
           <div class="fcell">
             <div class="ftitle">Inadequate frameworks</div>
             <div class="fbody">Existing jurisdictional rules cannot handle borderless AI systems operating across multiple territories.</div>
@@ -337,11 +461,12 @@ blockquote{
     </div>
   </div>
 
+  <!-- Slide 7: Proposed Solution -->
   <div class="slide" id="s7">
     <div class="rule"></div>
     <div class="pad">
       <div class="eyebrow">Proposed Solution</div>
-      <div class="statement" style="font-size:22px;margin-bottom:32px">Four layers. One coherent framework.</div>
+      <div class="statement" style="font-size:clamp(14px,2.2vw,22px);margin-bottom:clamp(16px,3vw,32px)">Four layers. One coherent framework.</div>
       <div class="layers">
         <div class="layer"><div class="ltag">Global</div><div class="ltext"><strong>WIPO Protocol</strong> — AI-specific provisions on jurisdiction, choice of law, minimum enforcement standards, and mutual recognition of judgments.</div></div>
         <div class="layer"><div class="ltag">Regional</div><div class="ltext"><strong>EU model</strong> — Harmonised procedural rules and specialised technical courts exported as templates for other regions.</div></div>
@@ -352,6 +477,7 @@ blockquote{
     <div class="rule rule-b"></div>
   </div>
 
+  <!-- Slide 8: Quote -->
   <div class="slide quote-slide" id="s8">
     <div class="rule"></div>
     <blockquote>"A unified international framework incorporating AI-specific provisions, enhanced mutual recognition of judgments, and standardised enforcement protocols is essential."</blockquote>
@@ -367,36 +493,61 @@ blockquote{
 
 </div>
 
+<!-- Navigation -->
 <div id="nav">
-  <button class="nbtn" id="pb" disabled>← Back</button>
-  <div id="bar-wrap"><div id="pbar"></div></div>
-  <span id="ctr">1 / 8</span>
-  <button class="nbtn" id="nb">Next →</button>
+  <button class="nbtn" id="pb" disabled aria-label="Previous slide">← Back</button>
+  <div id="bar-wrap" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="8"><div id="pbar"></div></div>
+  <span id="ctr" aria-live="polite">1 / 8</span>
+  <button class="nbtn" id="nb" aria-label="Next slide">Next →</button>
 </div>
 
 <script>
-const N=8;let c=0;
-const slides=document.querySelectorAll('.slide');
-const pb=document.getElementById('pb');
-const nb=document.getElementById('nb');
-const pbar=document.getElementById('pbar');
-const ctr=document.getElementById('ctr');
-function go(n){
+const N = 8;
+let c = 0;
+const slides = document.querySelectorAll('.slide');
+const pb = document.getElementById('pb');
+const nb = document.getElementById('nb');
+const pbar = document.getElementById('pbar');
+const ctr = document.getElementById('ctr');
+const barWrap = document.getElementById('bar-wrap');
+
+function go(n) {
   slides[c].classList.remove('active');
-  c=n;
+  c = n;
   slides[c].classList.add('active');
-  pb.disabled=c===0;
-  nb.disabled=c===N-1;
-  pbar.style.width=((c+1)/N*100)+'%';
-  ctr.textContent=(c+1)+' / '+N;
+  pb.disabled = c === 0;
+  nb.disabled = c === N - 1;
+  pbar.style.width = ((c + 1) / N * 100) + '%';
+  ctr.textContent = (c + 1) + ' / ' + N;
+  barWrap.setAttribute('aria-valuenow', c + 1);
 }
-pb.onclick=()=>go(c-1);
-nb.onclick=()=>go(c+1);
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowRight'||e.key==='ArrowDown')c<N-1&&go(c+1);
-  if(e.key==='ArrowLeft'||e.key==='ArrowUp')c>0&&go(c-1);
+
+pb.onclick = () => go(c - 1);
+nb.onclick = () => go(c + 1);
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (c < N - 1) go(c + 1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { if (c > 0)     go(c - 1); }
 });
-pbar.style.width=(1/N*100)+'%';
+
+// Touch/swipe navigation
+let tx = 0, ty = 0;
+document.getElementById('stage').addEventListener('touchstart', e => {
+  tx = e.changedTouches[0].screenX;
+  ty = e.changedTouches[0].screenY;
+}, { passive: true });
+document.getElementById('stage').addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].screenX - tx;
+  const dy = e.changedTouches[0].screenY - ty;
+  if (Math.abs(dx) > Math.abs(dy) + 10 && Math.abs(dx) > 40) {
+    if (dx < 0 && c < N - 1) go(c + 1);
+    if (dx > 0 && c > 0)     go(c - 1);
+  }
+}, { passive: true });
+
+// Init progress bar
+pbar.style.width = (1 / N * 100) + '%';
 </script>
 </body>
 </html>
