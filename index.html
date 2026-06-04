@@ -1,363 +1,402 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>👁️👄👁️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP Rights in Cross-Border AI — Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-  * { margin:0; padding:0; box-sizing:border-box; }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0c0c0c;
+  --surface:#141414;
+  --line:#2a2a2a;
+  --text:#f0ede8;
+  --muted:#6b6b6b;
+  --accent:#c8a96e;
+  --w:920px;
+  --h:520px;
+}
+body{
+  background:var(--bg);
+  font-family:'Inter',sans-serif;
+  color:var(--text);
+  overflow:hidden;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:20px;
+}
+#stage{
+  width:var(--w);
+  height:var(--h);
+  position:relative;
+  background:var(--bg);
+  border:1px solid var(--line);
+}
+.slide{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .4s ease;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.slide.active{opacity:1;pointer-events:all}
 
-body {
-background: #050508;
-min-height: 100vh;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-font-family: ‘Share Tech Mono’, monospace;
-overflow: hidden;
-cursor: none;
-user-select: none;
+.rule{
+  position:absolute;
+  top:0;left:80px;right:80px;
+  height:1px;
+  background:var(--line);
 }
+.rule-b{top:auto;bottom:0}
 
-.scanlines {
-position: fixed; inset: 0;
-background: repeating-linear-gradient(
-to bottom,
-transparent 0px, transparent 2px,
-rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px
-);
-pointer-events: none; z-index: 100;
+.eyebrow{
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-family:'Inter',sans-serif;
+  font-weight:400;
+  margin-bottom:20px;
 }
-.vignette {
-position: fixed; inset: 0;
-background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.9) 100%);
-pointer-events: none; z-index: 99;
+.big{
+  font-family:'EB Garamond',serif;
+  font-size:52px;
+  font-weight:400;
+  line-height:1.1;
+  color:var(--text);
 }
+.big em{color:var(--accent);font-style:italic}
+.sub{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.7;
+  font-weight:300;
+  max-width:520px;
+  margin-top:18px;
+}
+.authors{
+  display:flex;
+  gap:40px;
+  margin-top:36px;
+  padding-top:28px;
+  border-top:1px solid var(--line);
+}
+.aname{font-size:12px;font-weight:500;color:var(--text)}
+.arole{font-size:11px;color:var(--muted);margin-top:2px}
 
-#cursor {
-position: fixed;
-width: 18px; height: 18px;
-border: 2px solid #39ff14;
-border-radius: 50%;
-pointer-events: none;
-z-index: 200;
-transform: translate(-50%,-50%);
-transition: width .15s, height .15s, background .15s;
-box-shadow: 0 0 8px #39ff14, 0 0 20px #39ff1466;
-}
-#cursor.pressed {
-width: 36px; height: 36px;
-background: #39ff1422;
-}
+.pad{padding:0 80px}
 
-#face {
-display: flex;
-align-items: center;
-justify-content: center;
-gap: clamp(8px, 5vw, 60px);
-perspective: 800px;
+.statement{
+  font-family:'EB Garamond',serif;
+  font-size:28px;
+  font-weight:400;
+  line-height:1.55;
+  color:var(--text);
+  max-width:700px;
 }
+.statement em{color:var(--accent);font-style:italic}
 
-.ascii-el {
-line-height: 1;
-white-space: pre;
-transition: filter .12s;
-transform-origin: center;
+.col2{display:grid;grid-template-columns:1fr 1fr;height:100%}
+.col-l{
+  padding:60px 52px;
+  border-right:1px solid var(--line);
+  display:flex;flex-direction:column;justify-content:center;
 }
-
-.eye-wrap {
-font-size: clamp(70px, 18vw, 180px);
-filter: drop-shadow(0 0 14px #39ff14) drop-shadow(0 0 36px #39ff1466);
-}
-
-.mouth-wrap {
-font-size: clamp(80px, 20vw, 200px);
-filter: drop-shadow(0 0 14px #ff3c6e) drop-shadow(0 0 36px #ff3c6e66);
-transform-origin: center;
-}
-
-.ripple {
-position: fixed;
-border-radius: 50%;
-pointer-events: none;
-transform: translate(-50%,-50%) scale(0);
-animation: rippleOut .6s ease-out forwards;
-z-index: 50;
-}
-@keyframes rippleOut {
-to { transform: translate(-50%,-50%) scale(1); opacity: 0; }
-}
-
-@keyframes shake {
-0%,100% { transform: translate(0,0) rotate(0deg); }
-15% { transform: translate(-10px, 5px) rotate(-3deg); }
-30% { transform: translate(10px, -5px) rotate(3deg); }
-45% { transform: translate(-7px, 7px) rotate(-2deg); }
-60% { transform: translate(7px, -4px) rotate(2deg); }
-80% { transform: translate(-4px, 3px) rotate(-1deg); }
-}
-@keyframes spinEye {
-0% { transform: rotate(0deg) scale(1); }
-50% { transform: rotate(180deg) scale(1.3); }
-100% { transform: rotate(360deg) scale(1); }
-}
-@keyframes squish {
-0%,100% { transform: scaleY(1) scaleX(1); }
-30% { transform: scaleY(0.55) scaleX(1.4); }
-60% { transform: scaleY(1.25) scaleX(0.85); }
-}
-@keyframes scream {
-0%,100% { transform: scale(1) rotate(0deg); }
-20% { transform: scale(1.5) rotate(-6deg); }
-50% { transform: scale(0.8) rotate(4deg); }
-75% { transform: scale(1.3) rotate(-2deg); }
-}
-@keyframes bounce {
-0%,100% { transform: translateY(0); }
-40% { transform: translateY(-20px); }
-70% { transform: translateY(8px); }
-}
-@keyframes glitch {
-0%,100% { filter: drop-shadow(0 0 14px #39ff14); }
-15% { filter: drop-shadow(-4px 0 #ff003c) drop-shadow(4px 0 #00cfff) hue-rotate(90deg); transform: translate(4px,0); }
-30% { filter: drop-shadow(0 0 14px #39ff14); transform: translate(-4px,0); }
-45% { filter: invert(1) hue-rotate(180deg); transform: translate(2px,0); }
-60% { filter: drop-shadow(0 0 14px #39ff14); transform: translate(0,0); }
+.col-r{
+  padding:60px 52px;
+  display:flex;flex-direction:column;justify-content:center;gap:20px;
 }
 
-.reaction {
-position: fixed;
-font-family: ‘Share Tech Mono’, monospace;
-font-size: clamp(18px, 3.5vw, 32px);
-color: #39ff14;
-text-shadow: 0 0 12px #39ff14;
-pointer-events: none;
-z-index: 80;
-animation: floatUp 1s ease-out forwards;
-white-space: nowrap;
+.point{
+  display:flex;gap:20px;align-items:flex-start;
+  padding-bottom:20px;
+  border-bottom:1px solid var(--line);
 }
-@keyframes floatUp {
-0%   { opacity:1; transform:translate(-50%,-50%) scale(1); }
-100% { opacity:0; transform:translate(-50%,-160%) scale(1.4); }
+.point:last-child{border-bottom:none;padding-bottom:0}
+.point-num{
+  font-family:'EB Garamond',serif;
+  font-size:28px;color:var(--accent);
+  line-height:1;flex-shrink:0;
+  font-weight:400;
+}
+.point-text{font-size:12px;color:var(--muted);line-height:1.7;padding-top:4px}
+.point-text strong{color:var(--text);font-weight:500;display:block;font-size:13px;margin-bottom:2px}
+
+.jgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);margin-top:28px}
+.jcell{background:var(--bg);padding:24px 20px}
+.jflag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.jname{font-size:14px;font-weight:500;margin-bottom:10px;font-family:'EB Garamond',serif}
+.jpts{font-size:11px;color:var(--muted);line-height:1.8}
+
+.sstats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:28px}
+.sstat{background:var(--bg);padding:22px 24px}
+.snum{font-family:'EB Garamond',serif;font-size:40px;color:var(--accent);font-weight:400;line-height:1}
+.slabel{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
+
+.layers{display:flex;flex-direction:column;gap:0}
+.layer{
+  display:flex;align-items:center;gap:20px;
+  padding:16px 0;
+  border-bottom:1px solid var(--line);
+}
+.layer:first-child{padding-top:0}
+.layer:last-child{border-bottom:none;padding-bottom:0}
+.ltag{
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--accent);width:80px;flex-shrink:0;
+  font-weight:500;
+}
+.ltext{font-size:12px;color:var(--muted);line-height:1.6}
+.ltext strong{color:var(--text);font-weight:500}
+
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:28px}
+.fcell{background:var(--bg);padding:22px 20px}
+.ftitle{font-size:13px;font-weight:500;margin-bottom:8px}
+.fbody{font-size:11px;color:var(--muted);line-height:1.7}
+
+.quote-slide{padding:80px}
+blockquote{
+  font-family:'EB Garamond',serif;
+  font-size:22px;
+  font-style:italic;
+  line-height:1.7;
+  color:var(--text);
+  border-left:1px solid var(--accent);
+  padding-left:32px;
+  max-width:680px;
+  margin-bottom:40px;
+}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{
+  font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);
+  border:1px solid var(--line);
+  padding:5px 12px;
+  font-weight:400;
 }
 
-#hint {
-position: fixed;
-bottom: 28px;
-left: 50%;
-transform: translateX(-50%);
-color: #39ff1466;
-font-size: clamp(10px, 2vw, 13px);
-letter-spacing: .3em;
-text-transform: uppercase;
-animation: fadeHint 4s 1s ease-in-out forwards;
-z-index: 90;
-text-align: center;
+#nav{
+  width:var(--w);
+  display:flex;align-items:center;gap:14px;
 }
-@keyframes fadeHint { 0%,70%{opacity:1} 100%{opacity:0} }
+.nbtn{
+  background:none;
+  border:1px solid var(--line);
+  color:var(--muted);
+  padding:8px 18px;
+  font-size:11px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  font-family:'Inter',sans-serif;
+  cursor:pointer;
+  transition:all .15s;
+}
+.nbtn:hover{border-color:var(--muted);color:var(--text)}
+.nbtn:disabled{opacity:.2;cursor:default}
+#bar-wrap{flex:1;height:1px;background:var(--line)}
+#pbar{height:100%;background:var(--accent);transition:width .3s}
+#ctr{font-size:11px;color:var(--muted);letter-spacing:1px}
 </style>
-
 </head>
 <body>
 
-<div class="scanlines"></div>
-<div class="vignette"></div>
-<div id="cursor"></div>
+<div id="stage">
 
-<div id="face">
-  <div class="eye-wrap  ascii-el" id="eye-left">👁️</div>
-  <div class="mouth-wrap ascii-el" id="mouth">👄</div>
-  <div class="eye-wrap  ascii-el" id="eye-right">👁️</div>
+  <div class="slide active" id="s1">
+    <div class="rule"></div>
+    <div class="pad" style="padding-top:0">
+      <div class="eyebrow">Public International Law</div>
+      <div class="big">IP Rights &amp; <em>AI</em><br>Across Borders</div>
+      <div class="sub">A study on jurisdiction and enforcement of intellectual property rights in cross-border AI-related cases. 250 respondents. SPSS analysis.</div>
+      <div class="authors">
+        <div><div class="aname">Rakunatha Khrishanth Manathra</div><div class="arole">B.A., LL.B. (Hons.) — Saveetha School of Law</div></div>
+        <div><div class="aname">Dr. S. Pandiaraj</div><div class="arole">Professor — Saveetha School of Law, SIMATS</div></div>
+      </div>
+    </div>
+    <div class="rule rule-b"></div>
+  </div>
+
+  <div class="slide" id="s2">
+    <div class="rule"></div>
+    <div class="pad">
+      <div class="eyebrow">The Problem</div>
+      <div class="statement">
+        AI operates across borders seamlessly.<br>
+        The law does <em>not</em>.
+      </div>
+      <div class="sub" style="margin-top:28px">When a model trained in one country generates infringing content distributed globally — who has jurisdiction? Current treaties (Berne, TRIPS, WIPO) predate AI entirely and offer no answer.</div>
+    </div>
+    <div class="rule rule-b"></div>
+  </div>
+
+  <div class="slide" id="s3">
+    <div class="col2">
+      <div class="col-l">
+        <div class="eyebrow">Three Failures</div>
+        <div class="statement" style="font-size:24px">Where the system breaks down</div>
+      </div>
+      <div class="col-r">
+        <div class="point">
+          <div class="point-num">01</div>
+          <div class="point-text"><strong>Forum shopping</strong>Conflicting jurisdictional bases let parties file wherever outcomes favour them most.</div>
+        </div>
+        <div class="point">
+          <div class="point-num">02</div>
+          <div class="point-text"><strong>Unenforceable judgments</strong>AI infrastructure spans cloud servers across jurisdictions — winning in court means little.</div>
+        </div>
+        <div class="point">
+          <div class="point-num">03</div>
+          <div class="point-text"><strong>Technical illiteracy</strong>Courts lack capacity to evaluate AI training, similarity analysis, or developer liability.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" id="s4">
+    <div class="rule"></div>
+    <div class="pad">
+      <div class="eyebrow">Comparative Jurisdictions</div>
+      <div class="jgrid">
+        <div class="jcell">
+          <div class="jflag">United States</div>
+          <div class="jname">Minimum contacts + effects test</div>
+          <div class="jpts">ITC Section 337 exclusion orders. Judgments face pushback abroad over excessive damages.</div>
+        </div>
+        <div class="jcell">
+          <div class="jflag">European Union</div>
+          <div class="jname">Brussels Regulation + Pinckney</div>
+          <div class="jpts">Territorial remedies even when jurisdiction is established. AI Act adds new governance layer.</div>
+        </div>
+        <div class="jcell">
+          <div class="jflag">China</div>
+          <div class="jname">Specialised IP courts</div>
+          <div class="jpts">Beijing, Shanghai, Guangzhou. Expanding jurisdiction claims. Limited outbound enforcement.</div>
+        </div>
+        <div class="jcell">
+          <div class="jflag">United Kingdom</div>
+          <div class="jname">Rights-holder friendly</div>
+          <div class="jpts">London as preferred forum. Post-Brexit EU enforcement uncertainty remains unresolved.</div>
+        </div>
+      </div>
+    </div>
+    <div class="rule rule-b"></div>
+  </div>
+
+  <div class="slide" id="s5">
+    <div class="rule"></div>
+    <div class="pad">
+      <div class="eyebrow">Methodology</div>
+      <div class="sstats">
+        <div class="sstat">
+          <div class="snum">250</div>
+          <div class="slabel">Respondents — IP attorneys, AI developers, judicial officers, policy experts</div>
+        </div>
+        <div class="sstat">
+          <div class="snum">Mixed</div>
+          <div class="slabel">Doctrinal analysis of treaties + empirical survey with Likert-scale questionnaire</div>
+        </div>
+        <div class="sstat">
+          <div class="snum">SPSS</div>
+          <div class="slabel">Descriptive statistics, Pearson Chi-Square, correlation and regression modelling</div>
+        </div>
+      </div>
+    </div>
+    <div class="rule rule-b"></div>
+  </div>
+
+  <div class="slide" id="s6">
+    <div class="col2">
+      <div class="col-l">
+        <div class="eyebrow">Key Findings</div>
+        <div class="statement" style="font-size:22px">What the data says</div>
+        <div class="sub" style="max-width:360px">Chi-Square tests showed no statistically significant age-based variation in opinions — but a clear consensus emerged regardless of demographic.</div>
+      </div>
+      <div class="col-r">
+        <div class="fgrid" style="margin-top:0;gap:1px">
+          <div class="fcell">
+            <div class="ftitle">Inadequate frameworks</div>
+            <div class="fbody">Existing jurisdictional rules cannot handle borderless AI systems operating across multiple territories.</div>
+          </div>
+          <div class="fcell">
+            <div class="ftitle">Enforcement gaps</div>
+            <div class="fbody">Even successful judgments routinely fail — no bilateral treaties, limited asset identification, divergent standards.</div>
+          </div>
+          <div class="fcell">
+            <div class="ftitle">Infringement consensus</div>
+            <div class="fbody">Respondents broadly agree: AI training on copyrighted material without permission constitutes infringement.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide" id="s7">
+    <div class="rule"></div>
+    <div class="pad">
+      <div class="eyebrow">Proposed Solution</div>
+      <div class="statement" style="font-size:22px;margin-bottom:32px">Four layers. One coherent framework.</div>
+      <div class="layers">
+        <div class="layer"><div class="ltag">Global</div><div class="ltext"><strong>WIPO Protocol</strong> — AI-specific provisions on jurisdiction, choice of law, minimum enforcement standards, and mutual recognition of judgments.</div></div>
+        <div class="layer"><div class="ltag">Regional</div><div class="ltext"><strong>EU model</strong> — Harmonised procedural rules and specialised technical courts exported as templates for other regions.</div></div>
+        <div class="layer"><div class="ltag">National</div><div class="ltext"><strong>Specialised courts</strong> — Technical capacity, bilateral digital-IP enforcement treaties, streamlined cross-border evidence rules.</div></div>
+        <div class="layer"><div class="ltag">Industry</div><div class="ltext"><strong>ADR + standards</strong> — WIPO arbitration, New York Convention enforcement, standard licensing terms, technical prevention measures.</div></div>
+      </div>
+    </div>
+    <div class="rule rule-b"></div>
+  </div>
+
+  <div class="slide quote-slide" id="s8">
+    <div class="rule"></div>
+    <blockquote>"A unified international framework incorporating AI-specific provisions, enhanced mutual recognition of judgments, and standardised enforcement protocols is essential."</blockquote>
+    <div class="tags">
+      <span class="tag">WIPO reform</span>
+      <span class="tag">AI-specific law</span>
+      <span class="tag">Cross-border enforcement</span>
+      <span class="tag">SDG 16</span>
+      <span class="tag">Saveetha School of Law</span>
+    </div>
+    <div class="rule rule-b"></div>
+  </div>
+
 </div>
 
-<div id="hint">tap eyes · drag mouth · shake to panic</div>
+<div id="nav">
+  <button class="nbtn" id="pb" disabled>← Back</button>
+  <div id="bar-wrap"><div id="pbar"></div></div>
+  <span id="ctr">1 / 8</span>
+  <button class="nbtn" id="nb">Next →</button>
+</div>
 
 <script>
-const cursor = document.getElementById('cursor');
-const face   = document.getElementById('face');
-const eyeL   = document.getElementById('eye-left');
-const eyeR   = document.getElementById('eye-right');
-const mouth  = document.getElementById('mouth');
-
-let mx = innerWidth/2, my = innerHeight/2;
-let prevMx = mx, prevMy = my;
-let velX = 0, velY = 0, fastCount = 0;
-let faceRX = 0, faceRY = 0;
-let eyeLX = 0, eyeLY = 0, eyeRX = 0, eyeRY = 0;
-let isDown = false, holdInterval = null;
-let dragging = false, dragStartY = 0, mouthDragScale = 1;
-let lastPanic = 0;
-let eyeLState = 0, eyeRState = 0; // 0=normal,animating=1
-
-function lerp(a,b,t){ return a+(b-a)*t; }
-
-// ── Cursor ────────────────────────────────────────────────────────
-function setPos(x,y){ mx=x; my=y; cursor.style.left=x+'px'; cursor.style.top=y+'px'; }
-document.addEventListener('mousemove', e => setPos(e.clientX,e.clientY));
-document.addEventListener('touchmove', e => { e.preventDefault(); setPos(e.touches[0].clientX,e.touches[0].clientY); },{passive:false});
-
-// ── Helpers ───────────────────────────────────────────────────────
-function center(el){ const r=el.getBoundingClientRect(); return {x:r.left+r.width/2,y:r.top+r.height/2}; }
-function hit(el,x,y){ const r=el.getBoundingClientRect(); return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom; }
-
-function ripple(x,y,size,col){
-  const d=document.createElement('div');
-  d.className='ripple';
-  d.style.cssText=`left:${x}px;top:${y}px;width:${size}px;height:${size}px;background:${col||'radial-gradient(circle,#39ff1455 0%,transparent 70%)'}`;
-  document.body.appendChild(d);
-  setTimeout(()=>d.remove(),700);
+const N=8;let c=0;
+const slides=document.querySelectorAll('.slide');
+const pb=document.getElementById('pb');
+const nb=document.getElementById('nb');
+const pbar=document.getElementById('pbar');
+const ctr=document.getElementById('ctr');
+function go(n){
+  slides[c].classList.remove('active');
+  c=n;
+  slides[c].classList.add('active');
+  pb.disabled=c===0;
+  nb.disabled=c===N-1;
+  pbar.style.width=((c+1)/N*100)+'%';
+  ctr.textContent=(c+1)+' / '+N;
 }
-
-const words=['!!','OwO','uwu','OOF','WHY','HEY','lol','bruh','omg','👀','wut'];
-const mouths=['😮','😲','😬','🫦','💋','😱'];
-
-function reaction(text,x,y){
-  const d=document.createElement('div');
-  d.className='reaction';
-  d.textContent=text;
-  d.style.cssText=`left:${x}px;top:${y}px`;
-  document.body.appendChild(d);
-  setTimeout(()=>d.remove(),1000);
-}
-
-// ── Raf loop ──────────────────────────────────────────────────────
-function raf(){
-  velX = mx - prevMx; velY = my - prevMy;
-  prevMx = mx; prevMy = my;
-  const speed = Math.sqrt(velX*velX+velY*velY);
-
-  // shake / panic
-  if(speed > 28){ fastCount++; } else { fastCount = Math.max(0,fastCount-1); }
-  if(fastCount > 6){ triggerPanic(); fastCount=0; }
-
-  // face tilt
-  const cx=innerWidth/2, cy=innerHeight/2;
-  faceRX = lerp(faceRX, (mx-cx)*0.018, 0.06);
-  faceRY = lerp(faceRY, (my-cy)*0.012, 0.06);
-  face.style.transform = `rotateY(${faceRX}deg) rotateX(${-faceRY}deg)`;
-
-  // eye tracking
-  function eyeTrack(el, ox, oy){
-    const c = center(el);
-    const dx=mx-c.x, dy=my-c.y;
-    const d=Math.sqrt(dx*dx+dy*dy)||1;
-    const r = Math.min(d/180,1)*20;
-    return { x: lerp(ox,(dx/d)*r,0.1), y: lerp(oy,(dy/d)*r,0.1) };
-  }
-  if(eyeLState===0){ const o=eyeTrack(eyeL,eyeLX,eyeLY); eyeLX=o.x; eyeLY=o.y; eyeL.style.transform=`translate(${eyeLX}px,${eyeLY}px)`; }
-  if(eyeRState===0){ const o=eyeTrack(eyeR,eyeRX,eyeRY); eyeRX=o.x; eyeRY=o.y; eyeR.style.transform=`translate(${eyeRX}px,${eyeRY}px)`; }
-
-  requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
-
-// ── Panic / shake ─────────────────────────────────────────────────
-function triggerPanic(){
-  const now=Date.now(); if(now-lastPanic<800) return; lastPanic=now;
-  face.style.animation='shake .5s ease-out';
-  mouth.style.animation='scream .45s ease-out';
-  ripple(mx,my,220,'radial-gradient(circle,#ff3c6e55 0%,transparent 70%)');
-  reaction(['!!!','AHHHH','STOP','no no','🫨'][Math.floor(Math.random()*5)], mx, my-50);
-  setTimeout(()=>{ face.style.animation=''; mouth.style.animation=''; },500);
-}
-
-// ── Tap eye ───────────────────────────────────────────────────────
-function tapEye(el, stateRef, setRef){
-  if(stateRef[0]!==0) return;
-  stateRef[0]=1;
-  const c=center(el);
-  const animations=['spinEye .7s ease-out','squish .5s ease-out','bounce .5s ease-out','glitch .4s ease-out'];
-  const texts=['👁','OwO','UwU','😵','wut'];
-  const pick=Math.floor(Math.random()*animations.length);
-  el.style.animation=animations[pick];
-  reaction(texts[pick], c.x, c.y-60);
-  ripple(c.x,c.y,140,'radial-gradient(circle,#39ff1466 0%,transparent 70%)');
-  setTimeout(()=>{ el.style.animation=''; stateRef[0]=0; },700);
-}
-
-const eyeLState2=[0], eyeRState2=[0]; // use array so tapEye can mutate
-
-// ── Tap mouth ────────────────────────────────────────────────────
-function tapMouth(){
-  const c=center(mouth);
-  mouth.style.animation='scream .45s ease-out';
-  reaction(mouths[Math.floor(Math.random()*mouths.length)], c.x, c.y-70);
-  ripple(c.x,c.y,200,'radial-gradient(circle,#ff3c6e55 0%,transparent 70%)');
-  setTimeout(()=>mouth.style.animation='',450);
-}
-
-// ── Generic tap ──────────────────────────────────────────────────
-function doTap(x,y){
-  if(hit(eyeL,x,y)){ tapEye(eyeL,eyeLState2,null); return; }
-  if(hit(eyeR,x,y)){ tapEye(eyeR,eyeRState2,null); return; }
-  if(hit(mouth,x,y)){ tapMouth(); return; }
-  // background tap
-  face.style.animation='shake .3s ease-out';
-  reaction(words[Math.floor(Math.random()*words.length)], x, y-40);
-  ripple(x,y,150);
-  setTimeout(()=>face.style.animation='',300);
-}
-
-// ── Hold ─────────────────────────────────────────────────────────
-function startHold(){
-  ripple(mx,my,120);
-  holdInterval=setInterval(()=>{
-    face.style.animation='shake .2s ease-out';
-    reaction('!!',mx+Math.random()*40-20,my-40);
-    ripple(mx,my,80);
-    setTimeout(()=>face.style.animation='',200);
-  },280);
-}
-function stopHold(){ clearInterval(holdInterval); holdInterval=null; }
-
-// ── Drag (mouth stretch) ─────────────────────────────────────────
-function onDragMove(y){
-  const dy = y - dragStartY;
-  const s = 1 + Math.abs(dy)/250;
-  mouthDragScale = dy > 0 ? s : 1/s;
-  mouth.style.transform = `scaleY(${mouthDragScale}) scaleX(${1/Math.sqrt(Math.abs(mouthDragScale))})`;
-}
-function onDragEnd(){
-  dragging=false;
-  mouth.style.transform='';
-  mouthDragScale=1;
-}
-
-// ── Mouse ─────────────────────────────────────────────────────────
-document.addEventListener('mousedown', e=>{
-  isDown=true; dragging=true; dragStartY=e.clientY;
-  cursor.classList.add('pressed');
-  holdInterval===null && setTimeout(()=>{ if(isDown) startHold(); },320);
+pb.onclick=()=>go(c-1);
+nb.onclick=()=>go(c+1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')c<N-1&&go(c+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')c>0&&go(c-1);
 });
-document.addEventListener('mousemove', e=>{ if(dragging) onDragMove(e.clientY); });
-document.addEventListener('mouseup', e=>{
-  isDown=false; stopHold(); cursor.classList.remove('pressed');
-  const dist=Math.abs(e.clientY-dragStartY);
-  onDragEnd();
-  if(dist<8) doTap(e.clientX,e.clientY);
-});
-
-// ── Touch ──────────────────────────────────────────────────────────
-document.addEventListener('touchstart', e=>{
-  const t=e.touches[0]; setPos(t.clientX,t.clientY);
-  isDown=true; dragging=true; dragStartY=t.clientY;
-  cursor.classList.add('pressed');
-  setTimeout(()=>{ if(isDown) startHold(); },320);
-},{passive:true});
-document.addEventListener('touchmove', e=>{
-  if(dragging) onDragMove(e.touches[0].clientY);
-},{passive:false});
-document.addEventListener('touchend', e=>{
-  const t=e.changedTouches[0];
-  isDown=false; stopHold(); cursor.classList.remove('pressed');
-  const dist=Math.abs(t.clientY-dragStartY);
-  onDragEnd();
-  if(dist<8) doTap(t.clientX,t.clientY);
-});
+pbar.style.width=(1/N*100)+'%';
 </script>
-
 </body>
 </html>
