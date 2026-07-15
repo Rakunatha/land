@@ -2,845 +2,615 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#1E2A24">
-<meta name="description" content="Inheritance and Transfer of Intellectual Property Rights Within Families: Reconciling Family Law and Property Law Frameworks — an interactive research summary.">
-<title>Inheritance &amp; Transfer of IP Rights Within Families</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Systems-Based Legal Workflow Intelligence — Family Law Practitioner Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F3EEE3;
-    --ink:#1E2A24;
-    --ink-soft:#46544C;
-    --seal:#7A2E2A;
-    --seal-bright:#A8423B;
-    --gold:#9C7C3D;
-    --line:#C9BFA6;
-    --panel:#FBF8F0;
-    --shadow: 0 30px 80px -40px rgba(20,20,10,0.45);
-    --serif: "Iowan Old Style","Sitka Text","Source Serif Pro", Georgia, "Times New Roman", serif;
-    --display: "Canela", "Iowan Old Style", Georgia, serif;
-    --mono: "JetBrains Mono","IBM Plex Mono", Menlo, Consolas, monospace;
+    --navy:#1e2a44;
+    --navy-light:#33456e;
+    --gold:#a97d3f;
+    --gold-pale:#f2e6d3;
+    --paper:#f6f3ec;
+    --card:#ffffff;
+    --line:#e4ddce;
+    --text:#26241f;
+    --muted:#6c6858;
+    --danger:#a3352f;
   }
-
-  *{ box-sizing:border-box; }
-  html{ height:100%; }
-  html,body{
-    margin:0; padding:0;
-    height:100%;
-    height:100dvh;
-    background:var(--ink);
-    color:var(--ink);
-    font-family:var(--serif);
-    overflow:hidden;
-    -webkit-font-smoothing:antialiased;
-    -webkit-text-size-adjust:100%;
-  }
-
-  /* respect reduced-motion preference: cut transitions/animation way down */
-  @media (prefers-reduced-motion: reduce){
-    *, *::before, *::after{
-      animation-duration:0.001ms !important;
-      animation-iteration-count:1 !important;
-      transition-duration:0.001ms !important;
-      scroll-behavior:auto !important;
-    }
-  }
-
-  /* ---------- deck shell ---------- */
-  #deck{
-    position:relative;
-    width:100%;
-    height:100%;
-    height:100dvh;
-    overflow:hidden;
-  }
-
-  .slide{
-    position:absolute;
-    inset:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
     background:var(--paper);
-    opacity:0;
-    visibility:hidden;
-    pointer-events:none;
-    transform:translateY(24px) scale(0.985);
-    transition:opacity .65s cubic-bezier(.22,.61,.36,1), transform .75s cubic-bezier(.22,.61,.36,1);
-    overflow-y:auto;
-    overflow-x:hidden;
-    -webkit-overflow-scrolling:touch;
-    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    font-family:'Source Sans 3', sans-serif;
+    color:var(--text);
+    padding:0 0 80px;
   }
-  .slide.active{
-    opacity:1;
-    visibility:visible;
-    pointer-events:auto;
-    transform:translateY(0) scale(1);
+  .topband{
+    height:10px;
+    background:linear-gradient(90deg, var(--navy) 0%, var(--navy) 60%, var(--gold) 100%);
   }
-  .slide.leaving{
-    opacity:0;
-    transform:translateY(-18px) scale(0.99);
+  .wrap{
+    max-width:720px;
+    margin:0 auto;
+    padding:0 20px;
   }
-
-  .slide-inner{
-    width:min(1180px, 92vw);
-    min-height:min(720px, 86dvh);
-    margin: auto;
-    position:relative;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    padding-top: 28px;
-    padding-bottom: 28px;
+  .header-card{
+    background:var(--navy);
+    color:#fff;
+    border-radius:0 0 10px 10px;
+    padding:36px 32px 30px;
+    margin-bottom:24px;
   }
-
-  /* paper texture + border frame, consistent across slides */
-  .frame{
-    position:absolute; inset:0;
-    border:1px solid var(--line);
-    pointer-events:none;
-  }
-  .frame::before{
-    content:"";
-    position:absolute; inset:14px;
-    border:1px solid rgba(122,46,42,0.18);
-  }
-  .corner{ position:absolute; width:26px; height:26px; pointer-events:none; }
-  .corner svg{ width:100%; height:100%; }
-  .corner.tl{ top:6px; left:6px; }
-  .corner.tr{ top:6px; right:6px; transform:scaleX(-1); }
-  .corner.bl{ bottom:6px; left:6px; transform:scaleY(-1); }
-  .corner.br{ bottom:6px; right:6px; transform:scale(-1,-1); }
-
-  .kicker{
-    font-family:var(--mono);
-    font-size:11.5px;
-    letter-spacing:.18em;
-    text-transform:uppercase;
-    color:var(--seal);
+  .seal{
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:14px;
+    margin-bottom:18px;
   }
-  .kicker .dash{ width:26px; height:1px; background:var(--seal); display:inline-block; }
-
-  /* reveal-on-active animation utility */
-  .reveal{
-    opacity:0;
-    transform:translateY(16px);
-    transition:opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1);
-  }
-  .slide.active .reveal{ opacity:1; transform:translateY(0); }
-
-  @media (prefers-reduced-motion: reduce){
-    .reveal{ opacity:1 !important; transform:none !important; }
-    .fbar-fill{ transition:none !important; }
-  }
-
-  /* stagger helper classes, set via inline style transition-delay */
-
-  h1,h2,h3{ margin:0; font-weight:400; }
-
-  .content-pad{ padding: 56px 64px; min-height:100%; display:flex; flex-direction:column; }
-
-  /* ---------- progress / nav ---------- */
-  #nav{
-    position:fixed;
-    bottom: max(14px, env(safe-area-inset-bottom));
-    left:0; right:0;
-    display:flex; align-items:center; justify-content:center;
-    gap:4px;
-    z-index:50;
-    font-family:var(--mono);
-  }
-  .dot{
-    width:30px; height:30px;
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer;
-    background:transparent;
-    border:none;
-    padding:0;
-    -webkit-tap-highlight-color:transparent;
-  }
-  .dot::before{
-    content:"";
-    width:8px; height:8px; border-radius:50%;
-    background:rgba(243,238,227,0.28);
-    border:1px solid rgba(243,238,227,0.4);
-    transition: background .3s, transform .3s, border-color .3s;
-    display:block;
-  }
-  .dot.active::before{ background:var(--seal-bright); border-color:var(--seal-bright); transform:scale(1.35); }
-  .dot:focus-visible{ outline:2px solid var(--seal-bright); outline-offset:3px; border-radius:50%; }
-
-  #counter{
-    position:fixed;
-    top: max(20px, env(safe-area-inset-top));
-    right: max(18px, env(safe-area-inset-right));
-    font-family:var(--mono); font-size:12px; letter-spacing:.08em;
-    color:rgba(243,238,227,0.6);
-    z-index:50;
-    background:rgba(20,28,24,0.0);
-    pointer-events:none;
-  }
-  #counter b{ color:#F3EEE3; }
-
-  #brandmark{
-    position:fixed;
-    top: max(20px, env(safe-area-inset-top));
-    left: max(18px, env(safe-area-inset-left));
-    font-family:var(--mono); font-size:11px; letter-spacing:.14em;
+  .seal svg{flex-shrink:0;}
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:.12em;
     text-transform:uppercase;
-    color:rgba(243,238,227,0.45);
-    z-index:50;
-    pointer-events:none;
+    color:var(--gold);
+    font-weight:600;
+    margin:0;
   }
-
-  .arrow-btn{
-    position:fixed; top:50%; transform:translateY(-50%);
-    width:46px; height:46px;
-    border-radius:50%;
-    border:1px solid rgba(243,238,227,0.25);
-    background:rgba(30,42,36,0.45);
-    color:rgba(243,238,227,0.75);
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer; z-index:50;
-    transition: background .25s, color .25s, border-color .25s, opacity .25s;
-    font-size:18px;
-    font-family:inherit;
-    -webkit-tap-highlight-color:transparent;
-    touch-action:manipulation;
+  h1{
+    font-family:'Lora', serif;
+    font-weight:600;
+    font-size:26px;
+    line-height:1.3;
+    margin:4px 0 0;
   }
-  .arrow-btn:hover{ background:rgba(122,46,42,0.6); color:#F3EEE3; border-color:var(--seal-bright); }
-  .arrow-btn:focus-visible{ outline:2px solid var(--seal-bright); outline-offset:3px; }
-  .arrow-btn:disabled{ opacity:0.25; cursor:default; }
-  .arrow-btn:disabled:hover{ background:rgba(30,42,36,0.45); color:rgba(243,238,227,0.75); border-color:rgba(243,238,227,0.25); }
-  #prevBtn{ left: max(16px, env(safe-area-inset-left)); }
-  #nextBtn{ right: max(16px, env(safe-area-inset-right)); }
-
-  #progressbar{
-    position:fixed; top:0; left:0; height:3px;
-    background:var(--seal-bright);
-    z-index:60;
-    transition: width .5s cubic-bezier(.22,.61,.36,1);
+  .header-meta{
+    font-size:14px;
+    line-height:1.7;
+    color:#d9dce6;
+    margin-top:16px;
+    border-top:1px solid rgba(255,255,255,0.18);
+    padding-top:16px;
   }
-
-  /* ---------- intro / title slide ---------- */
-  .slide[data-index="0"] .slide-inner{ justify-content:center; align-items:center; text-align:center; }
-  .seal{
-    width:108px; height:108px;
-    border-radius:50%;
-    border:1.5px solid var(--seal);
-    display:flex; align-items:center; justify-content:center;
-    margin:0 auto 30px;
-    position:relative;
+  .header-meta b{color:#fff;}
+  .progress-track{
+    height:5px;
+    background:rgba(255,255,255,0.18);
+    border-radius:3px;
+    margin-top:18px;
+    overflow:hidden;
   }
-  .seal::before{
-    content:""; position:absolute; inset:8px; border:1px solid rgba(122,46,42,0.4); border-radius:50%;
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:var(--gold);
+    transition:width .25s ease;
   }
-  .seal .glyph{ font-family:var(--display); font-size:34px; color:var(--seal); letter-spacing:0.02em; }
-
-  .title-main{
-    font-family:var(--display);
-    font-size:clamp(34px, 4.6vw, 58px);
-    line-height:1.12;
-    color:var(--ink);
-    max-width:880px;
-    margin: 0 auto 22px;
-    letter-spacing:-0.01em;
+  .section-nav{
+    display:flex;
+    gap:6px;
+    margin-top:10px;
+    font-size:11px;
+    color:#b9bfd1;
   }
-  .title-sub{
-    font-family:var(--serif);
-    font-style:italic;
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:26px 28px;
+    margin-bottom:18px;
+  }
+  .section-title{
+    font-family:'Lora', serif;
+    font-weight:600;
     font-size:19px;
-    color:var(--ink-soft);
-    max-width:640px;
-    margin: 0 auto 38px;
+    color:var(--navy);
+    margin:0 0 4px;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  .section-tab{
+    display:inline-block;
+    font-size:11px;
+    letter-spacing:.08em;
+    color:var(--gold);
+    font-weight:600;
+    background:var(--gold-pale);
+    padding:2px 8px;
+    border-radius:4px;
+  }
+  .section-desc{
+    font-size:14px;
+    color:var(--muted);
+    margin:8px 0 0;
+    line-height:1.6;
+  }
+  .q{
+    padding:20px 0;
+    border-top:1px solid var(--line);
+  }
+  .card .q:first-of-type{border-top:none;padding-top:22px;}
+  .q-label{
+    font-size:15px;
+    font-weight:600;
+    color:var(--text);
+    margin:0 0 4px;
     line-height:1.5;
   }
-  .byline{
-    font-family:var(--mono);
+  .q-label .req{color:var(--danger);margin-left:3px;}
+  .q-help{
+    font-size:12.5px;
+    color:var(--muted);
+    margin:0 0 12px;
+  }
+  .options{display:flex;flex-direction:column;gap:9px;margin-top:10px;}
+  .opt{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    font-size:14.5px;
+    cursor:pointer;
+    padding:9px 12px;
+    border:1px solid var(--line);
+    border-radius:7px;
+    transition:border-color .15s, background .15s;
+  }
+  .opt:hover{border-color:var(--gold);background:#fdfaf5;}
+  .opt input{margin-top:2px;accent-color:var(--navy);width:16px;height:16px;flex-shrink:0;}
+  .opt.checked{border-color:var(--gold);background:var(--gold-pale);}
+  input[type=text], textarea{
+    width:100%;
+    font-family:inherit;
+    font-size:14.5px;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:7px;
+    color:var(--text);
+    background:#fff;
+  }
+  input[type=text]:focus, textarea:focus{
+    outline:none;
+    border-color:var(--navy);
+    box-shadow:0 0 0 3px rgba(30,42,68,0.10);
+  }
+  textarea{resize:vertical;min-height:70px;}
+  .scale-row{display:flex;align-items:center;gap:10px;margin-top:12px;}
+  .scale-endpoint{font-size:11.5px;color:var(--muted);width:88px;line-height:1.4;}
+  .scale-endpoint.right{text-align:right;}
+  input[type=range]{flex:1;accent-color:var(--gold);}
+  .scale-value{
+    font-size:13px;font-weight:600;color:var(--navy);
+    width:20px;text-align:center;
+  }
+  .footer-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:24px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .footer-note{font-size:12.5px;color:var(--muted);line-height:1.6;}
+  button.submit{
+    background:var(--navy);
+    color:#fff;
+    border:none;
+    padding:12px 26px;
+    border-radius:7px;
+    font-size:14.5px;
+    font-weight:600;
+    font-family:inherit;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  button.submit:hover{background:var(--navy-light);}
+  .error-flag{
     font-size:12px;
-    letter-spacing:.08em;
-    color:var(--ink-soft);
-    text-transform:uppercase;
-    line-height:2;
+    color:var(--danger);
+    margin-top:6px;
+    display:none;
   }
-  .byline b{ color:var(--seal); font-weight:600; }
-  .hr-orn{
-    width:120px; height:1px; background:var(--line); margin:26px auto;
-    position:relative;
+  .q.invalid .error-flag{display:block;}
+  .q.invalid .q-label{color:var(--danger);}
+  #thankyou{
+    display:none;
+    text-align:center;
+    padding:60px 28px;
   }
-  .hr-orn::after{
-    content:"❖"; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-    background:var(--paper); padding:0 10px; color:var(--gold); font-size:11px;
+  #thankyou svg{margin-bottom:14px;}
+  #thankyou h2{
+    font-family:'Lora', serif;
+    color:var(--navy);
+    font-size:22px;
+    margin:0 0 10px;
   }
-
-  /* ---------- generic section heading block ---------- */
-  .sec-head{ margin-bottom: 30px; }
-  .sec-title{
-    font-family:var(--display);
-    font-size:clamp(28px,3.4vw,42px);
-    color:var(--ink);
-    margin-top:10px;
-    letter-spacing:-0.01em;
-  }
-
-  /* ---------- slide 2: abstract / aim ---------- */
-  .stat-row{ display:flex; gap:18px; margin-top:8px; }
-  .stat-card{
-    flex:1;
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:4px;
-    padding:18px 16px 16px;
-    position:relative;
-    overflow:hidden;
-  }
-  .stat-card::before{
-    content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--seal-bright);
-  }
-  .stat-num{
-    font-family:var(--display); font-size:38px; color:var(--seal);
-    line-height:1;
-  }
-  .stat-label{
-    font-family:var(--mono); font-size:10.5px; letter-spacing:.05em;
-    color:var(--ink-soft); margin-top:8px; line-height:1.45; text-transform:uppercase;
-  }
-  .lede{
-    font-size:16.5px; line-height:1.7; color:var(--ink-soft); max-width:680px; margin-top:22px;
-  }
-  .lede b{ color:var(--ink); font-weight:600; }
-
-  .two-col{ display:flex; gap:48px; flex:1; align-items:flex-start; }
-  .two-col .col{ flex:1; }
-  .label-tag{
-    font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
-    color:var(--gold); margin-bottom:8px; display:block;
-  }
-  .col-text{ font-size:15.5px; line-height:1.65; color:var(--ink-soft); }
-  .col-text b{ color:var(--ink); }
-
-  /* ---------- objectives slide ---------- */
-  .obj-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:14px; }
-  .obj-item{
-    display:flex; gap:18px; align-items:flex-start;
-    padding:16px 18px;
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-left:none;
-    border-radius:3px;
-  }
-  .obj-num{
-    font-family:var(--display); font-size:22px; color:var(--seal-bright); width:30px; flex-shrink:0;
-  }
-  .obj-text{ font-size:15.5px; line-height:1.55; color:var(--ink); padding-top:2px; }
-
-  /* ---------- literature review slide ---------- */
-  .lit-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:16px 28px; }
-  .lit-card{ border-bottom:1px solid var(--line); padding-bottom:12px; }
-  .lit-name{ font-family:var(--serif); font-weight:700; font-size:14.5px; color:var(--ink); }
-  .lit-year{ color:var(--seal); font-family:var(--mono); font-size:11px; }
-  .lit-note{ font-size:13.5px; color:var(--ink-soft); line-height:1.5; margin-top:4px; }
-
-  /* ---------- methodology slide ---------- */
-  .method-grid{ display:grid; grid-template-columns: repeat(4,1fr); gap:14px; margin-top:10px; }
-  .method-cell{
-    background:var(--panel); border:1px solid var(--line); border-radius:3px;
-    padding:16px 14px; text-align:left;
-  }
-  .method-cell .mc-label{ font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--gold); }
-  .method-cell .mc-val{ font-family:var(--display); font-size:20px; color:var(--ink); margin-top:6px; line-height:1.2;}
-  .var-row{ display:flex; gap:36px; margin-top:24px; }
-  .var-block{ flex:1; }
-  .var-tag{ font-family:var(--mono); font-size:11px; color:var(--seal); letter-spacing:.1em; text-transform:uppercase; }
-  .var-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-  .chip{
-    font-size:13px; font-family:var(--serif); padding:6px 12px; border:1px solid var(--line);
-    border-radius:20px; color:var(--ink-soft); background:var(--panel);
-  }
-
-  /* ---------- findings slide ---------- */
-  .findings-wrap{ display:flex; gap:40px; align-items:center; flex:1; }
-  .finding-bars{ flex:1.1; display:flex; flex-direction:column; gap:16px; }
-  .fbar-row{ display:flex; flex-direction:column; gap:6px; }
-  .fbar-top{ display:flex; justify-content:space-between; align-items:baseline; font-size:13.5px; color:var(--ink); }
-  .fbar-pct{ font-family:var(--display); font-size:19px; color:var(--seal); }
-  .fbar-track{ height:9px; background:rgba(122,46,42,0.1); border-radius:6px; overflow:hidden; }
-  .fbar-fill{ height:100%; background:linear-gradient(90deg, var(--seal), var(--seal-bright)); width:0%; border-radius:6px; transition:width 1.1s cubic-bezier(.22,.61,.36,1); }
-  .slide.active .fbar-fill{ width: var(--w); }
-  .findings-side{ flex:0.85; border-left:1px solid var(--line); padding-left:34px; }
-
-  /* ---------- limitations/suggestions split ---------- */
-  .split-cols{ display:flex; gap:44px; flex:1; }
-  .split-col{ flex:1; }
-  .split-col .sc-head{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
-  .sc-dot{ width:8px; height:8px; border-radius:50%; background:var(--seal-bright); }
-  .sc-title{ font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink); }
-  .sc-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px; }
-  .sc-list li{ font-size:14.5px; line-height:1.55; color:var(--ink-soft); padding-left:16px; position:relative; }
-  .sc-list li::before{ content:"—"; position:absolute; left:0; color:var(--gold); }
-
-  /* ---------- conclusion slide ---------- */
-  .conclusion-wrap{ text-align:center; max-width:760px; margin:0 auto; }
-  .pillars{ display:flex; gap:18px; justify-content:center; margin-top:30px; }
-  .pillar{
-    flex:1; max-width:220px;
-    background:var(--panel); border:1px solid var(--line); border-radius:4px;
-    padding:20px 14px;
-  }
-  .pillar-roman{ font-family:var(--display); font-size:24px; color:var(--seal); }
-  .pillar-text{ font-size:13px; color:var(--ink-soft); margin-top:8px; line-height:1.5; }
-  .final-line{
-    font-family:var(--serif); font-style:italic; font-size:17px; color:var(--ink-soft);
-    margin-top:34px; line-height:1.6;
-  }
-
-  /* responsive */
-  @media (max-width: 880px){
-    .content-pad{ padding:36px 26px; }
-    .two-col, .findings-wrap, .split-cols, .var-row{ flex-direction:column; gap:24px; }
-    .lit-grid{ grid-template-columns:1fr; }
-    .method-grid{ grid-template-columns: repeat(2,1fr); }
-    .stat-row{ flex-wrap:wrap; }
-    .stat-card{ flex:1 1 45%; }
-    .pillars{ flex-direction:column; align-items:center; }
-    .findings-side{ border-left:none; border-top:1px solid var(--line); padding-left:0; padding-top:20px; }
-    .arrow-btn{ width:38px; height:38px; }
-    .title-main{ font-size: 30px; }
-  }
-
-  /* small phones */
-  @media (max-width: 480px){
-    .content-pad{ padding:30px 18px; }
-    .kicker{ font-size:10px; }
-    .sec-title{ font-size:24px; }
-    .lede{ font-size:14.5px; }
-    .stat-card{ flex:1 1 100%; }
-    .method-grid{ grid-template-columns: 1fr 1fr; }
-    .obj-item{ padding:13px 14px; gap:12px; }
-    .arrow-btn{ width:34px; height:34px; font-size:15px; }
-    #counter, #brandmark{ font-size:9.5px; }
-    .byline{ font-size:10.5px; }
-    .title-sub{ font-size:15.5px; }
-    .seal{ width:84px; height:84px; }
-    .seal .glyph{ font-size:26px; }
-    .fbar-pct{ font-size:16px; }
-  }
-
-  /* short / landscape viewports (e.g. phone sideways) — shrink vertical rhythm, allow scroll */
-  @media (max-height: 480px){
-    .slide{ align-items:flex-start; }
-    .slide-inner{ min-height:auto; padding-top:64px; padding-bottom:48px; }
-    .content-pad{ padding:18px 36px; }
-    .seal{ width:64px; height:64px; margin-bottom:16px; }
-    .title-main{ font-size:24px; margin-bottom:12px; }
-    .title-sub{ margin-bottom:18px; }
-    .hr-orn{ margin:14px auto; }
-    #nav{ display:none; } /* avoid covering content; counter + swipe/keys still work */
-  }
-
-  /* very narrow phones — collapse remaining grids to a single column */
-  @media (max-width: 360px){
-    .lit-grid{ grid-template-columns:1fr; }
-    .method-grid{ grid-template-columns:1fr 1fr; gap:10px; }
-    .method-cell{ padding:12px 10px; }
-    .method-cell .mc-val{ font-size:17px; }
-    .stat-row{ gap:10px; }
-    .title-main{ font-size:25px; }
-    .pillar{ max-width:100%; }
-  }
-
-  /* respect notch / home-indicator safe areas on the slide content itself */
-  .slide-inner{ padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
-
-  /* visible focus ring for any keyboard-focusable element, fallback for browsers without :focus-visible */
-  a:focus, button:focus{ outline:2px solid var(--seal-bright); outline-offset:2px; }
-  a:focus:not(:focus-visible), button:focus:not(:focus-visible){ outline:none; }
-
-  /* screen-reader-only helper text */
-  .sr-only{
-    position:absolute; width:1px; height:1px;
-    padding:0; margin:-1px; overflow:hidden;
-    clip:rect(0,0,0,0); white-space:nowrap; border:0;
-  }
-
-  /* print fallback: lay slides out one after another instead of stacked/hidden */
-  @media print{
-    html,body{ overflow:visible; height:auto; }
-    #deck{ height:auto; overflow:visible; }
-    .slide{
-      position:relative; opacity:1 !important; visibility:visible !important;
-      transform:none !important; page-break-after:always; height:auto; min-height:auto;
-      overflow:visible;
-    }
-    .arrow-btn, #nav, #counter, #brandmark, #progressbar{ display:none !important; }
-  }
+  #thankyou p{color:var(--muted);font-size:14.5px;line-height:1.7;max-width:440px;margin:0 auto;}
+  #formBody.hidden{display:none;}
 </style>
 </head>
 <body>
 
-<a href="#deck" class="sr-only">Skip to presentation</a>
-<div id="srAnnouncer" class="sr-only" role="status" aria-live="polite"></div>
+<div class="topband"></div>
+<div class="wrap">
 
-<div id="progressbar" style="width:0%" role="progressbar" aria-label="Presentation progress" aria-valuemin="1" aria-valuemax="8" aria-valuenow="1"></div>
-<div id="brandmark" aria-hidden="true">Saveetha School of Law · 2026</div>
-<div id="counter" aria-hidden="true"><b id="curNum">01</b> / 08</div>
-
-<div id="deck" role="region" aria-roledescription="carousel" aria-label="Presentation slides. Use arrow keys, swipe, or the on-screen buttons to navigate.">
-
-  <!-- SLIDE 0 — TITLE -->
-  <section class="slide active" data-index="0" role="group" aria-roledescription="slide" aria-label="Slide 1 of 8: Title">
-    <div class="frame">
-      <div class="corner tl"><svg viewBox="0 0 26 26"><path d="M1 1 L1 14 M1 1 L14 1" stroke="#7A2E2A" stroke-width="1" fill="none"/></svg></div>
-      <div class="corner tr"><svg viewBox="0 0 26 26"><path d="M1 1 L1 14 M1 1 L14 1" stroke="#7A2E2A" stroke-width="1" fill="none"/></svg></div>
-      <div class="corner bl"><svg viewBox="0 0 26 26"><path d="M1 1 L1 14 M1 1 L14 1" stroke="#7A2E2A" stroke-width="1" fill="none"/></svg></div>
-      <div class="corner br"><svg viewBox="0 0 26 26"><path d="M1 1 L1 14 M1 1 L14 1" stroke="#7A2E2A" stroke-width="1" fill="none"/></svg></div>
-    </div>
-    <div class="slide-inner">
-      <div class="reveal" style="transition-delay:.05s">
-        <div class="seal"><span class="glyph">§</span></div>
-      </div>
-      <h1 class="title-main reveal" style="transition-delay:.15s">Inheritance &amp; Transfer of Intellectual Property Rights Within Families</h1>
-      <p class="title-sub reveal" style="transition-delay:.28s">Reconciling Family Law and Property Law Frameworks — an empirical study of awareness, attitude, and dispute across 229 respondents</p>
-      <div class="hr-orn reveal" style="transition-delay:.38s"></div>
-      <div class="byline reveal" style="transition-delay:.46s">
-        <b>Rakunatha Khrishanth Manathra</b> — B.A., LLB. (Hons.), Saveetha School of Law, SIMATS<br>
-        with <b>Seetha Lakshmi</b>, Teaching Research Assistant, Saveetha School of Law · Chennai, India
+  <div class="header-card">
+    <div class="seal">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#a97d3f" stroke-width="1.6">
+        <path d="M12 2v20M4 6h16M6 6l-3 6a3 3 0 006 0l-3-6zM18 6l-3 6a3 3 0 006 0l-3-6z" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 22h6" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <p class="eyebrow">Research instrument</p>
       </div>
     </div>
-  </section>
+    <h1>Systems-Based Legal Workflow Intelligence for Indian Family Law Practice</h1>
+    <div class="header-meta">
+      This questionnaire supports doctoral/applied research into how a systems-based intelligence platform could
+      support case tracking, drafting, and decision-making in Indian family law practice. It takes about
+      <b>8–10 minutes</b>. Responses are used for academic research only, will be reported in aggregate, and
+      individual identities will not be disclosed without separate consent.
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
 
-  <!-- SLIDE 1 — ABSTRACT / AIM -->
-  <section class="slide" data-index="1" role="group" aria-roledescription="slide" aria-label="Slide 2 of 8: Abstract">
-    <div class="frame"></div>
-    <div class="slide-inner">
-      <div class="content-pad">
-        <div class="kicker reveal" style="transition-delay:.05s"><span class="dash"></span>01 — Abstract</div>
-        <h2 class="sec-title reveal" style="transition-delay:.12s">Where family ties meet legal title</h2>
-        <p class="lede reveal" style="transition-delay:.2s">This study investigates how <b>intellectual property rights move within families</b> — through inheritance, succession, and informal transfer — and where family law and property law frameworks pull in different directions. Built on a sample of <b>229 respondents</b>, it aims to surface the legal frameworks at play and the friction families encounter navigating them.</p>
-        <div class="stat-row reveal" style="transition-delay:.32s">
-          <div class="stat-card"><div class="stat-num">60%</div><div class="stat-label">Reported difficulty navigating the legal frameworks</div></div>
-          <div class="stat-card"><div class="stat-num">40%</div><div class="stat-label">Reported low awareness of their own IP rights</div></div>
-          <div class="stat-card"><div class="stat-num">25%</div><div class="stat-label">Experienced disputes over inherited IP</div></div>
-          <div class="stat-card"><div class="stat-num">15%</div><div class="stat-label">Went on to seek formal legal advice</div></div>
+  <form id="formBody">
+
+    <!-- SECTION A -->
+    <div class="card" data-section="A">
+      <p class="section-title"><span class="section-tab">Section A</span> Respondent profile</p>
+      <p class="section-desc">A few details to help us understand who is responding.</p>
+
+      <div class="q">
+        <p class="q-label">Name <span style="font-weight:400;color:var(--muted)">(optional)</span></p>
+        <input type="text" name="name" placeholder="Your name">
+      </div>
+
+      <div class="q" data-required="true">
+        <p class="q-label">Your primary role<span class="req">*</span></p>
+        <div class="options" data-type="radio" data-name="role">
+          <label class="opt"><input type="radio" name="role" value="Advocate"> Advocate</label>
+          <label class="opt"><input type="radio" name="role" value="Family Court Judge / Judicial Officer"> Family Court Judge / Judicial Officer</label>
+          <label class="opt"><input type="radio" name="role" value="Mediator / Counsellor"> Mediator / Counsellor</label>
+          <label class="opt"><input type="radio" name="role" value="Paralegal / Legal Associate"> Paralegal / Legal Associate</label>
+          <label class="opt"><input type="radio" name="role" value="Litigant-in-person"> Litigant-in-person</label>
+          <label class="opt"><input type="radio" name="role" value="Other"> Other</label>
+        </div>
+        <p class="error-flag">Please select one option.</p>
+      </div>
+
+      <div class="q" data-required="true">
+        <p class="q-label">Years of experience in family law<span class="req">*</span></p>
+        <div class="options" data-type="radio" data-name="experience">
+          <label class="opt"><input type="radio" name="experience" value="Less than 2 years"> Less than 2 years</label>
+          <label class="opt"><input type="radio" name="experience" value="2–5 years"> 2–5 years</label>
+          <label class="opt"><input type="radio" name="experience" value="6–10 years"> 6–10 years</label>
+          <label class="opt"><input type="radio" name="experience" value="11–20 years"> 11–20 years</label>
+          <label class="opt"><input type="radio" name="experience" value="20+ years"> 20+ years</label>
+        </div>
+        <p class="error-flag">Please select one option.</p>
+      </div>
+
+      <div class="q" data-required="true">
+        <p class="q-label">Primary state / jurisdiction of practice<span class="req">*</span></p>
+        <input type="text" name="jurisdiction" placeholder="e.g., Maharashtra, Delhi NCR">
+        <p class="error-flag">Please enter your jurisdiction.</p>
+      </div>
+
+      <div class="q" data-required="true">
+        <p class="q-label">Court(s) you primarily practice in<span class="req">*</span></p>
+        <p class="q-help">Select all that apply</p>
+        <div class="options" data-type="checkbox" data-name="courts">
+          <label class="opt"><input type="checkbox" name="courts" value="Family Court"> Family Court</label>
+          <label class="opt"><input type="checkbox" name="courts" value="District Court"> District Court</label>
+          <label class="opt"><input type="checkbox" name="courts" value="High Court"> High Court</label>
+          <label class="opt"><input type="checkbox" name="courts" value="Lok Adalat / Mediation Centre"> Lok Adalat / Mediation Centre</label>
+          <label class="opt"><input type="checkbox" name="courts" value="Other"> Other</label>
+        </div>
+        <p class="error-flag">Please select at least one option.</p>
+      </div>
+
+      <div class="q">
+        <p class="q-label">Average number of active family law cases you handle at a time</p>
+        <div class="options" data-type="radio" data-name="caseload">
+          <label class="opt"><input type="radio" name="caseload" value="Fewer than 10"> Fewer than 10</label>
+          <label class="opt"><input type="radio" name="caseload" value="10–25"> 10–25</label>
+          <label class="opt"><input type="radio" name="caseload" value="26–50"> 26–50</label>
+          <label class="opt"><input type="radio" name="caseload" value="More than 50"> More than 50</label>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- SLIDE 2 — OBJECTIVES -->
-  <section class="slide" data-index="2" role="group" aria-roledescription="slide" aria-label="Slide 3 of 8: Objectives of the study">
-    <div class="frame"></div>
-    <div class="slide-inner">
-      <div class="content-pad">
-        <div class="kicker reveal" style="transition-delay:.05s"><span class="dash"></span>02 — Objectives of the Study</div>
-        <h2 class="sec-title reveal" style="transition-delay:.12s">Four questions the research sets out to answer</h2>
-        <ul class="obj-list" style="margin-top:26px;">
-          <li class="obj-item reveal" style="transition-delay:.2s">
-            <span class="obj-num">I</span>
-            <span class="obj-text">Investigate the legal frameworks that govern inheritance and transfer of IP rights within families.</span>
-          </li>
-          <li class="obj-item reveal" style="transition-delay:.3s">
-            <span class="obj-num">II</span>
-            <span class="obj-text">Examine how family law and property law frameworks intersect and interact around IP rights.</span>
-          </li>
-          <li class="obj-item reveal" style="transition-delay:.4s">
-            <span class="obj-num">III</span>
-            <span class="obj-text">Identify the key challenges and opportunities families face inheriting and transferring IP.</span>
-          </li>
-          <li class="obj-item reveal" style="transition-delay:.5s">
-            <span class="obj-num">IV</span>
-            <span class="obj-text">Develop policy and practice recommendations to promote clarity and certainty in this space.</span>
-          </li>
-        </ul>
+    <!-- SECTION B -->
+    <div class="card" data-section="B">
+      <p class="section-title"><span class="section-tab">Section B</span> Current practice areas</p>
+
+      <div class="q" data-required="true">
+        <p class="q-label">Which family law matters do you handle most frequently?<span class="req">*</span></p>
+        <p class="q-help">Select all that apply</p>
+        <div class="options" data-type="checkbox" data-name="matters">
+          <label class="opt"><input type="checkbox" name="matters" value="Divorce / judicial separation"> Divorce / judicial separation</label>
+          <label class="opt"><input type="checkbox" name="matters" value="Maintenance (Sec. 125 CrPC / 144 BNSS)"> Maintenance (Sec. 125 CrPC / 144 BNSS)</label>
+          <label class="opt"><input type="checkbox" name="matters" value="Child custody and guardianship"> Child custody and guardianship</label>
+          <label class="opt"><input type="checkbox" name="matters" value="Domestic violence (PWDVA)"> Domestic violence (PWDVA)</label>
+          <label class="opt"><input type="checkbox" name="matters" value="Adoption"> Adoption</label>
+          <label class="opt"><input type="checkbox" name="matters" value="Succession / inheritance"> Succession / inheritance</label>
+          <label class="opt"><input type="checkbox" name="matters" value="Restitution of conjugal rights"> Restitution of conjugal rights</label>
+          <label class="opt"><input type="checkbox" name="matters" value="Marriage registration"> Marriage registration</label>
+          <label class="opt"><input type="checkbox" name="matters" value="Other"> Other</label>
+        </div>
+        <p class="error-flag">Please select at least one option.</p>
       </div>
-    </div>
-  </section>
 
-  <!-- SLIDE 3 — LITERATURE REVIEW -->
-  <section class="slide" data-index="3" role="group" aria-roledescription="slide" aria-label="Slide 4 of 8: Review of literature">
-    <div class="frame"></div>
-    <div class="slide-inner">
-      <div class="content-pad">
-        <div class="kicker reveal" style="transition-delay:.05s"><span class="dash"></span>03 — Review of Literature</div>
-        <h2 class="sec-title reveal" style="transition-delay:.12s">Eighteen sources, four recurring threads</h2>
-        <div class="lit-grid" style="margin-top:24px;">
-          <div class="lit-card reveal" style="transition-delay:.2s">
-            <span class="lit-name">Karapapa &amp; McDonagh</span> <span class="lit-year">2019</span>
-            <div class="lit-note">Map how IP rights move through assignment, licensing, and sale — and where moral and related rights complicate a clean transfer.</div>
-          </div>
-          <div class="lit-card reveal" style="transition-delay:.27s">
-            <span class="lit-name">Torremans</span> <span class="lit-year">2019</span>
-            <div class="lit-note">Examines tortious protection of IP rights, framing why safeguarding creators' claims matters before inheritance even begins.</div>
-          </div>
-          <div class="lit-card reveal" style="transition-delay:.34s">
-            <span class="lit-name">Indradewi</span> <span class="lit-year">2022</span>
-            <div class="lit-note">Finds Indonesia's IP regulations complex and at times contradictory — a caution echoed in many jurisdictions.</div>
-          </div>
-          <div class="lit-card reveal" style="transition-delay:.41s">
-            <span class="lit-name">Sampson · Bently · Gervais · Hilty</span> <span class="lit-year">1999–2023</span>
-            <div class="lit-note">A sustained body of work on family businesses and family law, consistently finding that IP rights shape succession and strain relationships between spouses, children, and heirs.</div>
-          </div>
+      <div class="q">
+        <p class="q-label">Which personal law systems do you most often work under?</p>
+        <p class="q-help">Select all that apply</p>
+        <div class="options" data-type="checkbox" data-name="personallaw">
+          <label class="opt"><input type="checkbox" name="personallaw" value="Hindu Marriage Act"> Hindu Marriage Act</label>
+          <label class="opt"><input type="checkbox" name="personallaw" value="Muslim personal law"> Muslim personal law</label>
+          <label class="opt"><input type="checkbox" name="personallaw" value="Indian Divorce Act (Christian)"> Indian Divorce Act (Christian)</label>
+          <label class="opt"><input type="checkbox" name="personallaw" value="Special Marriage Act"> Special Marriage Act</label>
+          <label class="opt"><input type="checkbox" name="personallaw" value="Parsi law"> Parsi law</label>
+          <label class="opt"><input type="checkbox" name="personallaw" value="Other"> Other</label>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- SLIDE 4 — METHODOLOGY -->
-  <section class="slide" data-index="4" role="group" aria-roledescription="slide" aria-label="Slide 5 of 8: Methodology">
-    <div class="frame"></div>
-    <div class="slide-inner">
-      <div class="content-pad">
-        <div class="kicker reveal" style="transition-delay:.05s"><span class="dash"></span>04 — Methodology</div>
-        <h2 class="sec-title reveal" style="transition-delay:.12s">Empirical design, structured questionnaire</h2>
-        <div class="method-grid">
-          <div class="method-cell reveal" style="transition-delay:.2s"><div class="mc-label">Sample size</div><div class="mc-val">229</div></div>
-          <div class="method-cell reveal" style="transition-delay:.27s"><div class="mc-label">Sampling method</div><div class="mc-val">Convenience</div></div>
-          <div class="method-cell reveal" style="transition-delay:.34s"><div class="mc-label">Instrument</div><div class="mc-val">5-pt Likert questionnaire</div></div>
-          <div class="method-cell reveal" style="transition-delay:.41s"><div class="mc-label">Analysis tools</div><div class="mc-val">SPSS v21 — χ², ANOVA, Pearson</div></div>
+    <!-- SECTION C -->
+    <div class="card" data-section="C">
+      <p class="section-title"><span class="section-tab">Section C</span> Current workflow and case management</p>
+
+      <div class="q" data-required="true">
+        <p class="q-label">How do you currently track case deadlines and hearing dates?<span class="req">*</span></p>
+        <div class="options" data-type="radio" data-name="tracking">
+          <label class="opt"><input type="radio" name="tracking" value="Physical diary / register"> Physical diary / register</label>
+          <label class="opt"><input type="radio" name="tracking" value="Excel / Word documents"> Excel / Word documents</label>
+          <label class="opt"><input type="radio" name="tracking" value="Case management software"> Case management software</label>
+          <label class="opt"><input type="radio" name="tracking" value="Court e-filing portal reminders"> Court e-filing portal reminders</label>
+          <label class="opt"><input type="radio" name="tracking" value="Memory / no formal system"> Memory / no formal system</label>
+          <label class="opt"><input type="radio" name="tracking" value="Other"> Other</label>
         </div>
-        <div class="var-row">
-          <div class="var-block reveal" style="transition-delay:.5s">
-            <span class="var-tag">Independent Variables</span>
-            <div class="var-chips">
-              <span class="chip">Age</span><span class="chip">Gender</span><span class="chip">Education</span><span class="chip">Geographic area</span><span class="chip">Occupation</span>
-            </div>
-          </div>
-          <div class="var-block reveal" style="transition-delay:.58s">
-            <span class="var-tag">Dependent Variable</span>
-            <div class="var-chips">
-              <span class="chip">Awareness &amp; attitude toward inheritance and transfer of IP rights</span>
-            </div>
-          </div>
+        <p class="error-flag">Please select one option.</p>
+      </div>
+
+      <div class="q">
+        <p class="q-label">How difficult is it to track multiple hearing dates across courts?</p>
+        <div class="scale-row">
+          <span class="scale-endpoint">Not difficult</span>
+          <input type="range" min="1" max="5" value="3" step="1" name="difficulty" oninput="this.nextElementSibling.textContent=this.value">
+          <span class="scale-value">3</span>
+          <span class="scale-endpoint right">Very difficult</span>
+        </div>
+      </div>
+
+      <div class="q" data-required="true">
+        <p class="q-label">What is your biggest workflow challenge in family law practice today?<span class="req">*</span></p>
+        <p class="q-help">Select up to three</p>
+        <div class="options" data-type="checkbox" data-name="challenges" data-max="3">
+          <label class="opt"><input type="checkbox" name="challenges" value="Tracking adjournments and next dates"> Tracking adjournments and next dates</label>
+          <label class="opt"><input type="checkbox" name="challenges" value="Drafting repetitive documents (petitions, affidavits)"> Drafting repetitive documents (petitions, affidavits)</label>
+          <label class="opt"><input type="checkbox" name="challenges" value="Locating relevant precedents / case law"> Locating relevant precedents / case law</label>
+          <label class="opt"><input type="checkbox" name="challenges" value="Coordinating between multiple parties / mediators"> Coordinating between multiple parties / mediators</label>
+          <label class="opt"><input type="checkbox" name="challenges" value="Managing client communication and updates"> Managing client communication and updates</label>
+          <label class="opt"><input type="checkbox" name="challenges" value="Maintaining evidence / document repository"> Maintaining evidence / document repository</label>
+          <label class="opt"><input type="checkbox" name="challenges" value="Predicting case timelines"> Predicting case timelines</label>
+          <label class="opt"><input type="checkbox" name="challenges" value="Other"> Other</label>
+        </div>
+        <p class="error-flag">Please select at least one option (max 3).</p>
+      </div>
+
+      <div class="q">
+        <p class="q-label">Roughly what share of your working week goes to administrative / documentation tasks rather than legal strategy?</p>
+        <div class="options" data-type="radio" data-name="admin_time">
+          <label class="opt"><input type="radio" name="admin_time" value="Less than 20%"> Less than 20%</label>
+          <label class="opt"><input type="radio" name="admin_time" value="20–40%"> 20–40%</label>
+          <label class="opt"><input type="radio" name="admin_time" value="40–60%"> 40–60%</label>
+          <label class="opt"><input type="radio" name="admin_time" value="More than 60%"> More than 60%</label>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- SLIDE 5 — FINDINGS -->
-  <section class="slide" data-index="5" role="group" aria-roledescription="slide" aria-label="Slide 6 of 8: Findings and discussion">
-    <div class="frame"></div>
-    <div class="slide-inner">
-      <div class="content-pad">
-        <div class="kicker reveal" style="transition-delay:.05s"><span class="dash"></span>05 — Findings &amp; Discussion</div>
-        <h2 class="sec-title reveal" style="transition-delay:.12s">Awareness is uneven — and largely a matter of access</h2>
-        <div class="findings-wrap" style="margin-top:22px;">
-          <div class="finding-bars">
-            <div class="fbar-row reveal" style="transition-delay:.22s">
-              <div class="fbar-top"><span>Difficulty navigating legal frameworks</span><span class="fbar-pct">60%</span></div>
-              <div class="fbar-track"><div class="fbar-fill" style="--w:60%"></div></div>
-            </div>
-            <div class="fbar-row reveal" style="transition-delay:.3s">
-              <div class="fbar-top"><span>Lack of awareness of own IP rights</span><span class="fbar-pct">40%</span></div>
-              <div class="fbar-track"><div class="fbar-fill" style="--w:40%"></div></div>
-            </div>
-            <div class="fbar-row reveal" style="transition-delay:.38s">
-              <div class="fbar-top"><span>Experienced disputes over inherited IP</span><span class="fbar-pct">25%</span></div>
-              <div class="fbar-track"><div class="fbar-fill" style="--w:25%"></div></div>
-            </div>
-            <div class="fbar-row reveal" style="transition-delay:.46s">
-              <div class="fbar-top"><span>Sought formal legal advice</span><span class="fbar-pct">15%</span></div>
-              <div class="fbar-track"><div class="fbar-fill" style="--w:15%"></div></div>
-            </div>
-          </div>
-          <div class="findings-side reveal" style="transition-delay:.56s">
-            <p class="col-text">Across five chi-square tests and three ANOVA models, <b>no variable</b> — age, gender, education, occupation, or area of residence — showed a statistically significant association with awareness or attitude (all p &gt; 0.05).</p>
-            <p class="col-text" style="margin-top:14px;">Awareness skews highest among the <b>31–40 age group</b> and those with stronger educational attainment — a pattern, not a proven effect.</p>
-          </div>
+    <!-- SECTION D -->
+    <div class="card" data-section="D">
+      <p class="section-title"><span class="section-tab">Section D</span> Technology adoption</p>
+
+      <div class="q">
+        <p class="q-label">Which of the following do you currently use in your practice?</p>
+        <p class="q-help">Select all that apply</p>
+        <div class="options" data-type="checkbox" data-name="currenttools">
+          <label class="opt"><input type="checkbox" name="currenttools" value="e-Courts / NJDG portal"> e-Courts / NJDG portal</label>
+          <label class="opt"><input type="checkbox" name="currenttools" value="Case management software"> Case management software</label>
+          <label class="opt"><input type="checkbox" name="currenttools" value="AI legal research tools (e.g., SCC Online AI, Manupatra)"> AI legal research tools (e.g., SCC Online AI, Manupatra)</label>
+          <label class="opt"><input type="checkbox" name="currenttools" value="Document automation tools"> Document automation tools</label>
+          <label class="opt"><input type="checkbox" name="currenttools" value="WhatsApp / email for client communication"> WhatsApp / email for client communication</label>
+          <label class="opt"><input type="checkbox" name="currenttools" value="None of the above"> None of the above</label>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- SLIDE 6 — LIMITATIONS & SUGGESTIONS -->
-  <section class="slide" data-index="6" role="group" aria-roledescription="slide" aria-label="Slide 7 of 8: Limitations and suggestions">
-    <div class="frame"></div>
-    <div class="slide-inner">
-      <div class="content-pad">
-        <div class="kicker reveal" style="transition-delay:.05s"><span class="dash"></span>06 — Limitations &amp; Suggestions</div>
-        <h2 class="sec-title reveal" style="transition-delay:.12s">What the data can't say — and what to do next</h2>
-        <div class="split-cols" style="margin-top:22px;">
-          <div class="split-col reveal" style="transition-delay:.2s">
-            <div class="sc-head"><span class="sc-dot"></span><span class="sc-title">Limitations</span></div>
-            <ul class="sc-list">
-              <li>Convenience sample of 229 limits generalisability across population groups.</li>
-              <li>Self-report and social-desirability bias likely shaped sensitive responses.</li>
-              <li>Geographic concentration under-represents rural and remote populations.</li>
-            </ul>
-          </div>
-          <div class="split-col reveal" style="transition-delay:.32s">
-            <div class="sc-head"><span class="sc-dot" style="background:var(--gold)"></span><span class="sc-title">Suggestions</span></div>
-            <ul class="sc-list">
-              <li>Strengthen and consistently enforce legislative frameworks at central and state levels.</li>
-              <li>Accelerate AI-driven monitoring and reporting tools for IP disputes.</li>
-              <li>Expand community awareness programmes toward underserved and rural populations.</li>
-              <li>Fund civil society organisations to support affected families and advocate reform.</li>
-            </ul>
-          </div>
+      <div class="q">
+        <p class="q-label">How comfortable are you with adopting new legal technology?</p>
+        <div class="scale-row">
+          <span class="scale-endpoint">Not comfortable</span>
+          <input type="range" min="1" max="5" value="3" step="1" name="comfort" oninput="this.nextElementSibling.textContent=this.value">
+          <span class="scale-value">3</span>
+          <span class="scale-endpoint right">Very comfortable</span>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- SLIDE 7 — CONCLUSION -->
-  <section class="slide" data-index="7" role="group" aria-roledescription="slide" aria-label="Slide 8 of 8: Conclusion">
-    <div class="frame">
-      <div class="corner tl"><svg viewBox="0 0 26 26"><path d="M1 1 L1 14 M1 1 L14 1" stroke="#7A2E2A" stroke-width="1" fill="none"/></svg></div>
-      <div class="corner tr"><svg viewBox="0 0 26 26"><path d="M1 1 L1 14 M1 1 L14 1" stroke="#7A2E2A" stroke-width="1" fill="none"/></svg></div>
-      <div class="corner bl"><svg viewBox="0 0 26 26"><path d="M1 1 L1 14 M1 1 L14 1" stroke="#7A2E2A" stroke-width="1" fill="none"/></svg></div>
-      <div class="corner br"><svg viewBox="0 0 26 26"><path d="M1 1 L1 14 M1 1 L14 1" stroke="#7A2E2A" stroke-width="1" fill="none"/></svg></div>
-    </div>
-    <div class="slide-inner" style="align-items:center; text-align:center;">
-      <div class="conclusion-wrap">
-        <div class="kicker reveal" style="transition-delay:.05s; justify-content:center;"><span class="dash"></span>07 — Conclusion<span class="dash"></span></div>
-        <h2 class="sec-title reveal" style="transition-delay:.14s;">Clarity, not just compliance</h2>
-        <p class="lede reveal" style="transition-delay:.24s; margin:18px auto 0; text-align:center;">The path forward rests on three pillars working together — not legislation alone.</p>
-        <div class="pillars reveal" style="transition-delay:.36s;">
-          <div class="pillar"><div class="pillar-roman">I</div><div class="pillar-text">Legislative reform across central and state frameworks</div></div>
-          <div class="pillar"><div class="pillar-roman">II</div><div class="pillar-text">Digital infrastructure for monitoring and dispute resolution</div></div>
-          <div class="pillar"><div class="pillar-roman">III</div><div class="pillar-text">Sustained community outreach, especially rural and underserved areas</div></div>
+      <div class="q" data-required="true">
+        <p class="q-label">Have you used any AI-powered legal tool before?<span class="req">*</span></p>
+        <div class="options" data-type="radio" data-name="ai_used">
+          <label class="opt"><input type="radio" name="ai_used" value="Yes, regularly"> Yes, regularly</label>
+          <label class="opt"><input type="radio" name="ai_used" value="Yes, occasionally"> Yes, occasionally</label>
+          <label class="opt"><input type="radio" name="ai_used" value="No, but interested"> No, but interested</label>
+          <label class="opt"><input type="radio" name="ai_used" value="No, and not interested"> No, and not interested</label>
         </div>
-        <p class="final-line reveal" style="transition-delay:.5s;">"229 voices point to the same conclusion: families don't lack concern for their intellectual property — they lack a clear map for passing it on."</p>
+        <p class="error-flag">Please select one option.</p>
       </div>
     </div>
-  </section>
+
+    <!-- SECTION E -->
+    <div class="card" data-section="E">
+      <p class="section-title"><span class="section-tab">Section E</span> Perception of a systems-based intelligence platform</p>
+      <p class="section-desc">Imagine a platform that brings case tracking, drafting support, and legal research together for family law practice.</p>
+
+      <div class="q" data-required="true">
+        <p class="q-label">Which features would be most valuable to you?<span class="req">*</span></p>
+        <p class="q-help">Select up to four</p>
+        <div class="options" data-type="checkbox" data-name="features" data-max="4">
+          <label class="opt"><input type="checkbox" name="features" value="Automated hearing / deadline tracking across courts"> Automated hearing / deadline tracking across courts</label>
+          <label class="opt"><input type="checkbox" name="features" value="AI-assisted drafting of petitions / affidavits"> AI-assisted drafting of petitions / affidavits</label>
+          <label class="opt"><input type="checkbox" name="features" value="Precedent and judgment retrieval specific to family law"> Precedent and judgment retrieval specific to family law</label>
+          <label class="opt"><input type="checkbox" name="features" value="Case outcome / timeline prediction"> Case outcome / timeline prediction</label>
+          <label class="opt"><input type="checkbox" name="features" value="Centralized client and case document repository"> Centralized client and case document repository</label>
+          <label class="opt"><input type="checkbox" name="features" value="Mediation and settlement tracking"> Mediation and settlement tracking</label>
+          <label class="opt"><input type="checkbox" name="features" value="Multi-party / multi-court case coordination"> Multi-party / multi-court case coordination</label>
+          <label class="opt"><input type="checkbox" name="features" value="Automated compliance checklists (e.g., maintenance calculation aids)"> Automated compliance checklists (e.g., maintenance calculation aids)</label>
+          <label class="opt"><input type="checkbox" name="features" value="Other"> Other</label>
+        </div>
+        <p class="error-flag">Please select at least one option (max 4).</p>
+      </div>
+
+      <div class="q">
+        <p class="q-label">How likely are you to adopt such a platform if it were available?</p>
+        <div class="scale-row">
+          <span class="scale-endpoint">Very unlikely</span>
+          <input type="range" min="1" max="5" value="3" step="1" name="adoption" oninput="this.nextElementSibling.textContent=this.value">
+          <span class="scale-value">3</span>
+          <span class="scale-endpoint right">Very likely</span>
+        </div>
+      </div>
+
+      <div class="q">
+        <p class="q-label">What concerns, if any, would affect your decision to adopt such a platform?</p>
+        <p class="q-help">Select all that apply</p>
+        <div class="options" data-type="checkbox" data-name="concerns">
+          <label class="opt"><input type="checkbox" name="concerns" value="Data privacy and confidentiality"> Data privacy and confidentiality</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="Cost / pricing"> Cost / pricing</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="Reliability / accuracy of AI outputs"> Reliability / accuracy of AI outputs</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="Learning curve / training required"> Learning curve / training required</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="Compatibility with existing court systems"> Compatibility with existing court systems</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="Ethical / Bar Council concerns"> Ethical / Bar Council concerns</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="None"> None</label>
+          <label class="opt"><input type="checkbox" name="concerns" value="Other"> Other</label>
+        </div>
+      </div>
+
+      <div class="q" data-required="true">
+        <p class="q-label">Would you be willing to participate in a pilot test of such a platform?<span class="req">*</span></p>
+        <div class="options" data-type="radio" data-name="pilot">
+          <label class="opt"><input type="radio" name="pilot" value="Yes"> Yes</label>
+          <label class="opt"><input type="radio" name="pilot" value="Maybe, need more information"> Maybe, need more information</label>
+          <label class="opt"><input type="radio" name="pilot" value="No"> No</label>
+        </div>
+        <p class="error-flag">Please select one option.</p>
+      </div>
+    </div>
+
+    <!-- SECTION F -->
+    <div class="card" data-section="F">
+      <p class="section-title"><span class="section-tab">Section F</span> Open feedback</p>
+
+      <div class="q">
+        <p class="q-label">In your own words, what is the single biggest inefficiency in current Indian family law case workflows?</p>
+        <textarea name="inefficiency" placeholder="Your answer"></textarea>
+      </div>
+
+      <div class="q">
+        <p class="q-label">Any additional suggestions or features you would like to see in such a platform?</p>
+        <textarea name="suggestions" placeholder="Your answer"></textarea>
+      </div>
+
+      <div class="q">
+        <p class="q-label">May we contact you for a brief follow-up interview?</p>
+        <p class="q-help">Optional — share an email only if you're open to being contacted</p>
+        <input type="text" name="email" placeholder="name@example.com">
+      </div>
+    </div>
+
+    <div class="footer-card">
+      <p class="footer-note">By submitting, you confirm your responses may be used for this research study in anonymised, aggregate form.</p>
+      <button type="button" class="submit" id="submitBtn">Submit</button>
+    </div>
+
+  </form>
+
+  <div id="thankyou">
+    <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#1e2a44" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <h2>Response recorded</h2>
+    <p>Thank you for contributing to this study on legal workflow intelligence in Indian family law practice. Your input will help shape a system grounded in how practitioners actually work.</p>
+  </div>
 
 </div>
 
-<button class="arrow-btn" id="prevBtn" aria-label="Previous slide">‹</button>
-<button class="arrow-btn" id="nextBtn" aria-label="Next slide">›</button>
-<div id="nav"></div>
-
 <script>
-(function(){
-  const slides = Array.from(document.querySelectorAll('.slide'));
-  const total = slides.length;
-  let current = 0;
-  let animating = false;
-  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const navEl = document.getElementById('nav');
-  const slideTitles = slides.map(s => {
-    const label = s.getAttribute('aria-label') || '';
-    const parts = label.split(': ');
-    return parts.length > 1 ? parts[1] : ('Slide ' + (slides.indexOf(s)+1));
-  });
-
-  slides.forEach((_, i) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'dot' + (i===0 ? ' active' : '');
-    b.setAttribute('aria-label', 'Go to slide ' + (i+1) + ' of ' + total + ': ' + slideTitles[i]);
-    if (i===0) b.setAttribute('aria-current', 'true');
-    b.addEventListener('click', () => goTo(i));
-    navEl.appendChild(b);
-  });
-  const dots = Array.from(navEl.children);
-  const counterEl = document.getElementById('curNum');
-  const progressEl = document.getElementById('progressbar');
-  const announcer = document.getElementById('srAnnouncer');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-
-  function pad(n){ return (n+1).toString().padStart(2,'0'); }
-
-  function render(opts){
-    opts = opts || {};
-    slides.forEach((s,i) => {
-      const isActive = i===current;
-      s.classList.toggle('active', isActive);
-      s.setAttribute('aria-hidden', isActive ? 'false' : 'true');
-      // keep inactive slides out of tab order
-      s.querySelectorAll('a, button, [tabindex]').forEach(el => {
-        if (!isActive) { el.setAttribute('data-prev-tabindex', el.getAttribute('tabindex') || ''); el.setAttribute('tabindex','-1'); }
-        else { el.removeAttribute('tabindex'); el.removeAttribute('data-prev-tabindex'); }
-      });
-      if (isActive && !opts.skipScrollReset) s.scrollTop = 0;
-    });
-    dots.forEach((d,i) => {
-      const isActive = i===current;
-      d.classList.toggle('active', isActive);
-      if (isActive) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
-    });
-    counterEl.textContent = pad(current);
-    progressEl.style.width = ((current+1)/total*100) + '%';
-    progressEl.setAttribute('aria-valuenow', String(current+1));
-    prevBtn.disabled = (current === 0);
-    nextBtn.disabled = (current === total-1);
-    if (!opts.silent) {
-      announcer.textContent = 'Slide ' + (current+1) + ' of ' + total + ': ' + slideTitles[current];
+document.querySelectorAll('.opt input').forEach(function(inp){
+  inp.addEventListener('change', function(){
+    var opt = inp.closest('.opt');
+    var group = inp.closest('.options');
+    if(inp.type === 'radio'){
+      group.querySelectorAll('.opt').forEach(function(o){o.classList.remove('checked');});
+      opt.classList.add('checked');
+    } else {
+      opt.classList.toggle('checked', inp.checked);
+      var max = group.getAttribute('data-max');
+      if(max){
+        var checked = group.querySelectorAll('input:checked');
+        if(checked.length > parseInt(max)){
+          inp.checked = false;
+          opt.classList.remove('checked');
+        }
+      }
     }
+    inp.closest('.q').classList.remove('invalid');
+  });
+});
+
+document.getElementById('submitBtn').addEventListener('click', function(){
+  var valid = true;
+  document.querySelectorAll('.q[data-required="true"]').forEach(function(q){
+    var type = q.querySelector('.options') ? q.querySelector('.options').getAttribute('data-type') : null;
+    var ok = true;
+    if(type === 'radio'){
+      ok = q.querySelectorAll('input:checked').length > 0;
+    } else if(type === 'checkbox'){
+      ok = q.querySelectorAll('input:checked').length > 0;
+    } else {
+      var textInput = q.querySelector('input[type=text]');
+      ok = textInput && textInput.value.trim().length > 0;
+    }
+    q.classList.toggle('invalid', !ok);
+    if(!ok){ valid = false; }
+  });
+
+  if(!valid){
+    document.querySelector('.q.invalid').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
   }
 
-  function goTo(i){
-    if (i===current || i<0 || i>=total || animating) return;
-    animating = true;
-    current = i;
-    render();
-    setTimeout(()=>{ animating = false; }, reduceMotion ? 0 : 700);
-  }
+  document.getElementById('formBody').classList.add('hidden');
+  document.getElementById('thankyou').style.display = 'block';
+  document.getElementById('progressFill').style.width = '100%';
+  window.scrollTo({top:0, behavior:'smooth'});
+});
 
-  function next(){ goTo(Math.min(current+1, total-1)); }
-  function prev(){ goTo(Math.max(current-1, 0)); }
-
-  nextBtn.addEventListener('click', next);
-  prevBtn.addEventListener('click', prev);
-
-  // keyboard nav — ignore when focus is in a text input/textarea/contenteditable (none currently, but future-proof)
-  window.addEventListener('keydown', (e) => {
-    const tag = (e.target && e.target.tagName) || '';
-    const editable = e.target && e.target.isContentEditable;
-    if (editable || tag === 'INPUT' || tag === 'TEXTAREA') return;
-
-    if (['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); next(); }
-    else if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); prev(); }
-    else if (e.key === 'Home'){ e.preventDefault(); goTo(0); }
-    else if (e.key === 'End'){ e.preventDefault(); goTo(total-1); }
+var sections = document.querySelectorAll('.card[data-section]');
+var fill = document.getElementById('progressFill');
+function updateProgress(){
+  var total = sections.length;
+  var passed = 0;
+  sections.forEach(function(s){
+    var rect = s.getBoundingClientRect();
+    if(rect.top < window.innerHeight * 0.5){ passed++; }
   });
-
-  // wheel navigation (debounced) — only when the slide itself isn't mid-scroll
-  let wheelLock = false;
-  window.addEventListener('wheel', (e) => {
-    if (wheelLock) return;
-    if (Math.abs(e.deltaY) < 24 || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-    const activeSlide = slides[current];
-    const atTop = activeSlide.scrollTop <= 0;
-    const atBottom = Math.ceil(activeSlide.scrollTop + activeSlide.clientHeight) >= activeSlide.scrollHeight;
-    // let the slide scroll internally first if it has overflow
-    if (e.deltaY > 0 && !atBottom) return;
-    if (e.deltaY < 0 && !atTop) return;
-    wheelLock = true;
-    if (e.deltaY > 0) next(); else prev();
-    setTimeout(()=>{ wheelLock = false; }, 700);
-  }, { passive: true });
-
-  // touch swipe navigation — vertical swipes only, ignore if slide is mid-internal-scroll
-  let touchStartY = null;
-  let touchStartX = null;
-  window.addEventListener('touchstart', (e) => {
-    touchStartY = e.touches[0].clientY;
-    touchStartX = e.touches[0].clientX;
-  }, {passive:true});
-  window.addEventListener('touchend', (e) => {
-    if (touchStartY === null) return;
-    const dy = touchStartY - e.changedTouches[0].clientY;
-    const dx = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(dy) > 60 && Math.abs(dy) > Math.abs(dx)){
-      const activeSlide = slides[current];
-      const atTop = activeSlide.scrollTop <= 0;
-      const atBottom = Math.ceil(activeSlide.scrollTop + activeSlide.clientHeight) >= activeSlide.scrollHeight;
-      if (dy > 0 && atBottom) next();
-      else if (dy < 0 && atTop) prev();
-    }
-    touchStartY = null;
-    touchStartX = null;
-  }, {passive:true});
-
-  render({silent:true, skipScrollReset:true});
-})();
+  fill.style.width = Math.min(100, (passed/total)*100) + '%';
+}
+window.addEventListener('scroll', updateProgress);
+updateProgress();
 </script>
+
 </body>
 </html>
