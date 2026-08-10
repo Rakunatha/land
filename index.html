@@ -18,6 +18,12 @@
     .row-success { color: #1a7f37; }
     .row-error { color: #cf222e; }
     .unsupported { color: #999; font-style: italic; }
+    .qr-section { border: 1px solid #ddd; border-radius: 4px; padding: 8px; margin-top: 8px; }
+    .qr-buttons button { margin-top: 6px; margin-right: 6px; padding: 6px 10px; }
+    #qrVideo { width: 100%; margin-top: 6px; display: none; border-radius: 4px; }
+    .qr-status { font-size: 11px; margin-top: 4px; }
+    .qr-status.ok { color: #1a7f37; }
+    .qr-status.err { color: #cf222e; }
   </style>
 </head>
 <body>
@@ -30,6 +36,19 @@
   <h3>1. Load a form</h3>
   <label>Form URL or ID</label>
   <input type="text" id="formUrl" placeholder="https://docs.google.com/forms/d/....">
+
+  <div class="qr-section">
+    <div><strong>Or scan a QR code of the form link</strong></div>
+    <div class="qr-buttons">
+      <button onclick="startCameraScan()" id="camBtn">Scan with camera</button>
+      <button onclick="document.getElementById('qrFile').click()">Upload QR image</button>
+      <input type="file" id="qrFile" accept="image/*" style="display:none" onchange="handleQrFile(event)">
+    </div>
+    <video id="qrVideo" playsinline></video>
+    <canvas id="qrCanvas" style="display:none;"></canvas>
+    <div id="qrStatus" class="qr-status"></div>
+  </div>
+
   <button onclick="loadForm()">Load Questions</button>
 
   <div id="formTitle"></div>
@@ -46,8 +65,110 @@
 
   <div id="results"></div>
 
+  <!-- jsQR: pure client-side QR decoding, no camera permission required for the upload path -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
   <script>
     let currentQuestions = [];
+    let qrStream = null;
+    let qrScanLoopId = null;
+
+    function setQrStatus(msg, ok) {
+      const el = document.getElementById('qrStatus');
+      el.textContent = msg;
+      el.className = 'qr-status ' + (ok === true ? 'ok' : ok === false ? 'err' : '');
+    }
+
+    // Pulls a plausible Google Forms URL out of decoded QR text and fills the input.
+    function applyDecodedUrl(text) {
+      const isFormsLink = /docs\.google\.com\/forms|forms\.gle/i.test(text);
+      if (!isFormsLink) {
+        setQrStatus('QR code scanned, but it doesn\'t look like a Google Forms link: ' + text, false);
+        return;
+      }
+      document.getElementById('formUrl').value = text.trim();
+      setQrStatus('Form link scanned successfully.', true);
+      loadForm();
+    }
+
+    // ---- Option A: upload an image containing the QR code ----
+    function handleQrFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      setQrStatus('Decoding image...');
+
+      const img = new Image();
+      img.onload = function () {
+        const canvas = document.getElementById('qrCanvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height);
+        if (code && code.data) {
+          applyDecodedUrl(code.data);
+        } else {
+          setQrStatus('No QR code found in that image. Try a clearer photo/screenshot.', false);
+        }
+      };
+      img.onerror = function () {
+        setQrStatus('Could not read that image file.', false);
+      };
+      img.src = URL.createObjectURL(file);
+    }
+
+    // ---- Option B: live camera scan ----
+    // Note: Apps Script sidebars run in a nested iframe, and Google's
+    // permissions policy sometimes blocks camera access there even if the
+    // browser would normally allow it. If this fails, use "Upload QR image"
+    // instead — it always works since it needs no camera permission.
+    function startCameraScan() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        setQrStatus('Camera access isn\'t available in this context. Use "Upload QR image" instead.', false);
+        return;
+      }
+      setQrStatus('Requesting camera access...');
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        .then(function (stream) {
+          qrStream = stream;
+          const video = document.getElementById('qrVideo');
+          video.srcObject = stream;
+          video.style.display = 'block';
+          video.play();
+          setQrStatus('Point the camera at the QR code...');
+          qrScanLoopId = requestAnimationFrame(scanCameraFrame);
+        })
+        .catch(function (err) {
+          setQrStatus('Camera blocked in this sidebar (' + err.message + '). Use "Upload QR image" instead.', false);
+        });
+    }
+
+    function stopCameraScan() {
+      if (qrScanLoopId) cancelAnimationFrame(qrScanLoopId);
+      if (qrStream) qrStream.getTracks().forEach(function (t) { t.stop(); });
+      document.getElementById('qrVideo').style.display = 'none';
+      qrStream = null;
+      qrScanLoopId = null;
+    }
+
+    function scanCameraFrame() {
+      const video = document.getElementById('qrVideo');
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        const canvas = document.getElementById('qrCanvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height);
+        if (code && code.data) {
+          stopCameraScan();
+          applyDecodedUrl(code.data);
+          return;
+        }
+      }
+      qrScanLoopId = requestAnimationFrame(scanCameraFrame);
+    }
 
     function loadForm() {
       const url = document.getElementById('formUrl').value;
