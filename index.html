@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Form Response Generator</title>
+<title>Test Response Generator</title>
 
 <style>
     * {
@@ -13,84 +13,187 @@
 
     body {
         margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f4f6f8;
-        color: #222;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        background: #f5f7fb;
+        color: #1f2937;
     }
 
     .container {
-        width: min(800px, 92%);
-        margin: 40px auto;
+        width: min(950px, 94%);
+        margin: 35px auto;
+    }
+
+    .header {
+        margin-bottom: 20px;
+    }
+
+    .header h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+    }
+
+    .header p {
+        margin: 0;
+        color: #6b7280;
+    }
+
+    .card {
         background: white;
-        padding: 30px;
         border-radius: 14px;
-        box-shadow: 0 5px 25px rgba(0,0,0,.08);
+        padding: 24px;
+        margin-bottom: 18px;
+        box-shadow: 0 4px 18px rgba(0,0,0,.06);
     }
 
-    h1 {
-        margin-top: 0;
-    }
-
-    .subtitle {
-        color: #666;
-        margin-bottom: 25px;
+    .grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 16px;
     }
 
     label {
         display: block;
-        font-weight: bold;
-        margin-top: 15px;
+        font-weight: 600;
+        margin-bottom: 7px;
     }
 
     input, select, textarea {
         width: 100%;
-        padding: 11px;
-        margin-top: 6px;
-        border: 1px solid #ccc;
-        border-radius: 7px;
-        font-size: 15px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 11px 12px;
+        font-size: 14px;
+        outline: none;
+        background: white;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #2563eb;
+    }
+
+    textarea {
+        min-height: 80px;
+        resize: vertical;
     }
 
     .field {
-        border: 1px solid #ddd;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
         padding: 16px;
-        margin-top: 15px;
-        border-radius: 9px;
+        margin-top: 12px;
         background: #fafafa;
     }
 
+    .field-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 2fr;
+        gap: 12px;
+    }
+
     button {
-        width: 100%;
-        padding: 12px;
-        margin-top: 18px;
-        border: none;
-        border-radius: 7px;
-        background: #222;
-        color: white;
-        font-size: 15px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        opacity: .85;
-    }
-
-    .remove {
-        background: #c62828;
-    }
-
-    .generate {
-        background: #1769aa;
-    }
-
-    #output {
-        margin-top: 25px;
-        padding: 15px;
+        border: 0;
         border-radius: 8px;
-        background: #f1f1f1;
-        white-space: pre-wrap;
-        font-family: monospace;
+        padding: 11px 16px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .btn-primary {
+        background: #2563eb;
+        color: white;
+    }
+
+    .btn-secondary {
+        background: #eef2ff;
+        color: #3730a3;
+    }
+
+    .btn-danger {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .btn-success {
+        background: #16a34a;
+        color: white;
+    }
+
+    .btn-dark {
+        background: #111827;
+        color: white;
+    }
+
+    .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .response-count {
+        margin-top: 12px;
+        color: #6b7280;
+        font-size: 13px;
+    }
+
+    .table-wrapper {
         overflow-x: auto;
+        margin-top: 15px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 10px;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: 13px;
+    }
+
+    th {
+        background: #f9fafb;
+        font-weight: 700;
+    }
+
+    .empty {
+        text-align: center;
+        padding: 30px;
+        color: #9ca3af;
+    }
+
+    .notice {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        color: #1e40af;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        margin-top: 15px;
+    }
+
+    @media (max-width: 700px) {
+        .grid,
+        .field-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .container {
+            width: 96%;
+            margin: 20px auto;
+        }
+
+        .card {
+            padding: 18px;
+        }
     }
 </style>
 </head>
@@ -99,60 +202,291 @@
 
 <div class="container">
 
-    <h1>Form Response Generator</h1>
-
-    <div class="subtitle">
-        Generate test response payloads from a simple browser interface.
+    <div class="header">
+        <h1>Test Response Generator</h1>
+        <p>Generate synthetic form responses and export them as CSV or JSON.</p>
     </div>
 
-    <label>Google Form ID</label>
 
-    <input
-        id="formId"
-        placeholder="Enter Form ID"
-    >
+    <!-- FORM SETTINGS -->
 
-    <label>Number of responses</label>
+    <div class="card">
 
-    <input
-        id="responseCount"
-        type="number"
-        min="1"
-        max="1000"
-        value="10"
-    >
+        <h2>1. Form Settings</h2>
 
-    <h3>Fields</h3>
+        <div class="grid">
 
-    <div id="fields"></div>
+            <div>
+                <label for="formUrl">
+                    Form URL / ID
+                </label>
 
-    <button onclick="addField()">
-        + Add Field
-    </button>
+                <input
+                    id="formUrl"
+                    type="text"
+                    placeholder="Paste Google Form URL or enter Form ID"
+                >
+            </div>
 
-    <button class="generate" onclick="generateResponses()">
-        Generate Test Responses
-    </button>
+            <div>
+                <label for="responseCount">
+                    Number of responses
+                </label>
 
-    <div id="output">
-        No responses generated yet.
+                <input
+                    id="responseCount"
+                    type="number"
+                    min="1"
+                    max="10000"
+                    value="10"
+                >
+            </div>
+
+        </div>
+
+        <div class="notice">
+            The Form URL/ID is stored only in this page and is included as
+            metadata in the exported JSON. This tool does not submit anything
+            to Google Forms.
+        </div>
+
+    </div>
+
+
+    <!-- FIELDS -->
+
+    <div class="card">
+
+        <h2>2. Form Fields</h2>
+
+        <p style="color:#6b7280;font-size:14px;">
+            Add the fields you want to generate responses for.
+        </p>
+
+        <div id="fields"></div>
+
+        <button
+            class="btn-secondary"
+            onclick="addField()"
+        >
+            + Add Field
+        </button>
+
+    </div>
+
+
+    <!-- GENERATE -->
+
+    <div class="card">
+
+        <h2>3. Generate</h2>
+
+        <div class="buttons">
+
+            <button
+                class="btn-primary"
+                onclick="generateResponses()"
+            >
+                Generate Responses
+            </button>
+
+            <button
+                class="btn-dark"
+                onclick="clearResponses()"
+            >
+                Clear
+            </button>
+
+        </div>
+
+        <div
+            id="responseCountText"
+            class="response-count"
+        >
+            No responses generated.
+        </div>
+
+    </div>
+
+
+    <!-- PREVIEW -->
+
+    <div class="card">
+
+        <h2>4. Preview</h2>
+
+        <div id="preview">
+
+            <div class="empty">
+                Generate responses to see them here.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DOWNLOAD -->
+
+    <div class="card">
+
+        <h2>5. Download</h2>
+
+        <div class="buttons">
+
+            <button
+                class="btn-success"
+                onclick="downloadCSV()"
+            >
+                Download CSV
+            </button>
+
+            <button
+                class="btn-primary"
+                onclick="downloadJSON()"
+            >
+                Download JSON
+            </button>
+
+        </div>
+
     </div>
 
 </div>
 
+
 <script>
+
+let generatedResponses = [];
+
+let fieldCounter = 0;
+
+
+/* =========================
+   FIELD MANAGEMENT
+========================= */
+
+function addField() {
+
+    fieldCounter++;
+
+    const container =
+        document.getElementById("fields");
+
+    const field =
+        document.createElement("div");
+
+    field.className = "field";
+
+    field.dataset.id = fieldCounter;
+
+    field.innerHTML = `
+
+        <div class="field-grid">
+
+            <div>
+
+                <label>Field name</label>
+
+                <input
+                    class="field-name"
+                    placeholder="e.g. Name"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label>Type</label>
+
+                <select class="field-type">
+
+                    <option value="text">
+                        Fixed Text
+                    </option>
+
+                    <option value="random_text">
+                        Random Text
+                    </option>
+
+                    <option value="random_email">
+                        Random Email
+                    </option>
+
+                    <option value="number">
+                        Random Number
+                    </option>
+
+                    <option value="choice">
+                        Random Choice
+                    </option>
+
+                    <option value="yes_no">
+                        Yes / No
+                    </option>
+
+                    <option value="date">
+                        Random Date
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div>
+
+                <label>
+                    Value / Options
+                </label>
+
+                <input
+                    class="field-value"
+                    placeholder="Text or Option A, Option B, Option C"
+                >
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="btn-danger"
+            style="margin-top:12px"
+            onclick="removeField(this)"
+        >
+            Remove
+        </button>
+    `;
+
+    container.appendChild(field);
+}
+
+
+function removeField(button) {
+
+    button.parentElement.remove();
+}
+
+
+/* =========================
+   RANDOM GENERATORS
+========================= */
 
 function randomString(length = 8) {
 
-    const characters =
+    const chars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     let result = "";
 
     for (let i = 0; i < length; i++) {
-        result += characters.charAt(
-            Math.floor(Math.random() * characters.length)
-        );
+
+        result += chars[
+            Math.floor(Math.random() * chars.length)
+        ];
+
     }
 
     return result;
@@ -161,28 +495,74 @@ function randomString(length = 8) {
 
 function randomEmail() {
 
-    return "test" +
+    return (
+        "test." +
         randomString(8).toLowerCase() +
-        "@example.com";
+        "@example.com"
+    );
+}
+
+
+function randomNumber() {
+
+    return Math.floor(
+        Math.random() * 100
+    ) + 1;
 }
 
 
 function randomChoice(value) {
 
-    const options = value
-        .split(",")
-        .map(x => x.trim())
-        .filter(Boolean);
+    const options =
+        value
+            .split(",")
+            .map(x => x.trim())
+            .filter(Boolean);
 
-    if (!options.length) {
+    if (options.length === 0) {
         return "";
     }
 
     return options[
-        Math.floor(Math.random() * options.length)
+        Math.floor(
+            Math.random() * options.length
+        )
     ];
 }
 
+
+function randomYesNo() {
+
+    return Math.random() < 0.5
+        ? "Yes"
+        : "No";
+}
+
+
+function randomDate() {
+
+    const start =
+        new Date(2025, 0, 1).getTime();
+
+    const end =
+        new Date(2026, 11, 31).getTime();
+
+    const date =
+        new Date(
+            start +
+            Math.random() *
+            (end - start)
+        );
+
+    return date
+        .toISOString()
+        .split("T")[0];
+}
+
+
+/* =========================
+   VALUE GENERATOR
+========================= */
 
 function generateValue(type, value) {
 
@@ -194,143 +574,148 @@ function generateValue(type, value) {
         case "random_email":
             return randomEmail();
 
-        case "random_choice":
+        case "number":
+            return randomNumber();
+
+        case "choice":
             return randomChoice(value);
 
+        case "yes_no":
+            return randomYesNo();
+
+        case "date":
+            return randomDate();
+
+        case "text":
         default:
             return value;
+
     }
 }
 
 
-function addField() {
+/* =========================
+   GET FORM ID
+========================= */
 
-    const container =
-        document.getElementById("fields");
+function extractFormId(input) {
 
-    const field =
-        document.createElement("div");
+    input = input.trim();
 
-    field.className = "field";
+    /*
+       If a URL was supplied, try to extract
+       the ID from common Google Forms URLs.
+    */
 
-    field.innerHTML = `
+    const match =
+        input.match(
+            /\/forms\/d\/(?:e\/)?([^\/?]+)/
+        );
 
-        <label>Entry ID</label>
+    if (match) {
+        return match[1];
+    }
 
-        <input
-            class="entryId"
-            placeholder="entry.123456789"
-        >
-
-        <label>Response Type</label>
-
-        <select class="fieldType">
-
-            <option value="text">
-                Fixed Text
-            </option>
-
-            <option value="random_text">
-                Random Text
-            </option>
-
-            <option value="random_email">
-                Random Email
-            </option>
-
-            <option value="random_choice">
-                Random Choice
-            </option>
-
-        </select>
-
-        <label>Value / Options</label>
-
-        <input
-            class="fieldValue"
-            placeholder="Example: Option A, Option B, Option C"
-        >
-
-        <button
-            class="remove"
-            onclick="this.parentElement.remove()"
-        >
-            Remove Field
-        </button>
-    `;
-
-    container.appendChild(field);
+    return input;
 }
 
 
-function collectFields() {
-
-    const fields = [];
-
-    document
-        .querySelectorAll(".field")
-        .forEach(field => {
-
-            const entryId =
-                field.querySelector(".entryId").value.trim();
-
-            const type =
-                field.querySelector(".fieldType").value;
-
-            const value =
-                field.querySelector(".fieldValue").value;
-
-            if (entryId) {
-
-                fields.push({
-                    entryId,
-                    type,
-                    value
-                });
-
-            }
-
-        });
-
-    return fields;
-}
-
+/* =========================
+   GENERATE RESPONSES
+========================= */
 
 function generateResponses() {
 
-    const formId =
-        document.getElementById("formId").value.trim();
-
     const count =
-        Number(
-            document.getElementById("responseCount").value
+        parseInt(
+            document.getElementById(
+                "responseCount"
+            ).value
         );
-
-    if (!formId) {
-
-        alert("Please enter a Form ID.");
-
-        return;
-    }
 
     if (!count || count < 1) {
 
-        alert("Enter a valid response count.");
+        alert(
+            "Please enter a valid number of responses."
+        );
 
         return;
     }
 
-    const fields = collectFields();
 
-    const responses = [];
+    const fields =
+        document.querySelectorAll(".field");
 
-    for (let i = 0; i < count; i++) {
+
+    if (fields.length === 0) {
+
+        alert(
+            "Please add at least one field."
+        );
+
+        return;
+    }
+
+
+    const fieldDefinitions = [];
+
+
+    fields.forEach(field => {
+
+        const name =
+            field
+                .querySelector(".field-name")
+                .value
+                .trim();
+
+        const type =
+            field
+                .querySelector(".field-type")
+                .value;
+
+        const value =
+            field
+                .querySelector(".field-value")
+                .value;
+
+
+        if (name) {
+
+            fieldDefinitions.push({
+                name,
+                type,
+                value
+            });
+
+        }
+
+    });
+
+
+    if (fieldDefinitions.length === 0) {
+
+        alert(
+            "Please give your fields names."
+        );
+
+        return;
+    }
+
+
+    generatedResponses = [];
+
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
 
         const response = {};
 
-        fields.forEach(field => {
+        fieldDefinitions.forEach(field => {
 
-            response[field.entryId] =
+            response[field.name] =
                 generateValue(
                     field.type,
                     field.value
@@ -338,26 +723,357 @@ function generateResponses() {
 
         });
 
-        responses.push(response);
+
+        generatedResponses.push(response);
     }
 
-    const output =
-        document.getElementById("output");
 
-    output.textContent =
-        JSON.stringify(
-            {
-                formId: formId,
-                totalResponses: count,
-                responses: responses
-            },
-            null,
-            2
-        );
+    updatePreview();
+
 }
 
 
-// Add one field automatically
+/* =========================
+   PREVIEW
+========================= */
+
+function updatePreview() {
+
+    const preview =
+        document.getElementById(
+            "preview"
+        );
+
+
+    if (
+        generatedResponses.length === 0
+    ) {
+
+        preview.innerHTML = `
+            <div class="empty">
+                No responses generated.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const columns =
+        Object.keys(
+            generatedResponses[0]
+        );
+
+
+    let html = `
+        <div class="table-wrapper">
+        <table>
+        <thead>
+        <tr>
+            <th>#</th>
+    `;
+
+
+    columns.forEach(column => {
+
+        html += `
+            <th>
+                ${escapeHTML(column)}
+            </th>
+        `;
+
+    });
+
+
+    html += `
+        </tr>
+        </thead>
+        <tbody>
+    `;
+
+
+    generatedResponses
+        .slice(0, 100)
+        .forEach((response, index) => {
+
+            html += `
+                <tr>
+                    <td>${index + 1}</td>
+            `;
+
+
+            columns.forEach(column => {
+
+                html += `
+                    <td>
+                        ${escapeHTML(
+                            String(
+                                response[column] ?? ""
+                            )
+                        )}
+                    </td>
+                `;
+
+            });
+
+
+            html += `
+                </tr>
+            `;
+
+        });
+
+
+    html += `
+        </tbody>
+        </table>
+        </div>
+    `;
+
+
+    if (
+        generatedResponses.length > 100
+    ) {
+
+        html += `
+            <p style="color:#6b7280;font-size:13px">
+                Showing first 100 responses.
+                All ${generatedResponses.length}
+                responses will be included in downloads.
+            </p>
+        `;
+
+    }
+
+
+    preview.innerHTML = html;
+
+
+    document.getElementById(
+        "responseCountText"
+    ).textContent =
+        `${generatedResponses.length} responses generated.`;
+}
+
+
+/* =========================
+   CSV
+========================= */
+
+function csvEscape(value) {
+
+    value =
+        String(value ?? "");
+
+    if (
+        value.includes('"') ||
+        value.includes(",") ||
+        value.includes("\n")
+    ) {
+
+        return '"' +
+            value.replace(
+                /"/g,
+                '""'
+            ) +
+            '"';
+
+    }
+
+    return value;
+}
+
+
+function downloadCSV() {
+
+    if (
+        generatedResponses.length === 0
+    ) {
+
+        alert(
+            "Generate responses first."
+        );
+
+        return;
+    }
+
+
+    const columns =
+        Object.keys(
+            generatedResponses[0]
+        );
+
+
+    let csv =
+        columns
+            .map(csvEscape)
+            .join(",") +
+        "\n";
+
+
+    generatedResponses.forEach(
+        response => {
+
+            csv +=
+                columns
+                    .map(
+                        column =>
+                            csvEscape(
+                                response[column]
+                            )
+                    )
+                    .join(",") +
+                "\n";
+
+        }
+    );
+
+
+    downloadFile(
+        csv,
+        "generated-responses.csv",
+        "text/csv"
+    );
+}
+
+
+/* =========================
+   JSON
+========================= */
+
+function downloadJSON() {
+
+    if (
+        generatedResponses.length === 0
+    ) {
+
+        alert(
+            "Generate responses first."
+        );
+
+        return;
+    }
+
+
+    const formInput =
+        document.getElementById(
+            "formUrl"
+        ).value;
+
+
+    const data = {
+
+        formId:
+            extractFormId(formInput),
+
+        generatedAt:
+            new Date().toISOString(),
+
+        totalResponses:
+            generatedResponses.length,
+
+        responses:
+            generatedResponses
+
+    };
+
+
+    const json =
+        JSON.stringify(
+            data,
+            null,
+            2
+        );
+
+
+    downloadFile(
+        json,
+        "generated-responses.json",
+        "application/json"
+    );
+}
+
+
+/* =========================
+   FILE DOWNLOAD
+========================= */
+
+function downloadFile(
+    content,
+    filename,
+    type
+) {
+
+    const blob =
+        new Blob(
+            [content],
+            { type: type }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href = url;
+
+    link.download = filename;
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+}
+
+
+/* =========================
+   CLEAR
+========================= */
+
+function clearResponses() {
+
+    generatedResponses = [];
+
+    document.getElementById(
+        "preview"
+    ).innerHTML = `
+        <div class="empty">
+            Generate responses to see them here.
+        </div>
+    `;
+
+    document.getElementById(
+        "responseCountText"
+    ).textContent =
+        "No responses generated.";
+}
+
+
+/* =========================
+   HTML ESCAPE
+========================= */
+
+function escapeHTML(value) {
+
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================
+   INITIAL FIELD
+========================= */
 
 addField();
 
