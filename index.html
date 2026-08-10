@@ -1,616 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Systems-Based Legal Workflow Intelligence — Family Law Practitioner Survey</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --navy:#1e2a44;
-    --navy-light:#33456e;
-    --gold:#a97d3f;
-    --gold-pale:#f2e6d3;
-    --paper:#f6f3ec;
-    --card:#ffffff;
-    --line:#e4ddce;
-    --text:#26241f;
-    --muted:#6c6858;
-    --danger:#a3352f;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--paper);
-    font-family:'Source Sans 3', sans-serif;
-    color:var(--text);
-    padding:0 0 80px;
-  }
-  .topband{
-    height:10px;
-    background:linear-gradient(90deg, var(--navy) 0%, var(--navy) 60%, var(--gold) 100%);
-  }
-  .wrap{
-    max-width:720px;
-    margin:0 auto;
-    padding:0 20px;
-  }
-  .header-card{
-    background:var(--navy);
-    color:#fff;
-    border-radius:0 0 10px 10px;
-    padding:36px 32px 30px;
-    margin-bottom:24px;
-  }
-  .seal{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    margin-bottom:18px;
-  }
-  .seal svg{flex-shrink:0;}
-  .eyebrow{
-    font-size:12px;
-    letter-spacing:.12em;
-    text-transform:uppercase;
-    color:var(--gold);
-    font-weight:600;
-    margin:0;
-  }
-  h1{
-    font-family:'Lora', serif;
-    font-weight:600;
-    font-size:26px;
-    line-height:1.3;
-    margin:4px 0 0;
-  }
-  .header-meta{
-    font-size:14px;
-    line-height:1.7;
-    color:#d9dce6;
-    margin-top:16px;
-    border-top:1px solid rgba(255,255,255,0.18);
-    padding-top:16px;
-  }
-  .header-meta b{color:#fff;}
-  .progress-track{
-    height:5px;
-    background:rgba(255,255,255,0.18);
-    border-radius:3px;
-    margin-top:18px;
-    overflow:hidden;
-  }
-  .progress-fill{
-    height:100%;
-    width:0%;
-    background:var(--gold);
-    transition:width .25s ease;
-  }
-  .section-nav{
-    display:flex;
-    gap:6px;
-    margin-top:10px;
-    font-size:11px;
-    color:#b9bfd1;
-  }
-  .card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:26px 28px;
-    margin-bottom:18px;
-  }
-  .section-title{
-    font-family:'Lora', serif;
-    font-weight:600;
-    font-size:19px;
-    color:var(--navy);
-    margin:0 0 4px;
-    display:flex;
-    align-items:baseline;
-    gap:8px;
-  }
-  .section-tab{
-    display:inline-block;
-    font-size:11px;
-    letter-spacing:.08em;
-    color:var(--gold);
-    font-weight:600;
-    background:var(--gold-pale);
-    padding:2px 8px;
-    border-radius:4px;
-  }
-  .section-desc{
-    font-size:14px;
-    color:var(--muted);
-    margin:8px 0 0;
-    line-height:1.6;
-  }
-  .q{
-    padding:20px 0;
-    border-top:1px solid var(--line);
-  }
-  .card .q:first-of-type{border-top:none;padding-top:22px;}
-  .q-label{
-    font-size:15px;
-    font-weight:600;
-    color:var(--text);
-    margin:0 0 4px;
-    line-height:1.5;
-  }
-  .q-label .req{color:var(--danger);margin-left:3px;}
-  .q-help{
-    font-size:12.5px;
-    color:var(--muted);
-    margin:0 0 12px;
-  }
-  .options{display:flex;flex-direction:column;gap:9px;margin-top:10px;}
-  .opt{
-    display:flex;
-    align-items:flex-start;
-    gap:10px;
-    font-size:14.5px;
-    cursor:pointer;
-    padding:9px 12px;
-    border:1px solid var(--line);
-    border-radius:7px;
-    transition:border-color .15s, background .15s;
-  }
-  .opt:hover{border-color:var(--gold);background:#fdfaf5;}
-  .opt input{margin-top:2px;accent-color:var(--navy);width:16px;height:16px;flex-shrink:0;}
-  .opt.checked{border-color:var(--gold);background:var(--gold-pale);}
-  input[type=text], textarea{
-    width:100%;
-    font-family:inherit;
-    font-size:14.5px;
-    padding:10px 12px;
-    border:1px solid var(--line);
-    border-radius:7px;
-    color:var(--text);
-    background:#fff;
-  }
-  input[type=text]:focus, textarea:focus{
-    outline:none;
-    border-color:var(--navy);
-    box-shadow:0 0 0 3px rgba(30,42,68,0.10);
-  }
-  textarea{resize:vertical;min-height:70px;}
-  .scale-row{display:flex;align-items:center;gap:10px;margin-top:12px;}
-  .scale-endpoint{font-size:11.5px;color:var(--muted);width:88px;line-height:1.4;}
-  .scale-endpoint.right{text-align:right;}
-  input[type=range]{flex:1;accent-color:var(--gold);}
-  .scale-value{
-    font-size:13px;font-weight:600;color:var(--navy);
-    width:20px;text-align:center;
-  }
-  .footer-card{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:24px 28px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:16px;
-  }
-  .footer-note{font-size:12.5px;color:var(--muted);line-height:1.6;}
-  button.submit{
-    background:var(--navy);
-    color:#fff;
-    border:none;
-    padding:12px 26px;
-    border-radius:7px;
-    font-size:14.5px;
-    font-weight:600;
-    font-family:inherit;
-    cursor:pointer;
-    flex-shrink:0;
-  }
-  button.submit:hover{background:var(--navy-light);}
-  .error-flag{
-    font-size:12px;
-    color:var(--danger);
-    margin-top:6px;
-    display:none;
-  }
-  .q.invalid .error-flag{display:block;}
-  .q.invalid .q-label{color:var(--danger);}
-  #thankyou{
-    display:none;
-    text-align:center;
-    padding:60px 28px;
-  }
-  #thankyou svg{margin-bottom:14px;}
-  #thankyou h2{
-    font-family:'Lora', serif;
-    color:var(--navy);
-    font-size:22px;
-    margin:0 0 10px;
-  }
-  #thankyou p{color:var(--muted);font-size:14.5px;line-height:1.7;max-width:440px;margin:0 auto;}
-  #formBody.hidden{display:none;}
-</style>
+  <base target="_top">
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 13px; padding: 8px; }
+    h3 { margin-bottom: 4px; }
+    .notice { background: #fff3cd; border: 1px solid #ffe08a; padding: 8px; border-radius: 4px; margin-bottom: 10px; }
+    label { display: block; margin-top: 8px; font-weight: bold; }
+    input[type=text], input[type=number], select, textarea {
+      width: 100%; box-sizing: border-box; padding: 4px; margin-top: 2px;
+    }
+    .question-block { border: 1px solid #ddd; border-radius: 4px; padding: 8px; margin-top: 10px; }
+    .question-title { font-weight: bold; }
+    .question-type { color: #666; font-size: 11px; }
+    button { margin-top: 12px; padding: 8px 12px; cursor: pointer; }
+    #results { margin-top: 12px; max-height: 200px; overflow-y: auto; }
+    .row-success { color: #1a7f37; }
+    .row-error { color: #cf222e; }
+    .unsupported { color: #999; font-style: italic; }
+  </style>
 </head>
 <body>
-
-<div class="topband"></div>
-<div class="wrap">
-
-  <div class="header-card">
-    <div class="seal">
-      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#a97d3f" stroke-width="1.6">
-        <path d="M12 2v20M4 6h16M6 6l-3 6a3 3 0 006 0l-3-6zM18 6l-3 6a3 3 0 006 0l-3-6z" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M9 22h6" stroke-linecap="round"/>
-      </svg>
-      <div>
-        <p class="eyebrow">Research instrument</p>
-      </div>
-    </div>
-    <h1>Systems-Based Legal Workflow Intelligence for Indian Family Law Practice</h1>
-    <div class="header-meta">
-      This questionnaire supports doctoral/applied research into how a systems-based intelligence platform could
-      support case tracking, drafting, and decision-making in Indian family law practice. It takes about
-      <b>8–10 minutes</b>. Responses are used for academic research only, will be reported in aggregate, and
-      individual identities will not be disclosed without separate consent.
-    </div>
-    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="notice">
+    For testing / QA / development on forms you own only. Works via the
+    official Apps Script Forms API — it cannot run against a form you
+    don't have edit access to.
   </div>
 
-  <form id="formBody">
+  <h3>1. Load a form</h3>
+  <label>Form URL or ID</label>
+  <input type="text" id="formUrl" placeholder="https://docs.google.com/forms/d/....">
+  <button onclick="loadForm()">Load Questions</button>
 
-    <!-- SECTION A -->
-    <div class="card" data-section="A">
-      <p class="section-title"><span class="section-tab">Section A</span> Respondent profile</p>
-      <p class="section-desc">A few details to help us understand who is responding.</p>
+  <div id="formTitle"></div>
+  <div id="questions"></div>
 
-      <div class="q">
-        <p class="q-label">Name <span style="font-weight:400;color:var(--muted)">(optional)</span></p>
-        <input type="text" name="name" placeholder="Your name">
-      </div>
-
-      <div class="q" data-required="true">
-        <p class="q-label">Your primary role<span class="req">*</span></p>
-        <div class="options" data-type="radio" data-name="role">
-          <label class="opt"><input type="radio" name="role" value="Advocate"> Advocate</label>
-          <label class="opt"><input type="radio" name="role" value="Family Court Judge / Judicial Officer"> Family Court Judge / Judicial Officer</label>
-          <label class="opt"><input type="radio" name="role" value="Mediator / Counsellor"> Mediator / Counsellor</label>
-          <label class="opt"><input type="radio" name="role" value="Paralegal / Legal Associate"> Paralegal / Legal Associate</label>
-          <label class="opt"><input type="radio" name="role" value="Litigant-in-person"> Litigant-in-person</label>
-          <label class="opt"><input type="radio" name="role" value="Other"> Other</label>
-        </div>
-        <p class="error-flag">Please select one option.</p>
-      </div>
-
-      <div class="q" data-required="true">
-        <p class="q-label">Years of experience in family law<span class="req">*</span></p>
-        <div class="options" data-type="radio" data-name="experience">
-          <label class="opt"><input type="radio" name="experience" value="Less than 2 years"> Less than 2 years</label>
-          <label class="opt"><input type="radio" name="experience" value="2–5 years"> 2–5 years</label>
-          <label class="opt"><input type="radio" name="experience" value="6–10 years"> 6–10 years</label>
-          <label class="opt"><input type="radio" name="experience" value="11–20 years"> 11–20 years</label>
-          <label class="opt"><input type="radio" name="experience" value="20+ years"> 20+ years</label>
-        </div>
-        <p class="error-flag">Please select one option.</p>
-      </div>
-
-      <div class="q" data-required="true">
-        <p class="q-label">Primary state / jurisdiction of practice<span class="req">*</span></p>
-        <input type="text" name="jurisdiction" placeholder="e.g., Maharashtra, Delhi NCR">
-        <p class="error-flag">Please enter your jurisdiction.</p>
-      </div>
-
-      <div class="q" data-required="true">
-        <p class="q-label">Court(s) you primarily practice in<span class="req">*</span></p>
-        <p class="q-help">Select all that apply</p>
-        <div class="options" data-type="checkbox" data-name="courts">
-          <label class="opt"><input type="checkbox" name="courts" value="Family Court"> Family Court</label>
-          <label class="opt"><input type="checkbox" name="courts" value="District Court"> District Court</label>
-          <label class="opt"><input type="checkbox" name="courts" value="High Court"> High Court</label>
-          <label class="opt"><input type="checkbox" name="courts" value="Lok Adalat / Mediation Centre"> Lok Adalat / Mediation Centre</label>
-          <label class="opt"><input type="checkbox" name="courts" value="Other"> Other</label>
-        </div>
-        <p class="error-flag">Please select at least one option.</p>
-      </div>
-
-      <div class="q">
-        <p class="q-label">Average number of active family law cases you handle at a time</p>
-        <div class="options" data-type="radio" data-name="caseload">
-          <label class="opt"><input type="radio" name="caseload" value="Fewer than 10"> Fewer than 10</label>
-          <label class="opt"><input type="radio" name="caseload" value="10–25"> 10–25</label>
-          <label class="opt"><input type="radio" name="caseload" value="26–50"> 26–50</label>
-          <label class="opt"><input type="radio" name="caseload" value="More than 50"> More than 50</label>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECTION B -->
-    <div class="card" data-section="B">
-      <p class="section-title"><span class="section-tab">Section B</span> Current practice areas</p>
-
-      <div class="q" data-required="true">
-        <p class="q-label">Which family law matters do you handle most frequently?<span class="req">*</span></p>
-        <p class="q-help">Select all that apply</p>
-        <div class="options" data-type="checkbox" data-name="matters">
-          <label class="opt"><input type="checkbox" name="matters" value="Divorce / judicial separation"> Divorce / judicial separation</label>
-          <label class="opt"><input type="checkbox" name="matters" value="Maintenance (Sec. 125 CrPC / 144 BNSS)"> Maintenance (Sec. 125 CrPC / 144 BNSS)</label>
-          <label class="opt"><input type="checkbox" name="matters" value="Child custody and guardianship"> Child custody and guardianship</label>
-          <label class="opt"><input type="checkbox" name="matters" value="Domestic violence (PWDVA)"> Domestic violence (PWDVA)</label>
-          <label class="opt"><input type="checkbox" name="matters" value="Adoption"> Adoption</label>
-          <label class="opt"><input type="checkbox" name="matters" value="Succession / inheritance"> Succession / inheritance</label>
-          <label class="opt"><input type="checkbox" name="matters" value="Restitution of conjugal rights"> Restitution of conjugal rights</label>
-          <label class="opt"><input type="checkbox" name="matters" value="Marriage registration"> Marriage registration</label>
-          <label class="opt"><input type="checkbox" name="matters" value="Other"> Other</label>
-        </div>
-        <p class="error-flag">Please select at least one option.</p>
-      </div>
-
-      <div class="q">
-        <p class="q-label">Which personal law systems do you most often work under?</p>
-        <p class="q-help">Select all that apply</p>
-        <div class="options" data-type="checkbox" data-name="personallaw">
-          <label class="opt"><input type="checkbox" name="personallaw" value="Hindu Marriage Act"> Hindu Marriage Act</label>
-          <label class="opt"><input type="checkbox" name="personallaw" value="Muslim personal law"> Muslim personal law</label>
-          <label class="opt"><input type="checkbox" name="personallaw" value="Indian Divorce Act (Christian)"> Indian Divorce Act (Christian)</label>
-          <label class="opt"><input type="checkbox" name="personallaw" value="Special Marriage Act"> Special Marriage Act</label>
-          <label class="opt"><input type="checkbox" name="personallaw" value="Parsi law"> Parsi law</label>
-          <label class="opt"><input type="checkbox" name="personallaw" value="Other"> Other</label>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECTION C -->
-    <div class="card" data-section="C">
-      <p class="section-title"><span class="section-tab">Section C</span> Current workflow and case management</p>
-
-      <div class="q" data-required="true">
-        <p class="q-label">How do you currently track case deadlines and hearing dates?<span class="req">*</span></p>
-        <div class="options" data-type="radio" data-name="tracking">
-          <label class="opt"><input type="radio" name="tracking" value="Physical diary / register"> Physical diary / register</label>
-          <label class="opt"><input type="radio" name="tracking" value="Excel / Word documents"> Excel / Word documents</label>
-          <label class="opt"><input type="radio" name="tracking" value="Case management software"> Case management software</label>
-          <label class="opt"><input type="radio" name="tracking" value="Court e-filing portal reminders"> Court e-filing portal reminders</label>
-          <label class="opt"><input type="radio" name="tracking" value="Memory / no formal system"> Memory / no formal system</label>
-          <label class="opt"><input type="radio" name="tracking" value="Other"> Other</label>
-        </div>
-        <p class="error-flag">Please select one option.</p>
-      </div>
-
-      <div class="q">
-        <p class="q-label">How difficult is it to track multiple hearing dates across courts?</p>
-        <div class="scale-row">
-          <span class="scale-endpoint">Not difficult</span>
-          <input type="range" min="1" max="5" value="3" step="1" name="difficulty" oninput="this.nextElementSibling.textContent=this.value">
-          <span class="scale-value">3</span>
-          <span class="scale-endpoint right">Very difficult</span>
-        </div>
-      </div>
-
-      <div class="q" data-required="true">
-        <p class="q-label">What is your biggest workflow challenge in family law practice today?<span class="req">*</span></p>
-        <p class="q-help">Select up to three</p>
-        <div class="options" data-type="checkbox" data-name="challenges" data-max="3">
-          <label class="opt"><input type="checkbox" name="challenges" value="Tracking adjournments and next dates"> Tracking adjournments and next dates</label>
-          <label class="opt"><input type="checkbox" name="challenges" value="Drafting repetitive documents (petitions, affidavits)"> Drafting repetitive documents (petitions, affidavits)</label>
-          <label class="opt"><input type="checkbox" name="challenges" value="Locating relevant precedents / case law"> Locating relevant precedents / case law</label>
-          <label class="opt"><input type="checkbox" name="challenges" value="Coordinating between multiple parties / mediators"> Coordinating between multiple parties / mediators</label>
-          <label class="opt"><input type="checkbox" name="challenges" value="Managing client communication and updates"> Managing client communication and updates</label>
-          <label class="opt"><input type="checkbox" name="challenges" value="Maintaining evidence / document repository"> Maintaining evidence / document repository</label>
-          <label class="opt"><input type="checkbox" name="challenges" value="Predicting case timelines"> Predicting case timelines</label>
-          <label class="opt"><input type="checkbox" name="challenges" value="Other"> Other</label>
-        </div>
-        <p class="error-flag">Please select at least one option (max 3).</p>
-      </div>
-
-      <div class="q">
-        <p class="q-label">Roughly what share of your working week goes to administrative / documentation tasks rather than legal strategy?</p>
-        <div class="options" data-type="radio" data-name="admin_time">
-          <label class="opt"><input type="radio" name="admin_time" value="Less than 20%"> Less than 20%</label>
-          <label class="opt"><input type="radio" name="admin_time" value="20–40%"> 20–40%</label>
-          <label class="opt"><input type="radio" name="admin_time" value="40–60%"> 40–60%</label>
-          <label class="opt"><input type="radio" name="admin_time" value="More than 60%"> More than 60%</label>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECTION D -->
-    <div class="card" data-section="D">
-      <p class="section-title"><span class="section-tab">Section D</span> Technology adoption</p>
-
-      <div class="q">
-        <p class="q-label">Which of the following do you currently use in your practice?</p>
-        <p class="q-help">Select all that apply</p>
-        <div class="options" data-type="checkbox" data-name="currenttools">
-          <label class="opt"><input type="checkbox" name="currenttools" value="e-Courts / NJDG portal"> e-Courts / NJDG portal</label>
-          <label class="opt"><input type="checkbox" name="currenttools" value="Case management software"> Case management software</label>
-          <label class="opt"><input type="checkbox" name="currenttools" value="AI legal research tools (e.g., SCC Online AI, Manupatra)"> AI legal research tools (e.g., SCC Online AI, Manupatra)</label>
-          <label class="opt"><input type="checkbox" name="currenttools" value="Document automation tools"> Document automation tools</label>
-          <label class="opt"><input type="checkbox" name="currenttools" value="WhatsApp / email for client communication"> WhatsApp / email for client communication</label>
-          <label class="opt"><input type="checkbox" name="currenttools" value="None of the above"> None of the above</label>
-        </div>
-      </div>
-
-      <div class="q">
-        <p class="q-label">How comfortable are you with adopting new legal technology?</p>
-        <div class="scale-row">
-          <span class="scale-endpoint">Not comfortable</span>
-          <input type="range" min="1" max="5" value="3" step="1" name="comfort" oninput="this.nextElementSibling.textContent=this.value">
-          <span class="scale-value">3</span>
-          <span class="scale-endpoint right">Very comfortable</span>
-        </div>
-      </div>
-
-      <div class="q" data-required="true">
-        <p class="q-label">Have you used any AI-powered legal tool before?<span class="req">*</span></p>
-        <div class="options" data-type="radio" data-name="ai_used">
-          <label class="opt"><input type="radio" name="ai_used" value="Yes, regularly"> Yes, regularly</label>
-          <label class="opt"><input type="radio" name="ai_used" value="Yes, occasionally"> Yes, occasionally</label>
-          <label class="opt"><input type="radio" name="ai_used" value="No, but interested"> No, but interested</label>
-          <label class="opt"><input type="radio" name="ai_used" value="No, and not interested"> No, and not interested</label>
-        </div>
-        <p class="error-flag">Please select one option.</p>
-      </div>
-    </div>
-
-    <!-- SECTION E -->
-    <div class="card" data-section="E">
-      <p class="section-title"><span class="section-tab">Section E</span> Perception of a systems-based intelligence platform</p>
-      <p class="section-desc">Imagine a platform that brings case tracking, drafting support, and legal research together for family law practice.</p>
-
-      <div class="q" data-required="true">
-        <p class="q-label">Which features would be most valuable to you?<span class="req">*</span></p>
-        <p class="q-help">Select up to four</p>
-        <div class="options" data-type="checkbox" data-name="features" data-max="4">
-          <label class="opt"><input type="checkbox" name="features" value="Automated hearing / deadline tracking across courts"> Automated hearing / deadline tracking across courts</label>
-          <label class="opt"><input type="checkbox" name="features" value="AI-assisted drafting of petitions / affidavits"> AI-assisted drafting of petitions / affidavits</label>
-          <label class="opt"><input type="checkbox" name="features" value="Precedent and judgment retrieval specific to family law"> Precedent and judgment retrieval specific to family law</label>
-          <label class="opt"><input type="checkbox" name="features" value="Case outcome / timeline prediction"> Case outcome / timeline prediction</label>
-          <label class="opt"><input type="checkbox" name="features" value="Centralized client and case document repository"> Centralized client and case document repository</label>
-          <label class="opt"><input type="checkbox" name="features" value="Mediation and settlement tracking"> Mediation and settlement tracking</label>
-          <label class="opt"><input type="checkbox" name="features" value="Multi-party / multi-court case coordination"> Multi-party / multi-court case coordination</label>
-          <label class="opt"><input type="checkbox" name="features" value="Automated compliance checklists (e.g., maintenance calculation aids)"> Automated compliance checklists (e.g., maintenance calculation aids)</label>
-          <label class="opt"><input type="checkbox" name="features" value="Other"> Other</label>
-        </div>
-        <p class="error-flag">Please select at least one option (max 4).</p>
-      </div>
-
-      <div class="q">
-        <p class="q-label">How likely are you to adopt such a platform if it were available?</p>
-        <div class="scale-row">
-          <span class="scale-endpoint">Very unlikely</span>
-          <input type="range" min="1" max="5" value="3" step="1" name="adoption" oninput="this.nextElementSibling.textContent=this.value">
-          <span class="scale-value">3</span>
-          <span class="scale-endpoint right">Very likely</span>
-        </div>
-      </div>
-
-      <div class="q">
-        <p class="q-label">What concerns, if any, would affect your decision to adopt such a platform?</p>
-        <p class="q-help">Select all that apply</p>
-        <div class="options" data-type="checkbox" data-name="concerns">
-          <label class="opt"><input type="checkbox" name="concerns" value="Data privacy and confidentiality"> Data privacy and confidentiality</label>
-          <label class="opt"><input type="checkbox" name="concerns" value="Cost / pricing"> Cost / pricing</label>
-          <label class="opt"><input type="checkbox" name="concerns" value="Reliability / accuracy of AI outputs"> Reliability / accuracy of AI outputs</label>
-          <label class="opt"><input type="checkbox" name="concerns" value="Learning curve / training required"> Learning curve / training required</label>
-          <label class="opt"><input type="checkbox" name="concerns" value="Compatibility with existing court systems"> Compatibility with existing court systems</label>
-          <label class="opt"><input type="checkbox" name="concerns" value="Ethical / Bar Council concerns"> Ethical / Bar Council concerns</label>
-          <label class="opt"><input type="checkbox" name="concerns" value="None"> None</label>
-          <label class="opt"><input type="checkbox" name="concerns" value="Other"> Other</label>
-        </div>
-      </div>
-
-      <div class="q" data-required="true">
-        <p class="q-label">Would you be willing to participate in a pilot test of such a platform?<span class="req">*</span></p>
-        <div class="options" data-type="radio" data-name="pilot">
-          <label class="opt"><input type="radio" name="pilot" value="Yes"> Yes</label>
-          <label class="opt"><input type="radio" name="pilot" value="Maybe, need more information"> Maybe, need more information</label>
-          <label class="opt"><input type="radio" name="pilot" value="No"> No</label>
-        </div>
-        <p class="error-flag">Please select one option.</p>
-      </div>
-    </div>
-
-    <!-- SECTION F -->
-    <div class="card" data-section="F">
-      <p class="section-title"><span class="section-tab">Section F</span> Open feedback</p>
-
-      <div class="q">
-        <p class="q-label">In your own words, what is the single biggest inefficiency in current Indian family law case workflows?</p>
-        <textarea name="inefficiency" placeholder="Your answer"></textarea>
-      </div>
-
-      <div class="q">
-        <p class="q-label">Any additional suggestions or features you would like to see in such a platform?</p>
-        <textarea name="suggestions" placeholder="Your answer"></textarea>
-      </div>
-
-      <div class="q">
-        <p class="q-label">May we contact you for a brief follow-up interview?</p>
-        <p class="q-help">Optional — share an email only if you're open to being contacted</p>
-        <input type="text" name="email" placeholder="name@example.com">
-      </div>
-    </div>
-
-    <div class="footer-card">
-      <p class="footer-note">By submitting, you confirm your responses may be used for this research study in anonymised, aggregate form.</p>
-      <button type="button" class="submit" id="submitBtn">Submit</button>
-    </div>
-
-  </form>
-
-  <div id="thankyou">
-    <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#1e2a44" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <h2>Response recorded</h2>
-    <p>Thank you for contributing to this study on legal workflow intelligence in Indian family law practice. Your input will help shape a system grounded in how practitioners actually work.</p>
+  <div id="generateSection" style="display:none;">
+    <h3>2. Generate responses</h3>
+    <label>Number of test responses (max 500)</label>
+    <input type="number" id="count" value="5" min="1" max="500">
+    <label>Delay between submissions (ms, min 200)</label>
+    <input type="number" id="delay" value="300" min="200">
+    <button onclick="generate()">Generate & Submit</button>
   </div>
 
-</div>
+  <div id="results"></div>
 
-<script>
-document.querySelectorAll('.opt input').forEach(function(inp){
-  inp.addEventListener('change', function(){
-    var opt = inp.closest('.opt');
-    var group = inp.closest('.options');
-    if(inp.type === 'radio'){
-      group.querySelectorAll('.opt').forEach(function(o){o.classList.remove('checked');});
-      opt.classList.add('checked');
-    } else {
-      opt.classList.toggle('checked', inp.checked);
-      var max = group.getAttribute('data-max');
-      if(max){
-        var checked = group.querySelectorAll('input:checked');
-        if(checked.length > parseInt(max)){
-          inp.checked = false;
-          opt.classList.remove('checked');
+  <script>
+    let currentQuestions = [];
+
+    function loadForm() {
+      const url = document.getElementById('formUrl').value;
+      document.getElementById('questions').innerHTML = 'Loading...';
+      google.script.run
+        .withSuccessHandler(renderForm)
+        .withFailureHandler(function (err) {
+          document.getElementById('questions').innerHTML =
+            '<div class="row-error">Error: ' + err.message + '</div>';
+        })
+        .getFormStructure(url);
+    }
+
+    function renderForm(data) {
+      currentQuestions = data.questions;
+      document.getElementById('formTitle').innerHTML = '<h4>' + data.title + '</h4>';
+
+      let html = '';
+      data.questions.forEach(function (q, i) {
+        html += '<div class="question-block">';
+        html += '<div class="question-title">' + q.title + '</div>';
+        html += '<div class="question-type">' + q.type + '</div>';
+
+        if (q.unsupported) {
+          html += '<div class="unsupported">Unsupported type — will be left blank.</div>';
+        } else {
+          html += '<label>Answer strategy</label>';
+          html += '<select id="mode_' + i + '" onchange="toggleMode(' + i + ')">';
+          html += '<option value="random">Random (sensible default)</option>';
+          html += '<option value="fixed">Fixed value (same every time)</option>';
+          html += '<option value="list">List (cycles through values)</option>';
+          html += '</select>';
+
+          if (q.choices) {
+            html += '<div class="question-type">Choices: ' + q.choices.join(', ') + '</div>';
+          }
+          if (q.lower !== undefined) {
+            html += '<div class="question-type">Scale: ' + q.lower + '–' + q.upper + '</div>';
+          }
+
+          html += '<input type="text" id="fixed_' + i + '" style="display:none" placeholder="Fixed value">';
+          html += '<textarea id="list_' + i + '" style="display:none" placeholder="One value per line"></textarea>';
         }
-      }
+        html += '</div>';
+      });
+
+      document.getElementById('questions').innerHTML = html;
+      document.getElementById('generateSection').style.display = 'block';
     }
-    inp.closest('.q').classList.remove('invalid');
-  });
-});
 
-document.getElementById('submitBtn').addEventListener('click', function(){
-  var valid = true;
-  document.querySelectorAll('.q[data-required="true"]').forEach(function(q){
-    var type = q.querySelector('.options') ? q.querySelector('.options').getAttribute('data-type') : null;
-    var ok = true;
-    if(type === 'radio'){
-      ok = q.querySelectorAll('input:checked').length > 0;
-    } else if(type === 'checkbox'){
-      ok = q.querySelectorAll('input:checked').length > 0;
-    } else {
-      var textInput = q.querySelector('input[type=text]');
-      ok = textInput && textInput.value.trim().length > 0;
+    function toggleMode(i) {
+      const mode = document.getElementById('mode_' + i).value;
+      document.getElementById('fixed_' + i).style.display = mode === 'fixed' ? 'block' : 'none';
+      document.getElementById('list_' + i).style.display = mode === 'list' ? 'block' : 'none';
     }
-    q.classList.toggle('invalid', !ok);
-    if(!ok){ valid = false; }
-  });
 
-  if(!valid){
-    document.querySelector('.q.invalid').scrollIntoView({behavior:'smooth', block:'center'});
-    return;
-  }
+    function buildAnswerConfigs() {
+      const configs = {};
+      currentQuestions.forEach(function (q, i) {
+        if (q.unsupported) return;
+        const modeEl = document.getElementById('mode_' + i);
+        const mode = modeEl.value;
+        const config = { mode: mode };
+        if (mode === 'fixed') {
+          config.fixedValue = document.getElementById('fixed_' + i).value;
+        } else if (mode === 'list') {
+          config.valueList = document.getElementById('list_' + i).value
+            .split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+        }
+        configs[i] = config;
+      });
+      return configs;
+    }
 
-  document.getElementById('formBody').classList.add('hidden');
-  document.getElementById('thankyou').style.display = 'block';
-  document.getElementById('progressFill').style.width = '100%';
-  window.scrollTo({top:0, behavior:'smooth'});
-});
+    function generate() {
+      const url = document.getElementById('formUrl').value;
+      const count = document.getElementById('count').value;
+      const delay = document.getElementById('delay').value;
+      const configs = buildAnswerConfigs();
 
-var sections = document.querySelectorAll('.card[data-section]');
-var fill = document.getElementById('progressFill');
-function updateProgress(){
-  var total = sections.length;
-  var passed = 0;
-  sections.forEach(function(s){
-    var rect = s.getBoundingClientRect();
-    if(rect.top < window.innerHeight * 0.5){ passed++; }
-  });
-  fill.style.width = Math.min(100, (passed/total)*100) + '%';
-}
-window.addEventListener('scroll', updateProgress);
-updateProgress();
-</script>
+      document.getElementById('results').innerHTML = 'Submitting...';
+      google.script.run
+        .withSuccessHandler(renderResults)
+        .withFailureHandler(function (err) {
+          document.getElementById('results').innerHTML =
+            '<div class="row-error">Error: ' + err.message + '</div>';
+        })
+        .generateResponses(url, count, configs, delay);
+    }
 
+    function renderResults(results) {
+      let html = '<h4>Results</h4>';
+      results.forEach(function (r) {
+        const cls = r.status === 'success' ? 'row-success' : 'row-error';
+        html += '<div class="' + cls + '">#' + r.submission + ': ' + r.status + ' — ' + r.message + '</div>';
+      });
+      const successCount = results.filter(function (r) { return r.status === 'success'; }).length;
+      html += '<p><strong>' + successCount + ' / ' + results.length + ' submitted successfully.</strong></p>';
+      document.getElementById('results').innerHTML = html;
+    }
+  </script>
 </body>
 </html>
