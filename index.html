@@ -1,242 +1,367 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <base target="_top">
-  <style>
-    body { font-family: Arial, sans-serif; font-size: 13px; padding: 8px; }
-    .notice { background: #fff3cd; border: 1px solid #ffe08a; padding: 8px; border-radius: 4px; margin-bottom: 10px; }
-    label { display: block; margin-top: 8px; font-weight: bold; }
-    input[type=text] { width: 100%; box-sizing: border-box; padding: 4px; margin-top: 2px; }
-    button { margin-top: 10px; padding: 8px 12px; cursor: pointer; }
-    .qr-section { border: 1px solid #ddd; border-radius: 4px; padding: 8px; margin-top: 10px; }
-    .qr-buttons button { margin-top: 6px; margin-right: 6px; padding: 6px 10px; }
-    #qrVideo { width: 100%; margin-top: 6px; display: none; border-radius: 4px; }
-    .qr-status { font-size: 11px; margin-top: 4px; }
-    .qr-status.ok { color: #1a7f37; }
-    .qr-status.err { color: #cf222e; }
-    #results { margin-top: 12px; max-height: 220px; overflow-y: auto; }
-    .row-error { color: #cf222e; }
-    .row-success { color: #1a7f37; }
-    #summary { margin-top: 8px; font-weight: bold; }
-    #genBtn { background: #1a73e8; color: white; border: none; border-radius: 4px; font-size: 14px; }
-    #genBtn:disabled { background: #999; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Form Response Generator</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        color: #222;
+    }
+
+    .container {
+        width: min(800px, 92%);
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 14px;
+        box-shadow: 0 5px 25px rgba(0,0,0,.08);
+    }
+
+    h1 {
+        margin-top: 0;
+    }
+
+    .subtitle {
+        color: #666;
+        margin-bottom: 25px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+        margin-top: 15px;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 11px;
+        margin-top: 6px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        font-size: 15px;
+    }
+
+    .field {
+        border: 1px solid #ddd;
+        padding: 16px;
+        margin-top: 15px;
+        border-radius: 9px;
+        background: #fafafa;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 18px;
+        border: none;
+        border-radius: 7px;
+        background: #222;
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        opacity: .85;
+    }
+
+    .remove {
+        background: #c62828;
+    }
+
+    .generate {
+        background: #1769aa;
+    }
+
+    #output {
+        margin-top: 25px;
+        padding: 15px;
+        border-radius: 8px;
+        background: #f1f1f1;
+        white-space: pre-wrap;
+        font-family: monospace;
+        overflow-x: auto;
+    }
+</style>
 </head>
+
 <body>
-  <div class="notice">
-    For testing / QA / development on forms you own only. Works via the
-    official Apps Script Forms API — it only runs on forms you have edit
-    access to.
-  </div>
 
-  <label>Form URL or ID</label>
-  <input type="text" id="formUrl" placeholder="https://docs.google.com/forms/d/....">
+<div class="container">
 
-  <div class="qr-section">
-    <div><strong>Or scan a QR code of the form link</strong></div>
-    <div class="qr-buttons">
-      <button onclick="startCameraScan()">Scan with camera</button>
-      <button onclick="document.getElementById('qrFile').click()">Upload QR image</button>
-      <input type="file" id="qrFile" accept="image/*" style="display:none" onchange="handleQrFile(event)">
+    <h1>Form Response Generator</h1>
+
+    <div class="subtitle">
+        Generate test response payloads from a simple browser interface.
     </div>
-    <video id="qrVideo" playsinline></video>
-    <canvas id="qrCanvas" style="display:none;"></canvas>
-    <div id="qrStatus" class="qr-status"></div>
-  </div>
 
-  <button id="genBtn" onclick="generate()">Generate 240 Test Responses</button>
+    <label>Google Form ID</label>
 
-  <div id="progressWrap" style="display:none; margin-top:10px;">
-    <div style="background:#eee; border-radius:4px; overflow:hidden; height:16px;">
-      <div id="progressBar" style="background:#1a73e8; height:100%; width:0%; transition: width 0.3s;"></div>
+    <input
+        id="formId"
+        placeholder="Enter Form ID"
+    >
+
+    <label>Number of responses</label>
+
+    <input
+        id="responseCount"
+        type="number"
+        min="1"
+        max="1000"
+        value="10"
+    >
+
+    <h3>Fields</h3>
+
+    <div id="fields"></div>
+
+    <button onclick="addField()">
+        + Add Field
+    </button>
+
+    <button class="generate" onclick="generateResponses()">
+        Generate Test Responses
+    </button>
+
+    <div id="output">
+        No responses generated yet.
     </div>
-    <div id="progressText" style="margin-top:4px; font-size:12px;"></div>
-  </div>
 
-  <div id="summary"></div>
-  <div id="results"></div>
+</div>
 
-  <!-- jsQR: pure client-side QR decoding, no camera permission required for the upload path -->
-  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-  <script>
-    const RESPONSE_COUNT = 240;
-    const DELAY_MS = 300; // basic rate limiting between submissions
+<script>
 
-    let qrStream = null;
-    let qrScanLoopId = null;
+function randomString(length = 8) {
 
-    function setQrStatus(msg, ok) {
-      const el = document.getElementById('qrStatus');
-      el.textContent = msg;
-      el.className = 'qr-status ' + (ok === true ? 'ok' : ok === false ? 'err' : '');
+    const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    let result = "";
+
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(
+            Math.floor(Math.random() * characters.length)
+        );
     }
 
-    function applyDecodedUrl(text) {
-      const isFormsLink = /docs\.google\.com\/forms|forms\.gle/i.test(text);
-      if (!isFormsLink) {
-        setQrStatus('QR code scanned, but it doesn\'t look like a Google Forms link: ' + text, false);
-        return;
-      }
-      document.getElementById('formUrl').value = text.trim();
-      setQrStatus('Form link scanned successfully.', true);
+    return result;
+}
+
+
+function randomEmail() {
+
+    return "test" +
+        randomString(8).toLowerCase() +
+        "@example.com";
+}
+
+
+function randomChoice(value) {
+
+    const options = value
+        .split(",")
+        .map(x => x.trim())
+        .filter(Boolean);
+
+    if (!options.length) {
+        return "";
     }
 
-    // ---- Upload an image containing the QR code ----
-    function handleQrFile(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      setQrStatus('Decoding image...');
+    return options[
+        Math.floor(Math.random() * options.length)
+    ];
+}
 
-      const img = new Image();
-      img.onload = function () {
-        const canvas = document.getElementById('qrCanvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const code = jsQR(imageData.data, imageData.width, imageData.height);
-        if (code && code.data) {
-          applyDecodedUrl(code.data);
-        } else {
-          setQrStatus('No QR code found in that image. Try a clearer photo/screenshot.', false);
-        }
-      };
-      img.onerror = function () {
-        setQrStatus('Could not read that image file.', false);
-      };
-      img.src = URL.createObjectURL(file);
+
+function generateValue(type, value) {
+
+    switch (type) {
+
+        case "random_text":
+            return "Test " + randomString();
+
+        case "random_email":
+            return randomEmail();
+
+        case "random_choice":
+            return randomChoice(value);
+
+        default:
+            return value;
     }
+}
 
-    // ---- Live camera scan ----
-    // Note: Apps Script sidebars run in a nested iframe, and Google's
-    // permissions policy sometimes blocks camera access there. If this
-    // fails, use "Upload QR image" instead — it always works.
-    function startCameraScan() {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        setQrStatus('Camera access isn\'t available here. Use "Upload QR image" instead.', false);
-        return;
-      }
-      setQrStatus('Requesting camera access...');
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-        .then(function (stream) {
-          qrStream = stream;
-          const video = document.getElementById('qrVideo');
-          video.srcObject = stream;
-          video.style.display = 'block';
-          video.play();
-          setQrStatus('Point the camera at the QR code...');
-          qrScanLoopId = requestAnimationFrame(scanCameraFrame);
-        })
-        .catch(function (err) {
-          setQrStatus('Camera blocked in this sidebar (' + err.message + '). Use "Upload QR image" instead.', false);
+
+function addField() {
+
+    const container =
+        document.getElementById("fields");
+
+    const field =
+        document.createElement("div");
+
+    field.className = "field";
+
+    field.innerHTML = `
+
+        <label>Entry ID</label>
+
+        <input
+            class="entryId"
+            placeholder="entry.123456789"
+        >
+
+        <label>Response Type</label>
+
+        <select class="fieldType">
+
+            <option value="text">
+                Fixed Text
+            </option>
+
+            <option value="random_text">
+                Random Text
+            </option>
+
+            <option value="random_email">
+                Random Email
+            </option>
+
+            <option value="random_choice">
+                Random Choice
+            </option>
+
+        </select>
+
+        <label>Value / Options</label>
+
+        <input
+            class="fieldValue"
+            placeholder="Example: Option A, Option B, Option C"
+        >
+
+        <button
+            class="remove"
+            onclick="this.parentElement.remove()"
+        >
+            Remove Field
+        </button>
+    `;
+
+    container.appendChild(field);
+}
+
+
+function collectFields() {
+
+    const fields = [];
+
+    document
+        .querySelectorAll(".field")
+        .forEach(field => {
+
+            const entryId =
+                field.querySelector(".entryId").value.trim();
+
+            const type =
+                field.querySelector(".fieldType").value;
+
+            const value =
+                field.querySelector(".fieldValue").value;
+
+            if (entryId) {
+
+                fields.push({
+                    entryId,
+                    type,
+                    value
+                });
+
+            }
+
         });
-    }
 
-    function stopCameraScan() {
-      if (qrScanLoopId) cancelAnimationFrame(qrScanLoopId);
-      if (qrStream) qrStream.getTracks().forEach(function (t) { t.stop(); });
-      document.getElementById('qrVideo').style.display = 'none';
-      qrStream = null;
-      qrScanLoopId = null;
-    }
+    return fields;
+}
 
-    function scanCameraFrame() {
-      const video = document.getElementById('qrVideo');
-      if (video.readyState === video.HAVE_ENOUGH_DATA) {
-        const canvas = document.getElementById('qrCanvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const code = jsQR(imageData.data, imageData.width, imageData.height);
-        if (code && code.data) {
-          stopCameraScan();
-          applyDecodedUrl(code.data);
-          return;
-        }
-      }
-      qrScanLoopId = requestAnimationFrame(scanCameraFrame);
-    }
 
-    // ---- Generate & submit 240 responses, all default/random answers ----
-    let pollTimer = null;
+function generateResponses() {
 
-    function pollProgress(progressKey) {
-      google.script.run
-        .withSuccessHandler(function (progress) {
-          if (!progress) return; // nothing recorded yet, keep waiting
-          const pct = Math.round((progress.completed / progress.total) * 100);
-          document.getElementById('progressBar').style.width = pct + '%';
-          document.getElementById('progressText').textContent =
-            pct + '%  (' + progress.completed + ' / ' + progress.total +
-            ' — ' + progress.success + ' ok, ' + progress.failed + ' failed)';
-          if (progress.done) {
-            clearInterval(pollTimer);
-          }
-        })
-        .withFailureHandler(function () { /* ignore transient poll errors */ })
-        .getProgress(progressKey);
-    }
+    const formId =
+        document.getElementById("formId").value.trim();
 
-    function generate() {
-      const url = document.getElementById('formUrl').value.trim();
-      if (!url) {
-        document.getElementById('summary').textContent = 'Paste a form link first (or scan its QR code).';
+    const count =
+        Number(
+            document.getElementById("responseCount").value
+        );
+
+    if (!formId) {
+
+        alert("Please enter a Form ID.");
+
         return;
-      }
-
-      const btn = document.getElementById('genBtn');
-      btn.disabled = true;
-      btn.textContent = 'Submitting 240 responses...';
-      document.getElementById('summary').textContent = '';
-      document.getElementById('results').innerHTML = '';
-
-      const progressKey = 'formtest_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
-      document.getElementById('progressWrap').style.display = 'block';
-      document.getElementById('progressBar').style.width = '0%';
-      document.getElementById('progressText').textContent = '0%  (0 / ' + RESPONSE_COUNT + ')';
-
-      pollTimer = setInterval(function () { pollProgress(progressKey); }, 1000);
-
-      // Empty config map = every question uses the built-in random default
-      // (random choice pick, random scale value, placeholder text, etc.)
-      google.script.run
-        .withSuccessHandler(function (results) {
-          clearInterval(pollTimer);
-          document.getElementById('progressBar').style.width = '100%';
-          document.getElementById('progressText').textContent =
-            '100%  (' + RESPONSE_COUNT + ' / ' + RESPONSE_COUNT + ')';
-          renderResults(results);
-        })
-        .withFailureHandler(function (err) {
-          clearInterval(pollTimer);
-          document.getElementById('summary').innerHTML =
-            '<span class="row-error">Error: ' + err.message + '</span>';
-          btn.disabled = false;
-          btn.textContent = 'Generate 240 Test Responses';
-        })
-        .generateResponses(url, RESPONSE_COUNT, {}, DELAY_MS, progressKey);
     }
 
-    function renderResults(results) {
-      const btn = document.getElementById('genBtn');
-      btn.disabled = false;
-      btn.textContent = 'Generate 240 Test Responses';
+    if (!count || count < 1) {
 
-      const successCount = results.filter(function (r) { return r.status === 'success'; }).length;
-      document.getElementById('summary').textContent =
-        successCount + ' / ' + results.length + ' submitted successfully.';
+        alert("Enter a valid response count.");
 
-      let html = '';
-      results.forEach(function (r) {
-        if (r.status !== 'success') {
-          html += '<div class="row-error">#' + r.submission + ': ' + r.status + ' — ' + r.message + '</div>';
-        }
-      });
-      document.getElementById('results').innerHTML = html || '<div class="row-success">All submissions succeeded.</div>';
+        return;
     }
-  </script>
+
+    const fields = collectFields();
+
+    const responses = [];
+
+    for (let i = 0; i < count; i++) {
+
+        const response = {};
+
+        fields.forEach(field => {
+
+            response[field.entryId] =
+                generateValue(
+                    field.type,
+                    field.value
+                );
+
+        });
+
+        responses.push(response);
+    }
+
+    const output =
+        document.getElementById("output");
+
+    output.textContent =
+        JSON.stringify(
+            {
+                formId: formId,
+                totalResponses: count,
+                responses: responses
+            },
+            null,
+            2
+        );
+}
+
+
+// Add one field automatically
+
+addField();
+
+</script>
+
 </body>
 </html>
