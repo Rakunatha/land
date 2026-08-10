@@ -4,43 +4,38 @@
   <base target="_top">
   <style>
     body { font-family: Arial, sans-serif; font-size: 13px; padding: 8px; }
-    h3 { margin-bottom: 4px; }
     .notice { background: #fff3cd; border: 1px solid #ffe08a; padding: 8px; border-radius: 4px; margin-bottom: 10px; }
     label { display: block; margin-top: 8px; font-weight: bold; }
-    input[type=text], input[type=number], select, textarea {
-      width: 100%; box-sizing: border-box; padding: 4px; margin-top: 2px;
-    }
-    .question-block { border: 1px solid #ddd; border-radius: 4px; padding: 8px; margin-top: 10px; }
-    .question-title { font-weight: bold; }
-    .question-type { color: #666; font-size: 11px; }
-    button { margin-top: 12px; padding: 8px 12px; cursor: pointer; }
-    #results { margin-top: 12px; max-height: 200px; overflow-y: auto; }
-    .row-success { color: #1a7f37; }
-    .row-error { color: #cf222e; }
-    .unsupported { color: #999; font-style: italic; }
-    .qr-section { border: 1px solid #ddd; border-radius: 4px; padding: 8px; margin-top: 8px; }
+    input[type=text] { width: 100%; box-sizing: border-box; padding: 4px; margin-top: 2px; }
+    button { margin-top: 10px; padding: 8px 12px; cursor: pointer; }
+    .qr-section { border: 1px solid #ddd; border-radius: 4px; padding: 8px; margin-top: 10px; }
     .qr-buttons button { margin-top: 6px; margin-right: 6px; padding: 6px 10px; }
     #qrVideo { width: 100%; margin-top: 6px; display: none; border-radius: 4px; }
     .qr-status { font-size: 11px; margin-top: 4px; }
     .qr-status.ok { color: #1a7f37; }
     .qr-status.err { color: #cf222e; }
+    #results { margin-top: 12px; max-height: 220px; overflow-y: auto; }
+    .row-error { color: #cf222e; }
+    .row-success { color: #1a7f37; }
+    #summary { margin-top: 8px; font-weight: bold; }
+    #genBtn { background: #1a73e8; color: white; border: none; border-radius: 4px; font-size: 14px; }
+    #genBtn:disabled { background: #999; }
   </style>
 </head>
 <body>
   <div class="notice">
     For testing / QA / development on forms you own only. Works via the
-    official Apps Script Forms API — it cannot run against a form you
-    don't have edit access to.
+    official Apps Script Forms API — it only runs on forms you have edit
+    access to.
   </div>
 
-  <h3>1. Load a form</h3>
   <label>Form URL or ID</label>
   <input type="text" id="formUrl" placeholder="https://docs.google.com/forms/d/....">
 
   <div class="qr-section">
     <div><strong>Or scan a QR code of the form link</strong></div>
     <div class="qr-buttons">
-      <button onclick="startCameraScan()" id="camBtn">Scan with camera</button>
+      <button onclick="startCameraScan()">Scan with camera</button>
       <button onclick="document.getElementById('qrFile').click()">Upload QR image</button>
       <input type="file" id="qrFile" accept="image/*" style="display:none" onchange="handleQrFile(event)">
     </div>
@@ -49,26 +44,24 @@
     <div id="qrStatus" class="qr-status"></div>
   </div>
 
-  <button onclick="loadForm()">Load Questions</button>
+  <button id="genBtn" onclick="generate()">Generate 240 Test Responses</button>
 
-  <div id="formTitle"></div>
-  <div id="questions"></div>
-
-  <div id="generateSection" style="display:none;">
-    <h3>2. Generate responses</h3>
-    <label>Number of test responses (max 500)</label>
-    <input type="number" id="count" value="5" min="1" max="500">
-    <label>Delay between submissions (ms, min 200)</label>
-    <input type="number" id="delay" value="300" min="200">
-    <button onclick="generate()">Generate & Submit</button>
+  <div id="progressWrap" style="display:none; margin-top:10px;">
+    <div style="background:#eee; border-radius:4px; overflow:hidden; height:16px;">
+      <div id="progressBar" style="background:#1a73e8; height:100%; width:0%; transition: width 0.3s;"></div>
+    </div>
+    <div id="progressText" style="margin-top:4px; font-size:12px;"></div>
   </div>
 
+  <div id="summary"></div>
   <div id="results"></div>
 
   <!-- jsQR: pure client-side QR decoding, no camera permission required for the upload path -->
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
   <script>
-    let currentQuestions = [];
+    const RESPONSE_COUNT = 240;
+    const DELAY_MS = 300; // basic rate limiting between submissions
+
     let qrStream = null;
     let qrScanLoopId = null;
 
@@ -78,7 +71,6 @@
       el.className = 'qr-status ' + (ok === true ? 'ok' : ok === false ? 'err' : '');
     }
 
-    // Pulls a plausible Google Forms URL out of decoded QR text and fills the input.
     function applyDecodedUrl(text) {
       const isFormsLink = /docs\.google\.com\/forms|forms\.gle/i.test(text);
       if (!isFormsLink) {
@@ -87,10 +79,9 @@
       }
       document.getElementById('formUrl').value = text.trim();
       setQrStatus('Form link scanned successfully.', true);
-      loadForm();
     }
 
-    // ---- Option A: upload an image containing the QR code ----
+    // ---- Upload an image containing the QR code ----
     function handleQrFile(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -117,14 +108,13 @@
       img.src = URL.createObjectURL(file);
     }
 
-    // ---- Option B: live camera scan ----
+    // ---- Live camera scan ----
     // Note: Apps Script sidebars run in a nested iframe, and Google's
-    // permissions policy sometimes blocks camera access there even if the
-    // browser would normally allow it. If this fails, use "Upload QR image"
-    // instead — it always works since it needs no camera permission.
+    // permissions policy sometimes blocks camera access there. If this
+    // fails, use "Upload QR image" instead — it always works.
     function startCameraScan() {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        setQrStatus('Camera access isn\'t available in this context. Use "Upload QR image" instead.', false);
+        setQrStatus('Camera access isn\'t available here. Use "Upload QR image" instead.', false);
         return;
       }
       setQrStatus('Requesting camera access...');
@@ -170,104 +160,82 @@
       qrScanLoopId = requestAnimationFrame(scanCameraFrame);
     }
 
-    function loadForm() {
-      const url = document.getElementById('formUrl').value;
-      document.getElementById('questions').innerHTML = 'Loading...';
+    // ---- Generate & submit 240 responses, all default/random answers ----
+    let pollTimer = null;
+
+    function pollProgress(progressKey) {
       google.script.run
-        .withSuccessHandler(renderForm)
-        .withFailureHandler(function (err) {
-          document.getElementById('questions').innerHTML =
-            '<div class="row-error">Error: ' + err.message + '</div>';
+        .withSuccessHandler(function (progress) {
+          if (!progress) return; // nothing recorded yet, keep waiting
+          const pct = Math.round((progress.completed / progress.total) * 100);
+          document.getElementById('progressBar').style.width = pct + '%';
+          document.getElementById('progressText').textContent =
+            pct + '%  (' + progress.completed + ' / ' + progress.total +
+            ' — ' + progress.success + ' ok, ' + progress.failed + ' failed)';
+          if (progress.done) {
+            clearInterval(pollTimer);
+          }
         })
-        .getFormStructure(url);
-    }
-
-    function renderForm(data) {
-      currentQuestions = data.questions;
-      document.getElementById('formTitle').innerHTML = '<h4>' + data.title + '</h4>';
-
-      let html = '';
-      data.questions.forEach(function (q, i) {
-        html += '<div class="question-block">';
-        html += '<div class="question-title">' + q.title + '</div>';
-        html += '<div class="question-type">' + q.type + '</div>';
-
-        if (q.unsupported) {
-          html += '<div class="unsupported">Unsupported type — will be left blank.</div>';
-        } else {
-          html += '<label>Answer strategy</label>';
-          html += '<select id="mode_' + i + '" onchange="toggleMode(' + i + ')">';
-          html += '<option value="random">Random (sensible default)</option>';
-          html += '<option value="fixed">Fixed value (same every time)</option>';
-          html += '<option value="list">List (cycles through values)</option>';
-          html += '</select>';
-
-          if (q.choices) {
-            html += '<div class="question-type">Choices: ' + q.choices.join(', ') + '</div>';
-          }
-          if (q.lower !== undefined) {
-            html += '<div class="question-type">Scale: ' + q.lower + '–' + q.upper + '</div>';
-          }
-
-          html += '<input type="text" id="fixed_' + i + '" style="display:none" placeholder="Fixed value">';
-          html += '<textarea id="list_' + i + '" style="display:none" placeholder="One value per line"></textarea>';
-        }
-        html += '</div>';
-      });
-
-      document.getElementById('questions').innerHTML = html;
-      document.getElementById('generateSection').style.display = 'block';
-    }
-
-    function toggleMode(i) {
-      const mode = document.getElementById('mode_' + i).value;
-      document.getElementById('fixed_' + i).style.display = mode === 'fixed' ? 'block' : 'none';
-      document.getElementById('list_' + i).style.display = mode === 'list' ? 'block' : 'none';
-    }
-
-    function buildAnswerConfigs() {
-      const configs = {};
-      currentQuestions.forEach(function (q, i) {
-        if (q.unsupported) return;
-        const modeEl = document.getElementById('mode_' + i);
-        const mode = modeEl.value;
-        const config = { mode: mode };
-        if (mode === 'fixed') {
-          config.fixedValue = document.getElementById('fixed_' + i).value;
-        } else if (mode === 'list') {
-          config.valueList = document.getElementById('list_' + i).value
-            .split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
-        }
-        configs[i] = config;
-      });
-      return configs;
+        .withFailureHandler(function () { /* ignore transient poll errors */ })
+        .getProgress(progressKey);
     }
 
     function generate() {
-      const url = document.getElementById('formUrl').value;
-      const count = document.getElementById('count').value;
-      const delay = document.getElementById('delay').value;
-      const configs = buildAnswerConfigs();
+      const url = document.getElementById('formUrl').value.trim();
+      if (!url) {
+        document.getElementById('summary').textContent = 'Paste a form link first (or scan its QR code).';
+        return;
+      }
 
-      document.getElementById('results').innerHTML = 'Submitting...';
+      const btn = document.getElementById('genBtn');
+      btn.disabled = true;
+      btn.textContent = 'Submitting 240 responses...';
+      document.getElementById('summary').textContent = '';
+      document.getElementById('results').innerHTML = '';
+
+      const progressKey = 'formtest_' + Date.now() + '_' + Math.floor(Math.random() * 1e6);
+      document.getElementById('progressWrap').style.display = 'block';
+      document.getElementById('progressBar').style.width = '0%';
+      document.getElementById('progressText').textContent = '0%  (0 / ' + RESPONSE_COUNT + ')';
+
+      pollTimer = setInterval(function () { pollProgress(progressKey); }, 1000);
+
+      // Empty config map = every question uses the built-in random default
+      // (random choice pick, random scale value, placeholder text, etc.)
       google.script.run
-        .withSuccessHandler(renderResults)
-        .withFailureHandler(function (err) {
-          document.getElementById('results').innerHTML =
-            '<div class="row-error">Error: ' + err.message + '</div>';
+        .withSuccessHandler(function (results) {
+          clearInterval(pollTimer);
+          document.getElementById('progressBar').style.width = '100%';
+          document.getElementById('progressText').textContent =
+            '100%  (' + RESPONSE_COUNT + ' / ' + RESPONSE_COUNT + ')';
+          renderResults(results);
         })
-        .generateResponses(url, count, configs, delay);
+        .withFailureHandler(function (err) {
+          clearInterval(pollTimer);
+          document.getElementById('summary').innerHTML =
+            '<span class="row-error">Error: ' + err.message + '</span>';
+          btn.disabled = false;
+          btn.textContent = 'Generate 240 Test Responses';
+        })
+        .generateResponses(url, RESPONSE_COUNT, {}, DELAY_MS, progressKey);
     }
 
     function renderResults(results) {
-      let html = '<h4>Results</h4>';
-      results.forEach(function (r) {
-        const cls = r.status === 'success' ? 'row-success' : 'row-error';
-        html += '<div class="' + cls + '">#' + r.submission + ': ' + r.status + ' — ' + r.message + '</div>';
-      });
+      const btn = document.getElementById('genBtn');
+      btn.disabled = false;
+      btn.textContent = 'Generate 240 Test Responses';
+
       const successCount = results.filter(function (r) { return r.status === 'success'; }).length;
-      html += '<p><strong>' + successCount + ' / ' + results.length + ' submitted successfully.</strong></p>';
-      document.getElementById('results').innerHTML = html;
+      document.getElementById('summary').textContent =
+        successCount + ' / ' + results.length + ' submitted successfully.';
+
+      let html = '';
+      results.forEach(function (r) {
+        if (r.status !== 'success') {
+          html += '<div class="row-error">#' + r.submission + ': ' + r.status + ' — ' + r.message + '</div>';
+        }
+      });
+      document.getElementById('results').innerHTML = html || '<div class="row-success">All submissions succeeded.</div>';
     }
   </script>
 </body>
