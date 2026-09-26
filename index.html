@@ -3,277 +3,341 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Legal &amp; Constitutional History</title>
+<title>Manatune Net — meet people around you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#1c140d; --parchment:#f4ecd8; --parchment2:#eadfc4;
-  --maroon:#5c1a1a; --maroon2:#7a2323; --gold:#b8860b; --goldlight:#d4af37;
-  --line:#c9b892;
+  --bg:#0d1b1e; --surface:#142a2e; --surface2:#1c363b; --border:#25454a;
+  --text:#eef5f3; --muted:#8fa8a4; --accent:#ff6b4a; --accent2:#4ade9c;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --ink:#f1e6cf; --parchment:#241a12; --parchment2:#2c2116;
-    --maroon:#c65a5a; --maroon2:#e07a7a; --gold:#e0b84d; --goldlight:#f0cf6a; --line:#4a3c28;
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f5f2ec; --surface:#ffffff; --surface2:#eef0ea; --border:#e1ddd2;
+    --text:#16211f; --muted:#6b7674; --accent:#e05a3d; --accent2:#1f9d6b;
   }
 }
 :root[data-theme="dark"]{
-  --ink:#f1e6cf; --parchment:#241a12; --parchment2:#2c2116;
-  --maroon:#c65a5a; --maroon2:#e07a7a; --gold:#e0b84d; --goldlight:#f0cf6a; --line:#4a3c28;
+  --bg:#0d1b1e; --surface:#142a2e; --surface2:#1c363b; --border:#25454a;
+  --text:#eef5f3; --muted:#8fa8a4; --accent:#ff6b4a; --accent2:#4ade9c;
 }
-html{scroll-padding-top:env(safe-area-inset-top,0px); height:100%;}
 *{box-sizing:border-box;}
+html,body{height:100%;margin:0;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
 body{
-  height:100%; margin:0; background:var(--parchment); color:var(--ink);
-  font-family:Georgia,'Times New Roman',serif;
-  display:flex; flex-direction:column;
+  background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif;
+  min-height:100%; overflow-x:hidden;
 }
-header{
-  padding:calc(10px + env(safe-area-inset-top,0px)) 4vw 10px;
-  display:flex; align-items:center; gap:12px;
-  border-bottom:2px solid var(--gold);
-  background:linear-gradient(180deg,var(--parchment2),var(--parchment));
+h1,h2,h3,.brand,.big-name{font-family:'Space Grotesk',system-ui,sans-serif;}
+#app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative;}
+
+/* ---------- Onboarding ---------- */
+.screen{padding:24px 20px 100px;flex:1;}
+.brand{font-size:22px;font-weight:700;letter-spacing:-0.02em;display:flex;align-items:center;gap:8px;padding-top:12px;}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent2);box-shadow:0 0 0 4px color-mix(in srgb, var(--accent2) 25%, transparent);}
+.tag{color:var(--muted);font-size:14px;margin:6px 0 28px;line-height:1.5;}
+label{display:block;font-size:13px;color:var(--muted);margin:18px 0 6px;}
+input[type=text], textarea{
+  width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);
+  padding:12px 14px;border-radius:12px;font-size:15px;font-family:inherit;
 }
-header .crest{font-size:clamp(1.2em,2.2vw,2em);}
-header h1{font-size:clamp(.9em,1.8vw,1.6em); margin:0; letter-spacing:.5px; color:var(--maroon2); font-weight:normal; font-variant:small-caps;}
-main{flex:1; overflow:hidden; position:relative; max-width:1400px; width:100%; margin:0 auto;}
-.slide{
-  position:absolute; inset:0; padding:clamp(16px,4vh,40px) 6vw 110px; overflow-y:auto;
-  opacity:0; visibility:hidden; transform:translateX(16px);
-  transition:opacity .25s ease, transform .25s ease;
-  font-size:clamp(1em,1.4vw,1.5em);
+textarea{resize:vertical;min-height:64px;}
+.avatars{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
+.avatar-opt{
+  width:48px;height:48px;border-radius:50%;background:var(--surface);border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;
 }
-.slide.active{opacity:1; visibility:visible; transform:translateX(0);}
-.slide h2{
-  color:var(--maroon); font-size:clamp(1.3em,2.6vw,2.2em); margin:0 0 6px; font-variant:small-caps;
-  border-bottom:1px solid var(--line); padding-bottom:10px;
+.avatar-opt.selected{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 15%, var(--surface));}
+.btn{
+  width:100%;padding:14px;border-radius:14px;border:none;font-size:15px;font-weight:600;
+  font-family:inherit;cursor:pointer;margin-top:22px;
 }
-.slide .sub{color:var(--gold); font-style:italic; margin:0 0 18px; font-size:.9em;}
-.slide p{line-height:1.55; margin:0 0 12px; max-width:60em;}
-.slide ul{margin:0 0 12px 0; padding-left:1.2em; line-height:1.55;}
-.slide li{margin-bottom:6px;}
-table{width:100%; border-collapse:collapse; margin:10px 0 16px; font-size:.85em;}
-.slide{overflow-x:hidden;}
-table{display:block; overflow-x:auto; white-space:normal;}
-th,td{border:1px solid var(--line); padding:8px 12px; text-align:left; vertical-align:top;}
-th{background:var(--maroon); color:var(--parchment); font-variant:small-caps;}
-tr:nth-child(even) td{background:var(--parchment2);}
-.flow{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:8px 0 16px;}
-.chip{background:var(--parchment2); border:1px solid var(--gold); border-radius:14px; padding:5px 12px; font-size:.8em;}
-.arrow{color:var(--gold); font-weight:bold;}
-.hier{display:flex; flex-direction:column; gap:6px; margin:10px 0;}
-.hier div{background:var(--parchment2); border-left:4px solid var(--maroon); padding:10px 14px; font-size:.9em;}
-.title-slide{display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; height:100%;}
-.title-slide .crest-big{font-size:clamp(2em,7vw,5em); margin-bottom:6px;}
-.title-slide h2{border:none; font-size:clamp(1.5em,4vw,3em); color:var(--maroon);}
-.title-slide .sub{font-size:1.1em;}
-nav.controls{
-  position:fixed; left:0; right:0; bottom:0;
-  padding:12px 4vw calc(14px + env(safe-area-inset-bottom,0px));
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-  background:linear-gradient(0deg,var(--parchment2),transparent);
+.btn-primary{background:var(--accent);color:#0d1b1e;}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);}
+.loc-status{font-size:13px;color:var(--muted);margin-top:10px;min-height:18px;}
+
+/* ---------- Radar ---------- */
+.radar-wrap{display:flex;justify-content:center;padding:10px 0 4px;}
+.radar{width:280px;height:280px;position:relative;border-radius:50%;
+  background:radial-gradient(circle, var(--surface2) 0%, var(--surface) 70%, transparent 71%);
 }
-button.nb{
-  font-family:Georgia,serif; font-variant:small-caps; letter-spacing:.5px;
-  background:var(--maroon); color:var(--parchment); border:1px solid var(--gold);
-  border-radius:8px; padding:14px 22px; font-size:clamp(.9em,1.6vw,1.2em); cursor:pointer;
-  min-width:44px; min-height:44px; touch-action:manipulation;
+.ring{position:absolute;border:1px solid var(--border);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);}
+.you-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;
+  background:var(--accent2);box-shadow:0 0 0 6px color-mix(in srgb, var(--accent2) 20%, transparent);z-index:3;}
+.pdot{position:absolute;width:34px;height:34px;border-radius:50%;transform:translate(-50%,-50%);
+  display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--surface2);
+  border:2px solid var(--border);cursor:pointer;z-index:2;}
+.pdot.interested{border-color:var(--accent);}
+.radar-caption{text-align:center;color:var(--muted);font-size:12px;margin:8px 0 18px;}
+
+/* ---------- List ---------- */
+.section-title{font-size:13px;color:var(--muted);margin:0 0 10px;}
+.card{
+  display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:12px;margin-bottom:10px;cursor:pointer;
 }
-button.nb:disabled{opacity:.35; cursor:default;}
-.counter{font-size:clamp(.8em,1.4vw,1.1em); color:var(--maroon2); font-variant:small-caps;}
-.dots{display:flex; gap:5px;}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--line);}
-.dot.on{background:var(--gold);}
-@media (min-width:1600px){ header h1{font-size:1.8em;} }
+.avatar-badge{width:46px;height:46px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.card-info{flex:1;min-width:0;}
+.card-name{font-size:15px;font-weight:600;}
+.card-sub{font-size:13px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.heart-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;flex-shrink:0;}
+.heart-btn.on{background:var(--accent);border-color:var(--accent);}
+.empty{color:var(--muted);font-size:14px;text-align:center;padding:40px 10px;}
+
+/* ---------- Profile overlay ---------- */
+.overlay{position:fixed;inset:0;background:var(--bg);z-index:20;overflow-y:auto;
+  padding-top:calc(20px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));}
+.overlay-inner{max-width:480px;margin:0 auto;padding:0 20px;}
+.back-btn{background:none;border:none;color:var(--text);font-size:15px;cursor:pointer;padding:6px 0;margin-bottom:10px;}
+.big-avatar{width:100px;height:100px;border-radius:28px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:46px;margin-bottom:16px;}
+.big-name{font-size:24px;font-weight:700;}
+.big-sub{color:var(--muted);font-size:14px;margin-top:4px;}
+.bio{margin-top:18px;font-size:15px;line-height:1.6;}
+
+/* ---------- Bottom nav ---------- */
+.tabbar{
+  position:sticky;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);
+  display:flex;padding:10px 8px calc(10px + env(safe-area-inset-bottom,0px));
+}
+.tab{flex:1;text-align:center;background:none;border:none;color:var(--muted);font-size:12px;padding:6px;cursor:pointer;font-family:inherit;}
+.tab .ic{font-size:19px;display:block;margin-bottom:2px;}
+.tab.active{color:var(--accent);}
 </style>
 </head>
 <body>
-<header><span class="crest">⚖️</span><h1>Legal &amp; Constitutional History of India</h1></header>
-<main id="main"></main>
-<nav class="controls">
-  <button class="nb" id="prev">◀ Prev</button>
-  <div class="counter" id="counter"></div>
-  <button class="nb" id="next">Next ▶</button>
-</nav>
+<div id="app"></div>
 
 <script>
-const slides = [
-`<div class="title-slide">
-  <div class="crest-big">⚖️</div>
-  <h2>Legal &amp; Constitutional History</h2>
-  <p class="sub">Framework · Ancient India · Medieval (Sultanate) Judicial System</p>
-</div>`,
+(function(){
+  const app = document.getElementById('app');
+  let state = { screen:'onboarding', tab:'discover', me:null, viewing:null, interested:new Set() };
 
-`<h2>Framework: Two Histories</h2>
-<p class="sub">Legal History vs Constitutional History</p>
-<p><strong>Legal History</strong> = History of Law + Courts + Justice</p>
-<div class="flow">
-<span class="chip">Ancient Courts</span><span class="arrow">→</span>
-<span class="chip">Medieval Courts</span><span class="arrow">→</span>
-<span class="chip">Company Courts</span><span class="arrow">→</span>
-<span class="chip">Supreme Court (Calcutta)</span><span class="arrow">→</span>
-<span class="chip">High Courts</span><span class="arrow">→</span>
-<span class="chip">Federal Court</span><span class="arrow">→</span>
-<span class="chip">Supreme Court of India</span>
-</div>
-<p><strong>Constitutional History</strong> = History of Government + Political Power + Constitutional Institutions</p>
-<div class="flow">
-<span class="chip">EIC</span><span class="arrow">→</span>
-<span class="chip">Parliament controls Company</span><span class="arrow">→</span>
-<span class="chip">Crown Rule</span><span class="arrow">→</span>
-<span class="chip">Legislative Councils</span><span class="arrow">→</span>
-<span class="chip">Indian Participation</span><span class="arrow">→</span>
-<span class="chip">Provincial Autonomy</span><span class="arrow">→</span>
-<span class="chip">Independence</span><span class="arrow">→</span>
-<span class="chip">Constituent Assembly</span><span class="arrow">→</span>
-<span class="chip">Constitution of India</span>
-</div>
-<p><strong>Basic problem:</strong> how do we resolve disputes &amp; maintain social order? Different societies answered this differently.</p>
-<p><strong>Law</strong> = a system of rules recognised and enforced by an authority to regulate conduct in society — addressing Rules, Institutions, Rights, Duties, Procedures, Courts, Enforcement.</p>`,
+  const AVATARS = ['🙂','😎','🌟','🌊','🦊','🌸','🎧','☕','🌿','🔥','🐼','🎨'];
+  const NAMES = [
+    ['Maya',27,'🌸','Here for the coffee, staying for the conversation. Into hiking and bad puns.'],
+    ['Jordan',31,'🎧','Producer by night, brunch enthusiast by morning. Ask me about my playlists.'],
+    ['Sam',24,'🌊','Just moved to the area — looking for people to explore it with.'],
+    ['Priya',29,'🌿','Plant mom, occasional rock climber. Will talk your ear off about houseplants.'],
+    ['Leo',33,'🔥','Chef on weekdays, chess hustler on weekends.'],
+    ['Ava',26,'🐼','Dog person, museum wanderer, currently learning pottery.'],
+    ['Noah',30,'🎨','Sketching strangers in coffee shops. Might sketch you.'],
+    ['Ivy',28,'☕','Trying every espresso bar in town, one cortado at a time.'],
+    ['Ethan',25,'🦊','Amateur astronomer. I know an embarrassing number of constellations.'],
+    ['Zoe',32,'🌟','Weekend farmer's-market regular. Let's split a pastry.']
+  ];
 
-`<h2>Five Major Historical Stages</h2>
-<table>
-<tr><th>Stage</th><th>Period</th><th>Key Features</th></tr>
-<tr><td>I</td><td>Ancient India</td><td>Dharma, Dharmashastra, King, Custom, Community Institutions, Royal Justice</td></tr>
-<tr><td>II</td><td>Medieval India</td><td>Sultan, Mughal Emperor, Sharia, Qazi, Mufti, Islamic Judicial Institutions, Local Customs</td></tr>
-<tr><td>III</td><td>EIC</td><td>Charter, Company, Presidency, Mayor's Court, Adalat, Governor, Council</td></tr>
-<tr><td>IV</td><td>British Crown</td><td>Supreme Court, High Courts, Privy Council, Federal Court, Regulating Act, Pitt's India Act, GOI Acts</td></tr>
-<tr><td>V</td><td>Constitutional India</td><td>Independence, Constituent Assembly, Drafting Committee, Constitution, Fundamental Rights, Parliament</td></tr>
-</table>`,
+  function loadLocal(){
+    try{
+      const raw = localStorage.getItem('nearby_me');
+      if(raw){ const d = JSON.parse(raw); state.me = d.me; state.interested = new Set(d.interested||[]); }
+    }catch(e){}
+  }
+  function saveLocal(){
+    try{ localStorage.setItem('nearby_me', JSON.stringify({me:state.me, interested:[...state.interested]})); }catch(e){}
+  }
 
-`<h2>Stage I: Ancient Legal System</h2>
-<p class="sub">Social Order &amp; Dharma</p>
-<p>Social order rested on two pillars:</p>
-<ul><li>Caste System</li><li>Joint Family System</li></ul>
-<p>→ These led to inequality before law for different castes.</p>
-<p><strong>Dharma</strong> — the most important constituent of Hindu thought, broader than "religion." Covers duty, morality, social order, appropriate conduct, obligation, justice, religious norms, and the duties of rulers &amp; subjects.</p>`,
+  function metersOffset(lat,lng,distKm,bearingDeg){
+    const R=6371, br=bearingDeg*Math.PI/180, d=distKm/R;
+    const lat1=lat*Math.PI/180, lng1=lng*Math.PI/180;
+    const lat2=Math.asin(Math.sin(lat1)*Math.cos(d)+Math.cos(lat1)*Math.sin(d)*Math.cos(br));
+    const lng2=lng1+Math.atan2(Math.sin(br)*Math.sin(d)*Math.cos(lat1),Math.cos(d)-Math.sin(lat1)*Math.sin(lat2));
+    return [lat2*180/Math.PI, lng2*180/Math.PI];
+  }
+  function haversine(lat1,lng1,lat2,lng2){
+    const R=6371, toRad=x=>x*Math.PI/180;
+    const dLat=toRad(lat2-lat1), dLng=toRad(lng2-lng1);
+    const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
+    return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+  }
 
-`<h2>Rajadharma &amp; Dharmashastra</h2>
-<p class="sub">The King's Duty &amp; the Texts of Law</p>
-<p><strong>Rajadharma (King's Duty):</strong></p>
-<ul>
-<li>Protection of subjects</li><li>Maintenance of order</li>
-<li>Administration of justice</li><li>Protection of property</li>
-<li>Punishment of wrongdoers</li><li>Preservation of social order</li>
-</ul>
-<p><strong>Dharmashastra</strong> — texts laying down dharma & rules of conduct: duties, family, inheritance, property, contract, offences, punishment, kingship, judicial procedure.</p>
-<p><strong>Key texts:</strong> Manava Dharmashastra (Manusmriti) · Yajnavalkya Smriti · Narada Smriti</p>`,
+  function genProfiles(lat,lng){
+    let seed=42;
+    const rnd=()=>{ seed=(seed*9301+49297)%233280; return seed/233280; };
+    return NAMES.map((n,i)=>{
+      const dist = 0.3 + rnd()*4.7;
+      const bearing = rnd()*360;
+      const [plat,plng] = metersOffset(lat,lng,dist,bearing);
+      return {id:'p'+i, name:n[0], age:n[1], avatar:n[2], bio:n[3], lat:plat, lng:plng, dist:Math.round(dist*10)/10};
+    }).sort((a,b)=>a.dist-b.dist);
+  }
 
-`<h2>Five Sources of Law</h2>
-<table>
-<tr><th>Source</th><th>Description</th></tr>
-<tr><td>1. Shruti</td><td>Sacred revelation — Vedas, Brahmanas, Aranyakas, Upanishads ("heard," transmitted orally by Rishis)</td></tr>
-<tr><td>2. Smriti</td><td>Remembered tradition &amp; authoritative texts — the Dharmashastras</td></tr>
-<tr><td>3. Custom</td><td>Accepted practices</td></tr>
-<tr><td>4. Royal Authority</td><td>Orders and decisions of rulers</td></tr>
-<tr><td>5. Local Practices</td><td>Community-specific rules &amp; institutions</td></tr>
-</table>
-<p class="sub">Content of Key Dharmashastra Texts</p>
-<table>
-<tr><th>Text</th><th>Content</th></tr>
-<tr><td>Manusmriti</td><td>Social duties, kingship, judicial administration, offences, punishment, property, inheritance, social relations</td></tr>
-<tr><td>Yajnavalkya Smriti</td><td>Judicial procedure, civil disputes, evidence, punishment, king's duties</td></tr>
-<tr><td>Narada Smriti</td><td>Disputes, courts, evidence, debt, property, contracts, procedure</td></tr>
-</table>`,
+  function render(){
+    if(state.screen==='onboarding'){ app.innerHTML = onboardingView(); bindOnboarding(); return; }
+    app.innerHTML = mainView();
+    bindMain();
+    if(state.viewing) renderOverlay();
+  }
 
-`<h2>Administration of Justice</h2>
-<p class="sub">Ancient India</p>
-<p>The institutional process through which legal disputes are heard, decided, and enforced — courts, judges, procedure, evidence, judgment, enforcement &amp; punishment.</p>
-<p><strong>King as Administrator of Justice</strong> — occupied the central position. Not meant to act on personal preference; an ideal king administered justice according to accepted norms of Dharma.</p>
-<p><strong>Duties of the King:</strong></p>
-<ul>
-<li>Administer Justice — resolve disputes &amp; punish offenders</li>
-<li>Protect Property — maintain social &amp; economic order</li>
-<li>Maintain Public Order — prevent disorder &amp; conflict</li>
-<li>Uphold Dharma — ruler's legitimacy linked to proper governance</li>
-</ul>`,
+  function onboardingView(){
+    const d = state.draft || {name:'', avatar:AVATARS[0], bio:''};
+    return `
+    <div class="screen">
+      <div class="brand"><span class="dot"></span> Manatune Net</div>
+      <p class="tag">Meet people who are out and about near you, right now. Log in by sharing your name and your live location.</p>
+      <label>Your name</label>
+      <input type="text" id="in-name" value="${d.name}" placeholder="e.g. Alex">
+      <label>Pick an avatar</label>
+      <div class="avatars" id="avatar-row">
+        ${AVATARS.map(a=>`<div class="avatar-opt ${a===d.avatar?'selected':''}" data-a="${a}">${a}</div>`).join('')}
+      </div>
+      <label>Short bio</label>
+      <textarea id="in-bio" placeholder="A line about you...">${d.bio}</textarea>
+      <button class="btn btn-primary" id="btn-locate">Share my location & find people nearby</button>
+      <div class="loc-status" id="loc-status"></div>
+    </div>`;
+  }
 
-`<h2>Judicial Institutions</h2>
-<p class="sub">Ancient India — Hierarchy (bottom → top)</p>
-<div class="hier">
-<div><strong>Kula</strong> — family/group-based forum (community-level resolution wherever possible)</div>
-<div><strong>Shreni</strong> — guild/occupation/community institution (internal self-regulation)</div>
-<div><strong>Puga</strong> — association/group belonging to a locality</div>
-<div><strong>Royal Judicial Officers</strong></div>
-<div><strong>King (Royal Court)</strong> — reached when lower institutions failed, disputes were significant, on appeal, or royal authority was required</div>
-</div>`,
+  function bindOnboarding(){
+    if(!state.draft) state.draft = {name:'', avatar:AVATARS[0], bio:''};
+    document.getElementById('in-name').oninput = e=> state.draft.name = e.target.value;
+    document.getElementById('in-bio').oninput = e=> state.draft.bio = e.target.value;
+    document.querySelectorAll('.avatar-opt').forEach(el=>{
+      el.onclick = ()=>{ state.draft.avatar = el.dataset.a; render(); };
+    });
+    document.getElementById('btn-locate').onclick = ()=>{
+      const status = document.getElementById('loc-status');
+      const name = state.draft.name.trim() || 'You';
+      const finish = (lat,lng,note)=>{
+        state.me = {name, avatar:state.draft.avatar, bio: state.draft.bio.trim() || 'New here 👋', lat, lng};
+        state.profiles = genProfiles(lat,lng);
+        state.screen='main'; state.tab='discover';
+        saveLocal(); render();
+      };
+      if(!navigator.geolocation){
+        status.textContent = 'Location isn\\'t available on this device — using an approximate spot instead.';
+        finish(40.7128,-74.0060);
+        return;
+      }
+      status.textContent = 'Getting your location…';
+      navigator.geolocation.getCurrentPosition(
+        pos=> finish(pos.coords.latitude, pos.coords.longitude),
+        err=>{ status.textContent = 'Couldn\\'t get your exact location, using an approximate spot.'; finish(40.7128,-74.0060); },
+        {timeout:8000}
+      );
+    };
+  }
 
-`<h2>Stage II: Medieval India</h2>
-<p class="sub">Administrative / Judicial Division — State Level</p>
-<ul>
-<li><strong>Diwan-e-Mazalim</strong> — highest court of criminal appeal, headed by Sadr-e-Jahan</li>
-<li><strong>Diwan-e-Risalat</strong> — highest court of civil appeal, headed by Sadr-e-Jahan</li>
-<li><strong>King's Court</strong> — Sultan</li>
-<li><strong>Chief Justice's Court</strong> — Qazi-ul-Quzat — all kinds of cases</li>
-<li><strong>Sadr-e-Jahan's Court</strong> — ecclesiastical (church) cases</li>
-<li><strong>Diwan-e-Siyasat</strong> — introduced by Muhammad-bin-Tughlaq</li>
-</ul>
-<p>The Sultan was regarded as the <strong>"Fountain (Foundation) of Justice."</strong></p>`,
+  function mainView(){
+    return `
+    <div class="screen" id="tab-content" style="padding-bottom:90px;"></div>
+    <div class="tabbar">
+      <button class="tab ${state.tab==='discover'?'active':''}" data-t="discover"><span class="ic">📡</span>Discover</button>
+      <button class="tab ${state.tab==='interested'?'active':''}" data-t="interested"><span class="ic">💛</span>Interested</button>
+      <button class="tab ${state.tab==='you'?'active':''}" data-t="you"><span class="ic">🙂</span>You</button>
+    </div>`;
+  }
 
-`<h2>Medieval India — Provincial Level</h2>
-<ul>
-<li><strong>Adalat Nazim-e-Subah</strong> (Governor's Court) — original &amp; appellate jurisdiction</li>
-<li><strong>Adalat Qazi-e-Subah</strong> (Chief Provincial Qazi) — highest court of appeal in the province, original jurisdiction</li>
-<li><strong>Diwan-e-Subah</strong> — Revenue Court; also the provincial Finance Minister</li>
-<li><strong>Sadr-e-Subah</strong> — ecclesiastical court (church matters)</li>
-</ul>`,
+  function bindMain(){
+    document.querySelectorAll('.tab').forEach(t=> t.onclick = ()=>{ state.tab=t.dataset.t; render(); });
+    const c = document.getElementById('tab-content');
+    if(state.tab==='discover') c.innerHTML = discoverView();
+    if(state.tab==='interested') c.innerHTML = interestedView();
+    if(state.tab==='you') c.innerHTML = youView();
+    bindCards();
+  }
 
-`<h2>Medieval India — District Level (Sarkar)</h2>
-<p class="sub">Highest Justice Department</p>
-<p><strong>Court of Qazi</strong> — hears all civil &amp; criminal matters, and appeals from:</p>
-<ul>
-<li>Pargana Qazis (Islamic judges/magistrates at sub-district level)</li>
-<li>Kotwal (chief police officer, fort guard/town magistrate)</li>
-<li>Village panchayat</li>
-</ul>
-<p class="sub">Court Staff</p>
-<table>
-<tr><th>Role</th><th>Function</th></tr>
-<tr><td>Kaatib</td><td>Writer of evidence / statements</td></tr>
-<tr><td>Faqih</td><td>Writer of legal opinion (scholar / mufti)</td></tr>
-<tr><td>Nazir</td><td>In charge of establishment</td></tr>
-<tr><td>Sub-ordinate Clerks</td><td>General clerical support</td></tr>
-<tr><td>Bargandaz</td><td>Armed guard</td></tr>
-<tr><td>Akhbar Navis</td><td>Journalist / news writer — recorded daily court proceedings</td></tr>
-</table>`,
+  function radarHTML(profiles){
+    const rings = [90,140,190,240].map(s=>`<div class="ring" style="width:${s}px;height:${s}px;"></div>`).join('');
+    const maxDist = 5;
+    const dots = profiles.map(p=>{
+      const angle = (parseInt(p.id.slice(1))*37)%360 * Math.PI/180;
+      const r = Math.min(p.dist/maxDist,1) * 120;
+      const x = 140 + r*Math.cos(angle), y = 140 + r*Math.sin(angle);
+      return `<div class="pdot ${state.interested.has(p.id)?'interested':''}" style="left:${x}px;top:${y}px;" data-id="${p.id}">${p.avatar}</div>`;
+    }).join('');
+    return `<div class="radar-wrap"><div class="radar">${rings}<div class="you-dot"></div>${dots}</div></div>
+    <p class="radar-caption">You, and ${profiles.length} people nearby right now</p>`;
+  }
 
-`<h2>Executive &amp; Financial Roles</h2>
-<p class="sub">District Level, continued</p>
-<ul>
-<li><strong>Faujdar</strong> — executive head with district-level responsibilities; with Kotwals, empowered to try petty criminal cases. Appeals go to the Governor.</li>
-<li><strong>Amil</strong> — state financial administrator; appeals on land revenue matters go to Diwan-e-Subah.</li>
-</ul>
-<p style="margin-top:30px; color:var(--gold); font-style:italic; text-align:center;">— End of Notes —</p>`
-];
+  function discoverView(){
+    const profiles = state.profiles;
+    return radarHTML(profiles) + `<p class="section-title">Nearby</p>` +
+      profiles.map(p=> cardHTML(p)).join('');
+  }
+  function interestedView(){
+    const list = state.profiles.filter(p=> state.interested.has(p.id));
+    if(!list.length) return `<p class="section-title">Interested</p><div class="empty">You haven't shown interest in anyone yet.<br>Head to Discover to find people nearby.</div>`;
+    return `<p class="section-title">People you're interested in</p>` + list.map(p=>cardHTML(p)).join('');
+  }
+  function youView(){
+    const m = state.me;
+    return `
+    <p class="section-title">Your profile</p>
+    <div class="card" style="cursor:default;">
+      <div class="avatar-badge">${m.avatar}</div>
+      <div class="card-info"><div class="card-name">${escapeHtml(m.name)}</div><div class="card-sub">${escapeHtml(m.bio)}</div></div>
+    </div>
+    <p class="section-title" style="margin-top:22px;">Location</p>
+    <div class="card" style="cursor:default;">
+      <div class="avatar-badge">📍</div>
+      <div class="card-info"><div class="card-name">Sharing live location</div><div class="card-sub">${m.lat.toFixed(3)}, ${m.lng.toFixed(3)}</div></div>
+    </div>
+    <button class="btn btn-ghost" id="btn-logout">Log out</button>`;
+  }
 
-let idx = 0;
-const main = document.getElementById('main');
-slides.forEach((html,i)=>{
-  const d = document.createElement('div');
-  d.className = 'slide' + (i===0 ? ' active':'');
-  d.innerHTML = html;
-  main.appendChild(d);
-});
-const els = main.querySelectorAll('.slide');
-const prevBtn = document.getElementById('prev');
-const nextBtn = document.getElementById('next');
-const counter = document.getElementById('counter');
+  function cardHTML(p){
+    const on = state.interested.has(p.id);
+    return `<div class="card" data-view="${p.id}">
+      <div class="avatar-badge">${p.avatar}</div>
+      <div class="card-info"><div class="card-name">${p.name}, ${p.age}</div><div class="card-sub">${p.dist} km away</div></div>
+      <div class="heart-btn ${on?'on':''}" data-heart="${p.id}">${on?'💛':'🤍'}</div>
+    </div>`;
+  }
 
-function render(){
-  els.forEach((el,i)=>el.classList.toggle('active', i===idx));
-  counter.textContent = (idx+1) + ' / ' + slides.length;
-  prevBtn.disabled = idx===0;
-  nextBtn.disabled = idx===slides.length-1;
-  els[idx].scrollTop = 0;
-}
-prevBtn.addEventListener('click', ()=>{ if(idx>0){idx--; render();} });
-nextBtn.addEventListener('click', ()=>{ if(idx<slides.length-1){idx++; render();} });
-document.addEventListener('keydown', (e)=>{
-  if(e.key==='ArrowRight'){ if(idx<slides.length-1){idx++; render();} }
-  if(e.key==='ArrowLeft'){ if(idx>0){idx--; render();} }
-});
-render();
+  function bindCards(){
+    document.querySelectorAll('[data-view]').forEach(el=>{
+      el.addEventListener('click', e=>{
+        if(e.target.closest('[data-heart]')) return;
+        state.viewing = el.dataset.view; render();
+      });
+    });
+    document.querySelectorAll('[data-heart]').forEach(el=>{
+      el.onclick = e=>{
+        e.stopPropagation();
+        const id = el.dataset.heart;
+        if(state.interested.has(id)) state.interested.delete(id); else state.interested.add(id);
+        saveLocal(); render();
+      };
+    });
+    const lo = document.getElementById('btn-logout');
+    if(lo) lo.onclick = ()=>{
+      state.me=null; state.profiles=[]; state.interested=new Set(); state.draft=null;
+      try{ localStorage.removeItem('nearby_me'); }catch(e){}
+      state.screen='onboarding'; render();
+    };
+  }
+
+  function renderOverlay(){
+    const p = state.profiles.find(x=>x.id===state.viewing);
+    const on = state.interested.has(p.id);
+    const div = document.createElement('div');
+    div.className='overlay';
+    div.innerHTML = `<div class="overlay-inner">
+      <button class="back-btn" id="ov-back">← Back</button>
+      <div class="big-avatar">${p.avatar}</div>
+      <div class="big-name">${p.name}, ${p.age}</div>
+      <div class="big-sub">${p.dist} km away · nearby now</div>
+      <div class="bio">${escapeHtml(p.bio)}</div>
+      <div class="heart-btn ${on?'on':''}" id="ov-heart" style="width:100%;border-radius:14px;margin-top:24px;height:48px;">${on?'💛 Interested':'🤍 Show interest'}</div>
+    </div>`;
+    app.appendChild(div);
+    div.querySelector('#ov-back').onclick = ()=>{ state.viewing=null; div.remove(); };
+    div.querySelector('#ov-heart').onclick = ()=>{
+      if(state.interested.has(p.id)) state.interested.delete(p.id); else state.interested.add(p.id);
+      saveLocal(); state.viewing=null; div.remove(); render();
+    };
+  }
+
+  function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  loadLocal();
+  if(state.me){ state.profiles = genProfiles(state.me.lat, state.me.lng); state.screen='main'; }
+  render();
+})();
 </script>
 </body>
 </html>
